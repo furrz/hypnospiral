@@ -57,6 +57,7 @@
         newSourceElem.src = state.bgImage;
         spiralVideo.replaceChildren(newSourceElem);
         spiralVideo.load();
+        spiralVideo.pause();
     });
 
     // Handle subliminal messaging

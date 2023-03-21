@@ -5,8 +5,13 @@ function HandleControlToggle() {
     const hud = document.querySelector('#controls');
 
     function toggleHud() {
-        if (hud.style.display === 'none') hud.style.display = 'flex';
-        else hud.style.display = 'none';
+        if (hud.style.display === 'none') {
+            hud.style.display = 'flex';
+            document.querySelector("#spiral-video-overlay").pause();
+        } else {
+            hud.style.display = 'none';
+            document.querySelector("#spiral-video-overlay").play();
+        }
     }
 
     window.addEventListener('keyup', function (e) {
