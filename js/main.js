@@ -47,9 +47,16 @@
     LinkStateToText(hsState);       // data-text:     Text boxes.
 
     const spiralOverlay = document.querySelector("#spiral-overlay");
+    const spiralVideo = document.querySelector("#spiral-video-overlay");
     hsState.onStateChange(state => {
         spiralOverlay.style.backgroundImage = `url("${state.bgImage}")`;
         spiralOverlay.style.opacity = state.bgImageAlpha;
+        spiralVideo.style.opacity = state.bgImageAlpha;
+
+        const newSourceElem = document.createElement("source");
+        newSourceElem.src = state.bgImage;
+        spiralVideo.replaceChildren(newSourceElem);
+        spiralVideo.load();
     });
 
     // Handle subliminal messaging
