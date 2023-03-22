@@ -190,6 +190,17 @@ textarea {
     flex-wrap: nowrap;
 }
 
+#subliminal-text.wall {
+    max-width: 200vw;
+    max-height: 200vh;
+    width: 200vw;
+    left: -50vw;
+    height: 200vh;
+    top: -50vh;
+    line-height: 0.9;
+    font-weight: bolder;
+}
+
 p {
     max-width: 40em;
     font-size: 1.1em;

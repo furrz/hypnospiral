@@ -34,6 +34,8 @@
         bgImage: "",
         bgImageAlpha: 0.5,
         trapCursor: false,
+        textWall: false,
+        customGoogleFont: ""
     });
 
     // Create a color picker and link its state.

@@ -26,6 +26,18 @@ function HandleSubliminalText(hsState) {
             linesInput.value = state.messages.join('\n');
         }
 
+        try {
+            WebFont.load({
+                google: {
+                    families: [state.customGoogleFont]
+                }
+            });
+        } catch (e) {
+            console.error(e);
+        }
+
+        linesOutput.style.fontFamily = state.customGoogleFont || "";
+
         linesOutput.style.color = `rgb(${state.txtColor.r},${state.txtColor.g},${state.txtColor.b})`;
 
         lineQueue = [];
@@ -52,34 +64,54 @@ function HandleSubliminalText(hsState) {
             return;
         }
 
-        // If we're out of lines to draw from, reshuffle all lines.
-        if (lineQueue.length < 1) {
-            lineQueue = [...state.messages];
 
-            if (state.randomOrder) {
-                // Durstenfeld shuffle
-                for (let i = lineQueue.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    const temp = lineQueue[i];
-                    lineQueue[i] = lineQueue[j];
-                    lineQueue[j] = temp;
+        if (state.textWall) {
+
+            let wallText = "";
+
+            for (let i = 0; i < 800; i++) {
+                    wallText += state.messages[Math.floor(Math.random() * state.messages.length)] + " ";
+            }
+
+            linesOutput.classList.add("wall");
+            linesOutput.innerText = wallText;
+            linesOutput.style.opacity = state.messageAlpha;
+
+            timeoutHandle = setTimeout(linesHandleDisplay, state.messageDuration * 1000);
+
+        } else {
+
+            // If we're out of lines to draw from, reshuffle all lines.
+            if (lineQueue.length < 1) {
+                lineQueue = [...state.messages];
+
+                if (state.randomOrder) {
+                    // Durstenfeld shuffle
+                    for (let i = lineQueue.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        const temp = lineQueue[i];
+                        lineQueue[i] = lineQueue[j];
+                        lineQueue[j] = temp;
+                    }
                 }
             }
-        }
 
-        // If we're out of words to display, pop a new line to display.
-        if (wordQueue.length < 1) {
-            wordQueue = (hsState.getState().oneWord ? lineQueue.shift().split(" ") : [lineQueue.shift()]);
-        }
+            // If we're out of words to display, pop a new line to display.
+            if (wordQueue.length < 1) {
+                wordQueue = (hsState.getState().oneWord ? lineQueue.shift().split(" ") : [lineQueue.shift()]);
+            }
 
-        linesOutput.innerText = wordQueue.shift();
-        linesOutput.style.opacity = state.messageAlpha;
+            linesOutput.classList.remove("wall");
+            linesOutput.innerText = wordQueue.shift();
+            linesOutput.style.opacity = state.messageAlpha;
 
-        // Only do a gap if we're out of words
-        if (wordQueue.length < 1) {
-            timeoutHandle = setTimeout(linesHandleGap, state.messageDuration * 1000);
-        } else {
-            timeoutHandle = setTimeout(linesHandleDisplay, state.messageDuration * 1000);
+            // Only do a gap if we're out of words
+            if (wordQueue.length < 1) {
+                timeoutHandle = setTimeout(linesHandleGap, state.messageDuration * 1000);
+            } else {
+                timeoutHandle = setTimeout(linesHandleDisplay, state.messageDuration * 1000);
+            }
+
         }
 
     }
