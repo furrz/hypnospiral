@@ -11,6 +11,7 @@ function HandleControlToggle() {
         } else {
             hud.style.display = 'none';
             document.querySelector("#spiral-video-overlay").play();
+            document.querySelector("#spiral-video-overlay").loop = true;
         }
     }
 
