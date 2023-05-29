@@ -3,7 +3,7 @@
     "outDir": "./web/",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "ES2020",
     "target": "es5",
     "allowJs": true,
     "jsx": "react",

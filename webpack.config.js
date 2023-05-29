@@ -42,11 +42,11 @@ module.exports = {
                 { from: 'web' }
             ]
         }),
-        new HtmlWebpackPlugin()
+        new HtmlWebpackPlugin(),
     ],
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist/js'),
+        path: path.resolve(__dirname, 'dist'),
         clean: true
     },
     devServer: {
