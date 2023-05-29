@@ -17,7 +17,7 @@ export default function CustomizeSubliminalFontPage() {
     return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
-            <Breadcrumb to="/customize/subliminal" showInBigPrimary>Subliminal Text</Breadcrumb>
+            <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
             <Label>
                 custom font name
                 <TextBox value={font} onChange={setFont}

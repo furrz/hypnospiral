@@ -15,7 +15,7 @@ export default function CustomizeSubliminalTimingPage() {
     return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
-            <Breadcrumb to="/customize/subliminal" showInBigPrimary>Subliminal Text</Breadcrumb>
+            <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
             <Label value={messageDuration} unit="s">
                 message duration
                 <Slider value={messageDuration} onChange={setMessageDuration} min={0.01}/>

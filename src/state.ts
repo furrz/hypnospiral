@@ -2,13 +2,21 @@ import {createState} from 'state-pool';
 
 let hashState : any = {};
 
-const onHashStateUpdate = () => {
+const onHashStateUpdate = debounce(() => {
     if (Object.keys(hashState).length > 0) {
-        window.location.hash = "#" + encodeURIComponent(JSON.stringify(hashState));
+        history.replaceState(undefined, undefined, "#" + encodeURIComponent(JSON.stringify(hashState)));
     } else {
-        window.location.hash = "";
+        history.replaceState(undefined, undefined, "#");
     }
-};
+});
+
+function debounce(func: (..._: any) => void, timeout = 100) {
+    let timer: any;
+    return (...args: any[]) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+}
 
 if (location.hash && location.hash.length > 2) {
     try {

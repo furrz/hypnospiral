@@ -10,7 +10,7 @@ export default function CustomizeSubliminalMessagesPage() {
     return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
-            <Breadcrumb to="/customize/subliminal" showInBigPrimary>Subliminal Text</Breadcrumb>
+            <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
             <Label flexExpand>
                 subliminal messages
                 <TextArea value={messages.join("\n")} onChange={l => setMessages(l.split('\n'))}

@@ -28,7 +28,7 @@ export default function CustomizeSubliminalPage() {
     return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
-            <Breadcrumb to="/customize">Customizer</Breadcrumb>
+            <Breadcrumb>Customizer</Breadcrumb>
             <Label>
                 text mode
                 <Radio value={useWall ? "wall" : "lines"} onChange={v => setUseWall(v === "wall")}>

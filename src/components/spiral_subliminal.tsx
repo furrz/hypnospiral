@@ -9,7 +9,7 @@ export default function SpiralSubliminal() {
     let [txtAlpha] = useMessageAlpha();
     return <div className={"subliminal_text" + (textWall ? " wall" : "")} style={{
         fontFamily: googleFont || "",
-        color: colord({a: txtAlpha * 255, ...txtColor }).toRgbString()
+        color: colord({a: txtAlpha, ...txtColor }).toRgbString()
     }}>
         Sample Text
     </div>;

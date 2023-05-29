@@ -12,7 +12,7 @@ export default function SpiralPage() {
 
     const clickHandler = useCallback((event: MouseEvent) => {
         if (event.clientY > window.innerHeight / 5 * 3 && event.clientX > window.innerWidth / 5 * 3) {
-            navigate("/");
+            navigate(-1);
         } else {
             let fsElement = document.fullscreenElement || document.webkitFullscreenElement;
 

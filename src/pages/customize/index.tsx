@@ -6,7 +6,7 @@ import {ShareBtn} from "components/sharebtn";
 
 export default function CustomizePage({secondary}: { secondary?: boolean }) {
     return <Page secondary={secondary}>
-        <Breadcrumb to="/">Main Menu</Breadcrumb>
+        <Breadcrumb secondary={secondary}>Main Menu</Breadcrumb>
         <BigHeader>
             hypnospiral<br/><b>customizer</b>.
         </BigHeader>

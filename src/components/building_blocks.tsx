@@ -8,7 +8,7 @@ import {
     useId,
     useState
 } from "react";
-import {Link, NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import {CaretLeft, Check} from "@phosphor-icons/react";
 import {RgbColor, RgbColorPicker} from "react-colorful";
 import {colord} from "colord";
@@ -16,7 +16,7 @@ import useOnClickOutside from "use-onclickoutside";
 import * as classNames from "classnames";
 import {dyslexiaState} from "state";
 
-const basicClassComponent = <T,>(clsName: string, cls_calc: (props: PropsWithChildren<T>) => string = (_) => "") =>
+const basicClassComponent = <T, >(clsName: string, cls_calc: (props: PropsWithChildren<T>) => string = (_) => "") =>
     (props: PropsWithChildren<T>) =>
         <div className={clsName + " " + cls_calc(props)}>{props.children}</div>;
 
@@ -44,16 +44,23 @@ export const WideButton = ({to, primary, children}: PropsWithChildren<{ to: stri
         {children}
     </NavLink>;
 
-export const Breadcrumb = ({to, children, showInBigPrimary}: {
-    to: string,
+export const Breadcrumb = ({children, showInBigPrimary, secondary}: {
     children: string,
-    showInBigPrimary?: boolean
-}) => <Fragment>
-    {showInBigPrimary || <div className="breadcrumb_space hide_when_not_big_primary"></div>}
-    <Link to={to} className={classNames("breadcrumb", {"hide_when_big_primary": !showInBigPrimary})}>
-        <CaretLeft weight="fill"/> {children}
-    </Link>
-</Fragment>;
+    showInBigPrimary?: boolean,
+    secondary?: boolean
+}) => {
+    const navigate = useNavigate();
+
+    return <Fragment>
+        {showInBigPrimary || <div className="breadcrumb_space hide_when_not_big_primary"></div>}
+        <a href="#" onClick={e => {
+            navigate(secondary ? -2 : -1);
+            e.preventDefault();
+        }} className={classNames("breadcrumb", {"hide_when_big_primary": !showInBigPrimary})}>
+            <CaretLeft weight="fill"/> {children}
+        </a>
+    </Fragment>
+};
 
 export const BreadcrumbSpace = basicClassComponent("breadcrumb_space");
 

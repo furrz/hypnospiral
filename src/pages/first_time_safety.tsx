@@ -5,7 +5,7 @@ import {BigHeader, Breadcrumb, FillGap, Page, TextBlock, WideButton} from "compo
 
 export default function FirstTimeSafetyPage() {
     return <Page>
-        <Breadcrumb to="/">Main Menu</Breadcrumb>
+        <Breadcrumb>Main Menu</Breadcrumb>
         <BigHeader>
             hypnospiral<br/>
             <b>safety</b>alizer.

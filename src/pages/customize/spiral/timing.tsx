@@ -14,7 +14,7 @@ export default function Timing() {
     return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
-            <Breadcrumb to="/customize/spiral" showInBigPrimary>Spiral Style</Breadcrumb>
+            <Breadcrumb showInBigPrimary>Spiral Style</Breadcrumb>
             <Label value={spinSpeed}>
                 spin speed
                 <Slider value={spinSpeed} onChange={setSpinSpeed} max={4}/>

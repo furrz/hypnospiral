@@ -7,7 +7,7 @@ export default function AboutPage() {
     const [dyslexia, setDyslexia] = dyslexiaState.useState();
 
     return <Page>
-        <Breadcrumb to="/">Main Menu</Breadcrumb>
+        <Breadcrumb>Main Menu</Breadcrumb>
         <BigHeader>
             hypnospiral<br/><b>visualizer</b>.
         </BigHeader>

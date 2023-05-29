@@ -3,7 +3,7 @@ import {Breadcrumb, Page, TextBlock} from "components/building_blocks";
 
 export default function AboutSafetyPage() {
     return <Page>
-        <Breadcrumb to="/about">About</Breadcrumb>
+        <Breadcrumb>About</Breadcrumb>
         <TextBlock>
             This site is designed with safety in mind, but <b>your mind is still your own responsibility</b>
             - always check the subliminal messages before staring at a spiral, and ensure you can escape safely

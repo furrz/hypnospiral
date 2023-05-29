@@ -12,7 +12,7 @@ export default function CustomizeOverlayPage() {
     return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
-            <Breadcrumb to="/customize">Customizer</Breadcrumb>
+            <Breadcrumb>Customizer</Breadcrumb>
             <Label>
                 overlay url
                 <TextBox placeholder="https://example.com/image.png" value={url} onChange={setUrl}/>

@@ -17,7 +17,7 @@ export default function CustomizeSpiralPage () {
     return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
-            <Breadcrumb to="/customize">Customizer</Breadcrumb>
+            <Breadcrumb>Customizer</Breadcrumb>
             <Label>
                 spiral type
                 <Radio value={spiralMode} onChange={setSpiralMode}>
