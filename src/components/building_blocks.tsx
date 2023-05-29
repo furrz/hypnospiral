@@ -38,11 +38,16 @@ export const TextBlock = basicClassComponent<{
     medium?: boolean
 }>("inline_text", p => classNames({"medium_text": p.medium}));
 
-export const WideButton = ({to, primary, children}: PropsWithChildren<{ to: string, primary?: boolean }>) =>
-    <NavLink to={to}
+export const WideButton = ({to, primary, children, onSecondaryPage}: PropsWithChildren<{ to: string, primary?: boolean, onSecondaryPage?: boolean }>) => {
+    const navigate = useNavigate();
+    return <NavLink to={to}
+             onClick={onSecondaryPage ? (() => {
+                navigate(-1);
+             }) : undefined}
              className={({isActive}) => classNames("wide_button", {"primary": primary, "active": isActive})}>
         {children}
     </NavLink>;
+}
 
 export const Breadcrumb = ({children, showInBigPrimary, secondary}: {
     children: string,

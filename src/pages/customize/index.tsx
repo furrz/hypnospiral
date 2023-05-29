@@ -10,9 +10,9 @@ export default function CustomizePage({secondary}: { secondary?: boolean }) {
         <BigHeader>
             hypnospiral<br/><b>customizer</b>.
         </BigHeader>
-        <WideButton to="/customize/spiral">spiral style <Gear weight="bold"/></WideButton>
-        <WideButton to="/customize/subliminal">subliminal text <TextAa weight="bold"/></WideButton>
-        <WideButton to="/customize/overlay">overlays <StackSimple weight="bold"/></WideButton>
+        <WideButton to="/customize/spiral" onSecondaryPage={secondary}>spiral style <Gear weight="bold"/></WideButton>
+        <WideButton to="/customize/subliminal" onSecondaryPage={secondary}>subliminal text <TextAa weight="bold"/></WideButton>
+        <WideButton to="/customize/overlay" onSecondaryPage={secondary}>overlays <StackSimple weight="bold"/></WideButton>
         <FillGap/>
         <ShareBtn/>
         <Previewer/>
