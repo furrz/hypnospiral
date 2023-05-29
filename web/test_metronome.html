@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Metronome</title>
+    <style>
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        #metronome {
+            display: block;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 10%;
+            bottom: 10%;
+            background-image: url("img/Metronome.svg");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #metronome-bottom-mask {
+            display: block;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 10%;
+            bottom: 10%;
+            background-image: url("img/MetronomeBottomMask.svg");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #metronome-hand {
+            display: block;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 20%;
+            bottom: 15%;
+            background-image: url("img/MetronomeHand.svg");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform-origin: bottom center;
+            animation: spin 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(20deg);
+            }
+            50% {
+                transform: rotate(-20deg);
+            }
+            100% {
+                transform: rotate(20deg);
+            }
+        }
+
+        #explainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+<div id="metronome"></div>
+<div id="metronome-hand"></div>
+<div id="metronome-bottom-mask"></div>
+<div id="explainer">
+    This is a tiny test of a Metronome.<br/>
+    In the final product, failing to click in time with the metronome will result in spirals.<br/>
+    Art assets and concept by <a href="https://twitter.com/GooeyBlueBoye">@GooeyBlueBoye</a>, code and SVG-converted
+    assets by <a href="https://twitter.com/PrinceZyntaks">@PrinceZyntaks</a>.<br/>
+    Clicking sounds are CC0 Kenney assets.
+</div>
+
+<script>
+    const metr = document.querySelector('#metronome-hand');
+
+    const click1 = new Audio('audio/click1.ogg');
+    click1.load();
+    const click2 = new Audio('audio/click2.ogg');
+    click2.load();
+
+    function animLooped() {
+        setTimeout(function () {
+            click1.play();
+        }, 350);
+        setTimeout(function () {
+            click2.play();
+        }, 1350);
+    }
+
+    metr.addEventListener('animationstart', animLooped);
+    metr.addEventListener('animationiteration', animLooped);
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <title>hypnospiral visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Generate a nice, hypnotic spiral~"/>
+    <meta name="robots" content="index, archive"/>
+    <link rel="canonical" href="https://hypnospiral.vercel.app/"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:site" content="@PrinceZyntaks"/>
+    <meta name="twitter:title" content="hypnospiral visualizer"/>
+    <meta name="twitter:image" content="https://hypnospiral.vercel.app/SITE_PREVIEW.jpg"/>
+    <meta name="twitter:image:alt" content="A green spiral on a black background."/>
+    <meta name="twitter:description" content="Generate a nice, hypnotic spiral~"/>
+    <meta name="og:title" content="hypnospiral visualizer"/>
+    <meta name="og:url" content="https://hypnospiral.vercel.app/"/>
+    <meta name="og:description" content="Generate a nice, hypnotic spiral~"/>
+    <meta name="og:image" content="https://hypnospiral.vercel.app/SITE_PREVIEW.jpg"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="icon" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/open-dyslexic-regular.css"/>
+</head>
+<body>
+<div id="app"></div>
+<!--<div id="controls">-->
+<!--    <h1>hypnospiral visualizer</h1>-->
+
+<!--    <button id="control-hide-btn">begin hypnosis</button>-->
+
+<!--    <div class="warning">-->
+<!--        <b>Click in the bottom-right corner of the screen at any time to escape the spiral.</b>-->
+<!--        <br/>-->
+<!--        Please use this site responsibly, and read the-->
+<!--        <a href="safety" class="safety-link">important safety information</a>.<br/>-->
+<!--        <a href="#" id="dyslexia-toggle" class="safety-link">Click here to toggle <span class="dyslexia">The OpenDyslexic Font</span>.</a> This is remembered locally.-->
+<!--    </div>-->
+
+<!--    <div id="config-row" class="row">-->
+<!--        <div id="picker"></div>-->
+<!--        <div class="config-col">-->
+<!--            <div class="row">-->
+<!--                <div class="color-display">-->
+<!--                    Spiral-->
+<!--                    <div class="color-box active" data-bg-color="spColor" data-picker-active="spColor"></div>-->
+<!--                </div>-->
+<!--                <div class="color-display">-->
+<!--                    Background-->
+<!--                    <div class="color-box" data-bg-color="bgColor" data-picker-active="bgColor"></div>-->
+<!--                </div>-->
+<!--                <div class="color-display">-->
+<!--                    Text-->
+<!--                    <div class="color-box" data-bg-color="txtColor" data-picker-active="txtColor"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="color-display">-->
+<!--                <div>Spin Speed <b data-float="spinSpeed"></b></div>-->
+<!--                <input type="range" data-slider="spinSpeed" min="0" max="4" step="0.01"/>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>Throb Speed <b data-float="throbSpeed"></b></div>-->
+<!--                <input type="range" data-slider="throbSpeed" min="0" max="4" step="0.01"/>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>Throb Strength <b data-float="throbStrength"></b></div>-->
+<!--                <input type="range" data-slider="throbStrength" min="0" max="4" step="0.01"/>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>Zoom <b data-float="zoom"></b></div>-->
+<!--                <input type="range" data-slider="zoom" id="zoom" min="0" max="4" step="0.01"/>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>Overlay Image</div>-->
+<!--                <input type="text" data-text="bgImage" placeholder="Image URL"/>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>Image Opacity <b data-float="bgImageAlpha"></b></div>-->
+<!--                <input type="range" data-slider="bgImageAlpha" min="0" max="1" step="0.01"/>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="config-col">-->
+<!--            <div class="color-display">-->
+<!--                Messages (One per line.)-->
+<!--                <textarea id="message-lines" placeholder="Put one message on each line."></textarea>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>Message Opacity <b data-float="messageAlpha"></b></div>-->
+<!--                <input type="range" data-slider="messageAlpha" min="0" max="1" step="0.01"/>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>Message Duration <b data-float="messageDuration"></b>s</div>-->
+<!--                <input type="range" data-slider="messageDuration" min="0.01" max="1" step="0.01"/>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>Time Between Messages <b data-float="messageGap"></b>s</div>-->
+<!--                <input type="range" data-slider="messageGap" min="0" max="10" step="0.01"/>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>-->
+<!--                    <input type="checkbox" id="check-one-word-at-a-time" data-check="oneWord"/>-->
+<!--                    <label for="check-one-word-at-a-time">One word at a time</label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>-->
+<!--                    <input type="checkbox" id="check-random-message-order" data-check="randomOrder"/>-->
+<!--                    <label for="check-random-message-order">Randomize message order</label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>-->
+<!--                    <input type="checkbox" id="check-text-wall-mode" data-check="textWall"/>-->
+<!--                    <label for="check-text-wall-mode">Text Wall mode</label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>-->
+<!--                    <input type="checkbox" id="check-trap-my-cursor" data-check="trapCursor"/>-->
+<!--                    <label for="check-trap-my-cursor">Cursor trap! (keep mouse centered)</label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="color-display">-->
+<!--                <div>Custom Google Font (Font Name)</div>-->
+<!--                <input type="text" data-text="customGoogleFont" placeholder="Font Name"/>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="color-display wide">-->
+<!--        Share These Settings-->
+<!--        <input type="text" id="share-url" readonly/>-->
+<!--    </div>-->
+
+<!--    <div class="label">-->
+<!--        <h5>Tips:</h5>-->
+<!--        Click on the spiral to enter fullscreen, and press escape to exit fullscreen.<br/>-->
+<!--        When not in fullscreen, pressing escape will show or hide the spiral.<br/>-->
+<!--        Pressing the spacebar will hide the spiral immediately.<br/>-->
+<!--        Tapping the bottom-right corner of the spiral area will also return here.<br/>-->
+<!--    </div>-->
+
+<!--    <div class="label">-->
+<!--        by <a href="https://twitter.com/PrinceZyntaks">@PrinceZyntaks</a>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div id="subliminal-text"></div>-->
+<!--<div id="mobile-emergency-escape"></div>-->
+<!--<div id="spiral-overlay"></div>-->
+<!--<video autoplay loop id="spiral-video-overlay"></video>-->
+<!--<canvas id="c"></canvas>-->
+
+<!-- This is the main script. Others are included up in the head. -->
+<script src="js/bundle.js" type="text/javascript"></script>
+</body>
+</html>

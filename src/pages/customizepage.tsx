@@ -1,0 +1,20 @@
+import {BigHeader, Breadcrumb, FillGap, Page, WideButton} from "../building_blocks";
+import * as React from "react";
+import {Gear, Play, Share, StackSimple, TextAa} from "@phosphor-icons/react";
+import Previewer from "../previewer";
+import {ShareBtn} from "../sharebtn";
+
+export default function CustomizePage({secondary}: { secondary?: boolean }) {
+    return <Page secondary={secondary}>
+        <Breadcrumb to="/">Main Menu</Breadcrumb>
+        <BigHeader>
+            hypnospiral<br/><b>customizer</b>.
+        </BigHeader>
+        <WideButton to="/customize/spiral">spiral style <Gear weight="bold"/></WideButton>
+        <WideButton to="/customize/subliminal">subliminal text <TextAa weight="bold"/></WideButton>
+        <WideButton to="/customize/overlay">overlays <StackSimple weight="bold"/></WideButton>
+        <FillGap/>
+        <ShareBtn/>
+        <Previewer/>
+    </Page>;
+};

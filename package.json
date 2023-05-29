@@ -1,0 +1,48 @@
+{
+  "name": "webvisu",
+  "version": "1.0.0",
+  "description": "This is the source code of [hypnospiral.vercel.app](https://hypnospiral.vercel.app).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/furrz/hypnospiral.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/furrz/hypnospiral/issues"
+  },
+  "homepage": "https://github.com/furrz/hypnospiral#readme",
+  "devDependencies": {
+    "@svgr/webpack": "^8.0.1",
+    "@types/gl-react-dom": "^3.15.4",
+    "@types/react": "^18.2.7",
+    "@types/react-dom": "^18.2.4",
+    "@types/webfontloader": "^1.6.35",
+    "raw-loader": "^4.0.2",
+    "ts-loader": "^9.4.3",
+    "typescript": "^5.0.4",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.0.9",
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
+    "colord": "^2.9.3",
+    "gl-react": "^5.2.0",
+    "gl-react-dom": "^5.2.1",
+    "react": "^18.2.0",
+    "react-colorful": "^5.6.1",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.11.2",
+    "state-pool": "^0.10.0",
+    "use-onclickoutside": "^0.4.1",
+    "webfontloader": "^1.6.28"
+  }
+}

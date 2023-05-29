@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script>
+        AFRAME.registerShader('my-custom', {
+            schema: {
+                spiralColor: {type: 'color', is: 'uniform', default: 'green'},
+                bgColor: {type: 'color', is:'uniform', default:'black'},
+                spinSpeed: {type: 'number', is: 'uniform', default: 1.0},
+                throbSpeed: {type: 'number', is: 'uniform', default: 1.0},
+                throbStrength: {type: 'number', is: 'uniform', default: 1.0},
+                zoom: {type: 'number', is: 'uniform', default: 1.0},
+                time: {type: 'time', is: 'uniform'},
+                iRes: {type: 'vec2', is:'uniform', default:{x: 1024, y: 1024}}
+            },
+            vertexShader: `
+varying vec2 vUv;
+
+void main() {
+  vUv = uv;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+            `,
+            fragmentShader: `
+#define PI 3.1415926538
+
+in vec2 vUv;
+
+uniform vec2 iRes;
+uniform float time;
+
+uniform vec3 spiralColor;
+uniform vec3 bgColor;
+
+uniform float spinSpeed;
+uniform float throbSpeed;
+uniform float throbStrength;
+uniform float zoom;
+
+void main() {
+    float iTime = time * 0.001;
+    vec2 truPos = vec2(1.0, iRes.y / iRes.x) * (vUv - vec2(0.5));
+
+    float angle = atan(truPos.y, truPos.x);
+    float dist = pow(length(truPos), .4 + sin((iTime + cos(iTime * .05) * 0.1) * throbSpeed) * 0.2);
+
+    float spiFactor = pow(sin(angle + dist * 40. * zoom - iTime * 5. * spinSpeed) + 1.0, 50.);
+    spiFactor = clamp(spiFactor, 0., 1.);
+
+    vec3 color = mix(spiralColor, bgColor, spiFactor);
+    pc_fragColor = vec4(color, 1.0);
+}
+            `
+        });
+    </script>
+</head>
+<body>
+    <a-scene>
+        <a-entity camera look-controls>
+            <a-plane position="0 0 -4" rotation="0 0 0" width="10" height="10" color="#AA2222" material="shader: my-custom;"></a-plane>
+        </a-entity>
+    </a-scene>
+</body>
+</html>
