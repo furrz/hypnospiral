@@ -2,7 +2,7 @@ import {createState} from 'state-pool';
 
 let hashState : any = {};
 
-const onHashStateUpdate = debounce(() => {
+export const onHashStateUpdate = debounce(() => {
     if (Object.keys(hashState).length > 0) {
         history.replaceState(undefined, undefined, "#" + encodeURIComponent(JSON.stringify(hashState)));
     } else {

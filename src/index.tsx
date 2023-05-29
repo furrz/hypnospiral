@@ -24,6 +24,7 @@ import CustomizeSubliminalFontPage from "pages/customize/subliminal/font";
 
 import './style.css';
 import {useEffect} from "react";
+import {onHashStateUpdate} from "./state";
 
 function HistoryManager() {
     const navType = useNavigationType();
@@ -32,7 +33,6 @@ function HistoryManager() {
 
     useEffect(() => {
         if (navType === "PUSH") {
-            console.log("Push Action");
             window.history.pushState(undefined, undefined);
         }
     }, [navType, navigation]);
@@ -40,6 +40,7 @@ function HistoryManager() {
     useEffect(() => {
         const handler = () => {
             navigate(-1);
+            onHashStateUpdate();
         }
 
         window.addEventListener("popstate", handler);
