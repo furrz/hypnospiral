@@ -10,7 +10,7 @@ export default function SpiralOverlay() {
             backgroundImage: `url(${url})`,
             opacity: alpha.toString()
         }}></div>
-        <video autoPlay loop className="spiral_video_overlay" style={{
+        <video autoPlay loop className="spiral_video_overlay" key={url} style={{
             opacity: alpha.toString()
         }}>
             <source src={url}/>
