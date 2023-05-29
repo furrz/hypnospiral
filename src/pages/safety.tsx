@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Breadcrumb, Page, TextBlock} from "../building_blocks";
+import {Breadcrumb, Page, TextBlock} from "components/building_blocks";
 
 export default function AboutSafetyPage() {
     return <Page>

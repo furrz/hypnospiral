@@ -1,7 +1,7 @@
 import * as React from "react";
-import {BigHeader, Breadcrumb, FillGap, Page, TextBlock, WideButton} from "../building_blocks";
 import {Link} from "react-router-dom";
 import {Play} from "@phosphor-icons/react";
+import {BigHeader, Breadcrumb, FillGap, Page, TextBlock, WideButton} from "components/building_blocks";
 
 export default function FirstTimeSafetyPage() {
     return <Page>

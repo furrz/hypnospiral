@@ -1,9 +1,6 @@
-import {NavLink} from "react-router-dom";
 import * as React from "react";
-import {Play} from "@phosphor-icons/react";
-import {useState} from "react";
-import Spiral from "./spiral";
 import {createState} from "state-pool";
+import Spiral from "components/spiral";
 
 const previewState = createState(false);
 

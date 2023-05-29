@@ -1,13 +1,13 @@
-import {Breadcrumb, ColourBox, FillGap, Label, Page, Radio, RadioOption, WideButton} from "../building_blocks";
 import * as React from "react";
-import Previewer from "../previewer";
-import {Fragment, useState} from "react";
-import CustomizePage from "./customizepage";
-
-import IconSpiral from "../assets/SpiralStyle.svg";
-import IconCircle from "../assets/CirclesStyle.svg";
+import {Fragment} from "react";
 import {Timer} from "@phosphor-icons/react";
-import {useBgColor, useFgColor, useSpiralMode} from "../state";
+import {Breadcrumb, ColourBox, FillGap, Label, Page, Radio, RadioOption, WideButton} from "components/building_blocks";
+import Previewer from "components/previewer";
+import CustomizePage from "pages/customize";
+import {useBgColor, useFgColor, useSpiralMode} from "state";
+
+import IconSpiral from "assets/SpiralStyle.svg";
+import IconCircle from "assets/CirclesStyle.svg";
 
 export default function CustomizeSpiralPage () {
     let [spiralMode, setSpiralMode] = useSpiralMode();

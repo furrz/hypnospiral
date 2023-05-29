@@ -1,8 +1,8 @@
-import {BigHeader, Breadcrumb, FillGap, Page, WideButton} from "../building_blocks";
+import {BigHeader, Breadcrumb, FillGap, Page, WideButton} from "components/building_blocks";
 import * as React from "react";
-import {Gear, Play, Share, StackSimple, TextAa} from "@phosphor-icons/react";
-import Previewer from "../previewer";
-import {ShareBtn} from "../sharebtn";
+import {Gear, StackSimple, TextAa} from "@phosphor-icons/react";
+import Previewer from "components/previewer";
+import {ShareBtn} from "components/sharebtn";
 
 export default function CustomizePage({secondary}: { secondary?: boolean }) {
     return <Page secondary={secondary}>

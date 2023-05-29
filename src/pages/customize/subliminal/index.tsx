@@ -1,13 +1,23 @@
-import {Breadcrumb, ColourBox, FillGap, Label, Page, Radio, RadioOption, Slider, WideButton} from "../building_blocks";
 import * as React from "react";
-import Previewer from "../previewer";
-import CustomizePage from "./customizepage";
-import {Fragment, useId, useState} from "react";
+import {Fragment, useId} from "react";
 import {Pencil, TextT, Timer} from "@phosphor-icons/react";
+import {useMessageAlpha, useTextWall, useTxtColor} from "state";
+import {
+    Breadcrumb,
+    ColourBox,
+    FillGap,
+    Label,
+    Page,
+    Radio,
+    RadioOption,
+    Slider,
+    WideButton
+} from "components/building_blocks";
+import Previewer from "components/previewer";
+import CustomizePage from "pages/customize";
 
-import IconLines from '../assets/LinesText.svg';
-import IconWall from '../assets/WallText.svg';
-import {useMessageAlpha, useTextWall, useTxtColor} from "../state";
+import IconLines from 'assets/LinesText.svg';
+import IconWall from 'assets/WallText.svg';
 
 export default function CustomizeSubliminalPage() {
     let opacitySliderId = useId();

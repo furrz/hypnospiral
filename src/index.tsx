@@ -1,19 +1,19 @@
 import * as React from 'react';
 import {createMemoryRouter, RouterProvider} from "react-router-dom";
 import {createRoot} from "react-dom/client";
-import Homepage from "./pages/homepage";
-import SpiralPage from "./pages/spiralpage";
-import FirstTimeSafetyPage from "./pages/firsttimesafetypage";
-import CustomizePage from "./pages/customizepage";
-import AboutPage from "./pages/aboutpage";
-import AboutSafetyPage from "./pages/aboutsafetypage";
-import CustomizeSpiralPage from "./pages/customizespiralpage";
-import CustomizeSubliminalPage from "./pages/customizesubliminalpage";
-import CustomizeOverlayPage from "./pages/customizeoverlaypage";
-import CustomizeSubliminalMessagesPage from "./pages/customizesubliminalmessagespage";
-import CustomizeSubliminalTimingPage from "./pages/customizesubliminaltimingpage";
-import CustomizeSpiralTimingPage from "./pages/customizespiraltimingpage";
-import CustomizeSubliminalFontPage from "./pages/customizesubliminalfontpage";
+import Homepage from "pages/homepage";
+import SpiralPage from "pages/spiral_page";
+import FirstTimeSafetyPage from "pages/first_time_safety";
+import AboutPage from "pages/about";
+import AboutSafetyPage from "pages/safety";
+import CustomizePage from "pages/customize";
+import CustomizeOverlayPage from "pages/customize/overlay";
+import CustomizeSpiralPage from "pages/customize/spiral";
+import CustomizeSpiralTimingPage from "pages/customize/spiral/timing";
+import CustomizeSubliminalPage from "pages/customize/subliminal";
+import CustomizeSubliminalMessagesPage from "pages/customize/subliminal/messages";
+import CustomizeSubliminalTimingPage from "pages/customize/subliminal/timing";
+import CustomizeSubliminalFontPage from "pages/customize/subliminal/font";
 
 const routes = [
     {

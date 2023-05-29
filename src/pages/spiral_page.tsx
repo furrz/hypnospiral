@@ -1,7 +1,7 @@
 import * as React from "react";
-import Spiral from "../spiral";
 import {useCallback, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
+import Spiral from "components/spiral";
 
 export default function SpiralPage() {
     const navigate = useNavigate();
@@ -16,8 +16,14 @@ export default function SpiralPage() {
         } else {
             // @ts-ignore
             let fsElement = document.fullscreenElement || document.webkitFullscreenElement;
+
             // @ts-ignore
-            let fsRequest = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen || document.documentElement.mozRequestFullscreen || ((_: any) => {});
+            let fsRequest = document.documentElement.requestFullscreen
+                // @ts-ignore
+                || document.documentElement.webkitRequestFullscreen
+                // @ts-ignore
+                || document.documentElement.mozRequestFullscreen || ((_: any) => {});
+
             // @ts-ignore
             let fsExitRequest = document.exitFullscreen || document.webkitExitFullscreen || (() => {});
 

@@ -1,21 +1,16 @@
-import {Fragment, useId, useState} from "react";
-import CustomizePage from "./customizepage";
+import * as React from "react";
+import {Fragment} from "react";
+import CustomizePage from "pages/customize";
 import {
     Breadcrumb,
-    ColourBox,
     FillGap,
     Label,
     Page,
-    Slider,
-    TextArea,
     TextBlock,
-    TextBox,
-    WideButton
-} from "../building_blocks";
-import {Pencil, Timer} from "@phosphor-icons/react";
-import Previewer from "../previewer";
-import * as React from "react";
-import {useCutomGoogleFont} from "../state";
+    TextBox
+} from "components/building_blocks";
+import Previewer from "components/previewer";
+import {useCutomGoogleFont} from "state";
 
 export default function CustomizeSubliminalFontPage() {
     let [font, setFont] = useCutomGoogleFont();

@@ -7,7 +7,7 @@
     "target": "es5",
     "allowJs": true,
     "jsx": "react",
-    "moduleResolution": "node"
-  },
-  "include": ["src/custom.d.ts"]
+    "moduleResolution": "node",
+    "baseUrl": "./src/"
+  }
 }

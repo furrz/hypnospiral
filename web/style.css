@@ -10,6 +10,8 @@
     --screen-aspect: 3/5;
     --page-padding: 0.25in;
     --slider-thumb-size: 4vh;
+    --subliminal-font-size: 15vh;
+    --preview-size: 25;
 }
 
 * {
@@ -240,7 +242,7 @@ input[type=range]::-moz-range-progress {
 }
 
 .preview_box {
-    height: 25vh;
+    height: calc(var(--preview-size) * 1vh);
     border-radius: var(--side-pad);
     border: 2px solid var(--accent-color);
     overflow: clip;
@@ -461,7 +463,7 @@ input[type=checkbox]:checked {
 }
 
 .dyslexia, .dyslexia * {
-    font-family: 'OpenDyslexicRegular', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: 'OpenDyslexicRegular', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
 
 .spiral_overlay {
@@ -491,7 +493,6 @@ input[type=checkbox]:checked {
     bottom: 0;
     left: 0;
     text-align: center;
-    font-size: 5em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -503,15 +504,20 @@ input[type=checkbox]:checked {
     overflow: hidden;
     flex-wrap: nowrap;
     container-name: spiralzone;
+    font-size: var(--subliminal-font-size);
+}
+
+.preview_box .subliminal_text {
+    font-size: calc(var(--subliminal-font-size)*(var(--preview-size)/100));
 }
 
 .subliminal_text.wall {
-    max-width: 200vw;
-    max-height: 200vh;
-    width: 200vw;
-    left: -50vw;
-    height: 200vh;
-    top: -50vh;
+    max-width: 200%;
+    max-height: 200%;
+    width: 200%;
+    left: -50%;
+    height: 200%;
+    top: -50%;
     line-height: 0.9;
     font-weight: bolder;
 }

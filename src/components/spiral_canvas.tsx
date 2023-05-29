@@ -1,11 +1,10 @@
 import * as React from "react";
-// @ts-ignore
 import {Node, Shaders} from "gl-react";
 import {Surface} from "gl-react-dom";
-import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {useBgColor, useFgColor, useSpinSpeed, useSpiralMode, useThrobSpeed, useThrobStrength, useZoom} from "./state";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {useBgColor, useFgColor, useSpinSpeed, useSpiralMode, useThrobSpeed, useThrobStrength, useZoom} from "state";
 
-import spiralFrag from './assets/spiral.frag';
+import spiralFrag from 'assets/spiral.frag';
 
 const shaders = Shaders.create({
     spiral: {
@@ -18,13 +17,16 @@ const shaders = Shaders.create({
 
 export default function SpiralCanvas() {
     const targetRef = useRef<HTMLDivElement>();
+
     const [dimensions, setDimensions] = useState({width: 0, height: 0});
-    const [spinSpeed, setSpinSpeed] = useSpinSpeed();
-    const [throbSpeed, setThrobSpeed] = useThrobSpeed();
-    const [throbStrength, setThrobStrength] = useThrobStrength();
-    const [zoom, setZoom] = useZoom();
-    const [fgColor, setFgColor] = useFgColor();
-    const [bgColor, setBgColor] = useBgColor();
+
+    const [spinSpeed] = useSpinSpeed();
+    const [throbSpeed] = useThrobSpeed();
+    const [throbStrength] = useThrobStrength();
+    const [zoom] = useZoom();
+    const [fgColor] = useFgColor();
+    const [bgColor] = useBgColor();
+    const [spiralMode] = useSpiralMode();
 
     const animFrame = useCallback(() => {
         if (targetRef.current) {
@@ -41,7 +43,6 @@ export default function SpiralCanvas() {
         requestAnimationFrame(animFrame);
     }, [targetRef]);
 
-    const [spiralMode, setSpiralMode] = useSpiralMode();
 
     return <div className="spiral_canvas_div" ref={targetRef}>
         <Surface width={dimensions.width} height={dimensions.height}>

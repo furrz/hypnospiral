@@ -1,12 +1,12 @@
-import {Fragment} from "react";
-import CustomizePage from "./customizepage";
-import {Breadcrumb, Checkbox, FillGap, Label, Page, Slider} from "../building_blocks";
-import Previewer from "../previewer";
 import * as React from "react";
-import {useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useSpiralMode, useTextWall} from "../state";
+import {Fragment} from "react";
+import CustomizePage from "pages/customize";
+import {Breadcrumb, Checkbox, FillGap, Label, Page, Slider} from "components/building_blocks";
+import Previewer from "components/previewer";
+import {useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useTextWall} from "state";
 
 export default function CustomizeSubliminalTimingPage() {
-    const [textWall, setTextWall] = useTextWall();
+    const [textWall] = useTextWall();
     const [messageDuration, setMessageDuration] = useMessageDuration();
     const [blankDuration, setBlankDuration] = useMessageGap();
     const [oneWord, setOneWord] = useOneWord();

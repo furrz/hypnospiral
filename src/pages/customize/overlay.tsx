@@ -1,11 +1,11 @@
-import {Breadcrumb, FillGap, Label, Page, Slider, TextBlock, TextBox} from "../building_blocks";
 import * as React from "react";
-import {Fragment, useState} from "react";
-import Previewer from "../previewer";
-import CustomizePage from "./customizepage";
-import {useBgImageAlpha, useBgImage} from "../state";
+import {Fragment} from "react";
+import {useBgImageAlpha, useBgImage} from "state";
+import {Breadcrumb, FillGap, Label, Page, Slider, TextBlock, TextBox} from "components/building_blocks";
+import Previewer from "components/previewer";
+import CustomizePage from "pages/customize";
 
-export default function CustomizeOverlayPage () {
+export default function CustomizeOverlayPage() {
     let [url, setUrl] = useBgImage();
     let [opacity, setOpacity] = useBgImageAlpha();
 

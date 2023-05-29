@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useBgImage, useBgImageAlpha} from "./state";
+import {useBgImage, useBgImageAlpha} from "state";
 
 export default function SpiralOverlay() {
     const [url] = useBgImage();

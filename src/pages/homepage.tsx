@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {Gear, Info, Play, Share} from "@phosphor-icons/react";
-import {BigHeader, BreadcrumbSpace, FillGap, Page, TextBlock, WideButton} from "../building_blocks";
-import {ShareBtn} from "../sharebtn";
+import {Gear, Info, Play} from "@phosphor-icons/react";
+import {BigHeader, BreadcrumbSpace, FillGap, Page, TextBlock, WideButton} from "components/building_blocks";
+import {ShareBtn} from "components/sharebtn";
 
 export default function Homepage() {
     return (

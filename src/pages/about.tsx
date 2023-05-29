@@ -1,8 +1,7 @@
-import {BigHeader, Breadcrumb, Checkbox, FillGap, Label, Page, TextBlock} from "../building_blocks";
 import * as React from "react";
 import {Link} from "react-router-dom";
-import {useState} from "react";
-import {dyslexiaState} from "../state";
+import {dyslexiaState} from "state";
+import {BigHeader, Breadcrumb, Checkbox, FillGap, Page, TextBlock} from "components/building_blocks";
 
 export default function AboutPage() {
     const [dyslexia, setDyslexia] = dyslexiaState.useState();

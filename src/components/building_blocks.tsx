@@ -1,13 +1,10 @@
 import * as React from 'react';
 import {
-    ChangeEvent,
     createContext,
     Fragment,
-    HTMLFactory,
     PropsWithChildren,
     ReactElement,
-    ReactHTMLElement,
-    ReactNode, useContext,
+    useContext,
     useId,
     useState
 } from "react";
@@ -16,25 +13,34 @@ import {CaretLeft, Check} from "@phosphor-icons/react";
 import {RgbColor, RgbColorPicker} from "react-colorful";
 import {colord} from "colord";
 import useOnClickOutside from "use-onclickoutside";
-import {dyslexiaState} from "./state";
+import * as classNames from "classnames";
+import {dyslexiaState} from "state";
 
-const basicClassComponent = <T, >(clsName: string, cls_calc: (props: PropsWithChildren<T>) => string = (_) => "") =>
+const basicClassComponent = <T,>(clsName: string, cls_calc: (props: PropsWithChildren<T>) => string = (_) => "") =>
     (props: PropsWithChildren<T>) =>
         <div className={clsName + " " + cls_calc(props)}>{props.children}</div>;
 
-export const Page = function ({primary, secondary, children}: PropsWithChildren<{primary?: boolean, secondary?:boolean}>) {
-    const [dyslexia, setDyslexia] = dyslexiaState.useState();
-
-    return <div className={"page" + (primary ? " primary" : "") + (secondary ? " secondary" : "") + (dyslexia ? " dyslexia" : "")}>{children}</div>
+export const Page = function ({primary, secondary, children}: PropsWithChildren<{
+    primary?: boolean,
+    secondary?: boolean
+}>) {
+    const [dyslexia] = dyslexiaState.useState();
+    return <div className={classNames("page", {
+        "primary": primary,
+        "secondary": secondary,
+        "dyslexia": dyslexia
+    })}>{children}</div>
 };
 
 export const BigHeader = basicClassComponent("big_header");
 export const FillGap = basicClassComponent("fill_gap");
-export const TextBlock = basicClassComponent<{ medium?: boolean }>("inline_text", p => p.medium ? "medium_text" : "");
+export const TextBlock = basicClassComponent<{
+    medium?: boolean
+}>("inline_text", p => classNames({"medium_text": p.medium}));
 
 export const WideButton = ({to, primary, children}: PropsWithChildren<{ to: string, primary?: boolean }>) =>
     <NavLink to={to}
-             className={({isActive}) => "wide_button" + (primary ? " primary" : "") + (isActive ? " active" : "")}>
+             className={({isActive}) => classNames("wide_button", {"primary": primary, "active": isActive})}>
         {children}
     </NavLink>;
 
@@ -44,8 +50,9 @@ export const Breadcrumb = ({to, children, showInBigPrimary}: {
     showInBigPrimary?: boolean
 }) => <Fragment>
     {showInBigPrimary || <div className="breadcrumb_space hide_when_not_big_primary"></div>}
-    <Link to={to} className={"breadcrumb " + (showInBigPrimary ? "" : "hide_when_big_primary")}><CaretLeft
-        weight="fill"/> {children}</Link>
+    <Link to={to} className={classNames("breadcrumb", {"hide_when_big_primary": !showInBigPrimary})}>
+        <CaretLeft weight="fill"/> {children}
+    </Link>
 </Fragment>;
 
 export const BreadcrumbSpace = basicClassComponent("breadcrumb_space");
@@ -59,26 +66,26 @@ export const Label = function ({value, unit, children, htmlFor, flexExpand}: {
 }) {
     let text: string;
     let extras: ReactElement[] = [];
-    let labelClasses = "";
-    if (flexExpand) {
-        labelClasses += " flex_expand";
-    }
-    if (typeof children === 'string') {
+    const isLabelOnly = typeof children === 'string';
+
+    if (isLabelOnly) {
         text = children;
-        labelClasses += " separate_input";
     } else {
         [text, ...extras] = children;
     }
 
-    return <label htmlFor={htmlFor} className={labelClasses}>
-        <div className={"label_row"}>
+    return <label htmlFor={htmlFor} className={classNames({
+        "flex_expand": flexExpand,
+        "separate_input": isLabelOnly
+    })}>
+        <div className="label_row">
             <span>{text}</span>
             <span>
                 {(value != undefined) ? value.toFixed(2) : ""}
                 <span className="label_unit">{unit ?? ""}</span>
             </span>
         </div>
-        <div className={"input_row " + (flexExpand ? " flex_expand" : "")}>
+        <div className={classNames("input_row", {"flex_expand": flexExpand})}>
             {...extras}
         </div>
     </label>
@@ -94,7 +101,9 @@ export const Slider = function ({min = 0, max = 1, step = 0.01, value, onChange,
 }) {
     let percent = (value - min) / (max - min) * 100;
     return <input type="range" min={min} max={max} step={step} value={value} id={id}
-                  style={{background: "linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) " + percent + "%, var(--input-color) " + percent + "%, var(--input-color) 100%)"}}
+                  style={{
+                      background: `linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) ${percent}%, var(--input-color) ${percent}%, var(--input-color) 100%)`
+                  }}
                   onChange={e => onChange && onChange(e.target.valueAsNumber)}/>
 };
 
@@ -182,9 +191,10 @@ export const ColourBox = function ({value, onChange}: {
     });
 
     return <Fragment>
-        <div className={"colour_box " + (isOpen ? "active" : "")} style={{backgroundColor: colord(value).toRgbString()}}
+        <div className={classNames("colour_box", {"active": isOpen})}
+             style={{backgroundColor: colord(value).toRgbString()}}
              onClick={() => setIsOpen(true)}></div>
-        <div className={"popover_darken " + (isOpen ? "active" : "")}></div>
+        <div className={classNames("popover_darken", {"active": isOpen})}></div>
         {isOpen && (
             <div className="colour_popover" ref={ref}>
                 <RgbColorPicker color={value} onChange={onChange}/>

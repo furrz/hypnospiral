@@ -1,9 +1,9 @@
-import {Fragment} from "react";
-import CustomizePage from "./customizepage";
-import {Breadcrumb, FillGap, Label, Page, TextArea} from "../building_blocks";
-import Previewer from "../previewer";
 import * as React from "react";
-import {useMessages} from "../state";
+import {Fragment} from "react";
+import CustomizePage from "pages/customize";
+import {Breadcrumb, FillGap, Label, Page, TextArea} from "components/building_blocks";
+import Previewer from "components/previewer";
+import {useMessages} from "state";
 
 export default function CustomizeSubliminalMessagesPage() {
     let [messages, setMessages] = useMessages();

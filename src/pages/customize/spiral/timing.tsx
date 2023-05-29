@@ -1,11 +1,11 @@
-import {Fragment, useState} from "react";
-import CustomizePage from "./customizepage";
-import {Breadcrumb, FillGap, Label, Page, Slider} from "../building_blocks";
-import Previewer from "../previewer";
 import * as React from "react";
-import {useSpinSpeed, useThrobSpeed, useThrobStrength, useZoom} from "../state";
+import {Fragment} from "react";
+import {useSpinSpeed, useThrobSpeed, useThrobStrength, useZoom} from "state";
+import {Breadcrumb, FillGap, Label, Page, Slider} from "components/building_blocks";
+import Previewer from 'components/previewer';
+import CustomizePage from "pages/customize";
 
-export default function CustomizeSpiralTimingPage() {
+export default function Timing() {
     const [spinSpeed, setSpinSpeed] = useSpinSpeed();
     const [throbSpeed, setThrobSpeed] = useThrobSpeed();
     const [throbStrength, setThrobStrength] = useThrobStrength();

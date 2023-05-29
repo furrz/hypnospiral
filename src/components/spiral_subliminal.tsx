@@ -1,6 +1,6 @@
 import * as React from "react";
-import {useCutomGoogleFont, useMessageAlpha, useTextWall, useTxtColor} from "./state";
 import {colord} from "colord";
+import {useCutomGoogleFont, useMessageAlpha, useTextWall, useTxtColor} from "state";
 
 export default function SpiralSubliminal() {
     let [textWall] = useTextWall();
@@ -11,6 +11,6 @@ export default function SpiralSubliminal() {
         fontFamily: googleFont || "",
         color: colord({a: txtAlpha * 255, ...txtColor }).toRgbString()
     }}>
-        FUCK
+        Sample Text
     </div>;
 }
