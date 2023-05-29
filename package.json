@@ -24,7 +24,6 @@
     "@types/gl-react-dom": "^3.15.4",
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
-    "@types/webfontloader": "^1.6.35",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.5.1",
@@ -54,7 +53,6 @@
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.11.2",
     "state-pool": "^0.10.0",
-    "use-onclickoutside": "^0.4.1",
-    "webfontloader": "^1.6.28"
+    "use-onclickoutside": "^0.4.1"
   }
 }

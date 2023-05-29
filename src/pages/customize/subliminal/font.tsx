@@ -21,11 +21,16 @@ export default function CustomizeSubliminalFontPage() {
             <Label>
                 custom font name
                 <TextBox value={font} onChange={setFont}
-                          placeholder={"Roboto"}/>
+                         placeholder={"Roboto"}/>
             </Label>
             <TextBlock>
-                The name above must exactly match the name of a font from <a href="https://fonts.google.com">Google Fonts</a>.
+                The name above must exactly match the name of a font from <a href="https://fonts.google.com">Google
+                Fonts</a>.
                 If you get the name wrong, your custom font will not appear in the spiral view.
+            </TextBlock>
+            <TextBlock>
+                Want a font to be bold? Even bolder? You can add a font weight,
+                e.g.: <code>Roboto:bold</code>, <code>Roboto:light</code>, <code>Roboto:800</code>.
             </TextBlock>
             <FillGap/>
             <Previewer/>
