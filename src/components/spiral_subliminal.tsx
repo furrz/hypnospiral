@@ -9,14 +9,21 @@ export default function SpiralSubliminal() {
     let [txtColor] = useTxtColor();
     let [txtAlpha] = useMessageAlpha();
 
+    let [fontFamily, fontWeight] = (googleFont || "").trim().split(":", 2);
+    if (!fontWeight) fontWeight = "400";
+    let fontItalic = fontWeight.startsWith("i");
+    if (fontItalic) fontWeight = fontWeight.substring(1);
+    if (fontWeight === "") fontWeight = "400";
+
     return <Fragment>
         <link rel="stylesheet" href={"https://fonts.googleapis.com/css?family=" + googleFont}/>
         <div className={"subliminal_text" + (textWall ? " wall" : "")} style={{
-        fontFamily: (googleFont || "").split(":", 1)[0],
-        fontWeight: (googleFont || "").split(":")[2] || "200",
-        color: colord({a: txtAlpha, ...txtColor }).toRgbString()
-    }}>
-        Sample Text
+            fontFamily,
+            fontWeight,
+            fontStyle: fontItalic ? "italic" : "normal",
+            color: colord({a: txtAlpha, ...txtColor}).toRgbString()
+        }}>
+            Sample Text
         </div>
     </Fragment>;
 }

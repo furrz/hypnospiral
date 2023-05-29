@@ -31,6 +31,8 @@ export default function CustomizeSubliminalFontPage() {
             <TextBlock>
                 Want a font to be bold? Even bolder? You can add a font weight,
                 e.g.: <code>Roboto:bold</code>, <code>Roboto:light</code>, <code>Roboto:800</code>.
+                Adding an <code>i</code> before the font weight, such as <code>Open Sans:i900</code>,
+                can make the text italic.
             </TextBlock>
             <FillGap/>
             <Previewer/>
