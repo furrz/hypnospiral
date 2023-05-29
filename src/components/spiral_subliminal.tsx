@@ -25,10 +25,9 @@ export default function SpiralSubliminal() {
     let [oneWord] = useOneWord();
 
     let [fontFamily, fontWeight] = (googleFont || "").trim().split(":", 2);
-    if (!fontWeight) fontWeight = "400";
+    if (!fontWeight) fontWeight = "";
     let fontItalic = fontWeight.startsWith("i");
     if (fontItalic) fontWeight = fontWeight.substring(1);
-    if (fontWeight === "") fontWeight = "400";
 
     useEffect(() => {
         let timer: any;
