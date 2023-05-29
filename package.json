@@ -1,5 +1,6 @@
 {
   "name": "webvisu",
+  "private": true,
   "version": "1.0.0",
   "description": "This is the source code of [hypnospiral.vercel.app](https://hypnospiral.vercel.app).",
   "main": "index.js",
@@ -11,8 +12,8 @@
     "url": "git+https://github.com/furrz/hypnospiral.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Zyntaks",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/furrz/hypnospiral/issues"
   },

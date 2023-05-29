@@ -23,12 +23,15 @@ module.exports = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        modules: [
+            path.resolve(__dirname, 'src'), 'node_modules'
+        ],
         roots: [
-            path.resolve('./src/')
+            path.resolve('./web/')
         ]
     },
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'web/js'),
-    },
+    }
 };

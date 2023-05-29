@@ -14,17 +14,12 @@ export default function SpiralPage() {
         if (event.clientY > window.innerHeight / 5 * 3 && event.clientX > window.innerWidth / 5 * 3) {
             navigate("/");
         } else {
-            // @ts-ignore
             let fsElement = document.fullscreenElement || document.webkitFullscreenElement;
 
-            // @ts-ignore
             let fsRequest = document.documentElement.requestFullscreen
-                // @ts-ignore
                 || document.documentElement.webkitRequestFullscreen
-                // @ts-ignore
                 || document.documentElement.mozRequestFullscreen || ((_: any) => {});
 
-            // @ts-ignore
             let fsExitRequest = document.exitFullscreen || document.webkitExitFullscreen || (() => {});
 
             if (fsElement) {

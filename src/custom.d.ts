@@ -1,3 +1,16 @@
+interface Document {
+    mozCancelFullScreen?: any;
+    webkitExitFullscreen?: any;
+    fullscreenElement?: any;
+    mozFullScreenElement?: any;
+    webkitFullscreenElement?: any;
+}
+
+interface HTMLElement {
+    webkitRequestFullscreen?: any;
+    mozRequestFullscreen?: any;
+}
+
 declare module "*.svg" {
     const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
     export default content;
