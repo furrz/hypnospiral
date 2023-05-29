@@ -1,6 +1,10 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ReactRefreshTypeScript = require('react-refresh-typescript');
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
     entry: './src/index.tsx',
@@ -9,7 +13,15 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
+                use: {
+                    loader: 'ts-loader',
+                    options: {
+                        getCustomTransformers: () => ({
+                            before: [isDevelopment && ReactRefreshTypeScript()].filter(Boolean)
+                        }),
+                        transpileOnly: isDevelopment
+                    }
+                },
                 exclude: /node_modules/,
             },
             {
@@ -43,7 +55,8 @@ module.exports = {
             ]
         }),
         new HtmlWebpackPlugin(),
-    ],
+        isDevelopment && new ReactRefreshWebpackPlugin()
+    ].filter(Boolean),
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
@@ -55,5 +68,6 @@ module.exports = {
         },
         compress: true,
         port: 9000,
+        hot: true,
     },
 };
