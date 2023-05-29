@@ -15,6 +15,8 @@ import CustomizeSubliminalMessagesPage from "pages/customize/subliminal/messages
 import CustomizeSubliminalTimingPage from "pages/customize/subliminal/timing";
 import CustomizeSubliminalFontPage from "pages/customize/subliminal/font";
 
+import './style.css';
+
 const routes = [
     {
         path: "/",

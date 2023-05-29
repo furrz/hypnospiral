@@ -536,3 +536,11 @@ input[type=checkbox]:checked {
         white-space: break-spaces;
     }
 }
+
+@font-face {
+    font-family: 'OpenDyslexicRegular';
+    src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/otf/OpenDyslexic-Regular.otf') format('opentype');
+    src:   url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/woff/OpenDyslexic-Regular.woff') format('woff'),
+    url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/ttf/OpenDyslexic-Regular.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/svg/OpenDyslexic-Regular.svg#opendyslexicregular') format('svg');
+}

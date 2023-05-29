@@ -3,9 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "description": "This is the source code of [hypnospiral.vercel.app](https://hypnospiral.vercel.app).",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development"
   },
   "repository": {
     "type": "git",
@@ -24,11 +24,16 @@
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
     "@types/webfontloader": "^1.6.35",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.8.1",
+    "html-webpack-plugin": "^5.5.1",
     "raw-loader": "^4.0.2",
+    "style-loader": "^3.3.3",
     "ts-loader": "^9.4.3",
     "typescript": "^5.0.4",
     "webpack": "^5.84.1",
-    "webpack-cli": "^5.1.1"
+    "webpack-cli": "^5.1.1",
+    "webpack-dev-server": "^4.15.0"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.0.9",

@@ -1,4 +1,6 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     entry: './src/index.tsx',
@@ -19,6 +21,10 @@ module.exports = {
                 test: /\.frag$/i,
                 type: 'asset/source',
             },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
         ],
     },
     resolve: {
@@ -30,8 +36,24 @@ module.exports = {
             path.resolve('./web/')
         ]
     },
+    plugins: [
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: 'web' }
+            ]
+        }),
+        new HtmlWebpackPlugin()
+    ],
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'web/js'),
-    }
+        path: path.resolve(__dirname, 'dist/js'),
+        clean: true
+    },
+    devServer: {
+        static: {
+            directory: path.join(__dirname, 'web'),
+        },
+        compress: true,
+        port: 9000,
+    },
 };
