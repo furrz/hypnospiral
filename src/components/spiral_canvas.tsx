@@ -5,13 +5,14 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import {useBgColor, useFgColor, useSpinSpeed, useSpiralMode, useThrobSpeed, useThrobStrength, useZoom} from "state";
 
 import spiralFrag from 'assets/spiral.frag';
+import concentricFrag from 'assets/concentric.frag';
 
 const shaders = Shaders.create({
     spiral: {
         frag: spiralFrag
     },
     circle: {
-        frag: spiralFrag
+        frag: concentricFrag
     }
 })
 

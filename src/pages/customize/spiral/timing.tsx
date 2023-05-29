@@ -17,7 +17,7 @@ export default function Timing() {
             <Breadcrumb showInBigPrimary>Spiral Style</Breadcrumb>
             <Label value={spinSpeed}>
                 spin speed
-                <Slider value={spinSpeed} onChange={setSpinSpeed} max={4}/>
+                <Slider value={spinSpeed} onChange={setSpinSpeed} min={-4} max={4}/>
             </Label>
             <Label value={throbSpeed}>
                 throb speed
