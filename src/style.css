@@ -235,10 +235,10 @@ input[type=range] {
     height: var(--slider-thumb-size);
     border-radius: var(--slider-thumb-size);
     background: var(--bg-color);
-    outline: 2px solid var(--accent-color);
-    border: none;
+    outline: none;
+    border: 2px solid var(--accent-color);
     cursor: pointer;
-    margin-top: calc(2vh/2 - 5vh/2);
+    margin-top: calc(-1vh);
 }
 .is_webkit input[type='range']::-webkit-slider-thumb:hover {
     outline-color: var(--bg-color);
