@@ -88,7 +88,7 @@ export default function SpiralSubliminal() {
         }
 
         return () => clearTimeout(timer);
-    }, [messages, messageGap, messageDuration, randomOrder, textWall]);
+    }, [messages, messageGap, messageDuration, randomOrder, textWall, oneWord]);
 
     return <Fragment>
         <link rel="stylesheet" href={"https://fonts.googleapis.com/css?family=" + googleFont}/>
