@@ -23,7 +23,7 @@ export default function Homepage() {
                 about
                 <Info weight="bold"/>
             </WideButton>
-            {window.location.hostname !== "hypno.zyntaks.ca" &&
+            {window.location.hostname !== "hypno.zyntaks.ca" && window.location.hostname !== "localhost" &&
             <TextBlock>
                 You appear to be on a beta version of the site.
                 This could be out of date or unreliable sometimes.
