@@ -10,7 +10,8 @@ export default function Homepage() {
             <BigHeader>
                 hypnospiral<br/><b>visualizer</b>.
             </BigHeader>
-            <WideButton primary to={localStorage.getItem("has-seen-safety") === null ? "/first-time-safety" : "/spiral"}>
+            <WideButton primary
+                        to={localStorage.getItem("has-seen-safety") === null ? "/first-time-safety" : "/spiral"}>
                 begin hypnosis
                 <Play weight="bold"/>
             </WideButton>
@@ -23,16 +24,20 @@ export default function Homepage() {
                 about
                 <Info weight="bold"/>
             </WideButton>
-            {window.location.hostname !== "hypno.zyntaks.ca" && window.location.hostname !== "localhost" &&
-            <TextBlock>
-                You appear to be on a beta version of the site.
-                This could be out of date or unreliable sometimes.
-
-                <a href="#" onClick={e => {
-                    window.location.href = "https://hypno.zyntaks.ca/" + window.location.hash;
+            {window.navigator.xr && navigator.xr.isSessionSupported("immersive-vr") &&
+                <WideButton to="/about" onClick={e => {
                     e.preventDefault();
-                }}> Switch to the official release.</a>
-            </TextBlock>}
+                }}>vr mode</WideButton>}
+            {window.location.hostname !== "hypno.zyntaks.ca" && window.location.hostname !== "localhost" &&
+                <TextBlock>
+                    You appear to be on a beta version of the site.
+                    This could be out of date or unreliable sometimes.
+
+                    <a href="#" onClick={e => {
+                        window.location.href = "https://hypno.zyntaks.ca/" + window.location.hash;
+                        e.preventDefault();
+                    }}> Switch to the official release.</a>
+                </TextBlock>}
             <FillGap/>
             <TextBlock medium>
                 by <a href="https://twitter.com/PrinceZyntaks">@PrinceZyntaks</a>

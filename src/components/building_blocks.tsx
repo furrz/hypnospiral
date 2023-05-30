@@ -38,13 +38,18 @@ export const TextBlock = basicClassComponent<{
     medium?: boolean
 }>("inline_text", p => classNames({"medium_text": p.medium}));
 
-export const WideButton = ({to, primary, children, onSecondaryPage}: PropsWithChildren<{ to: string, primary?: boolean, onSecondaryPage?: boolean }>) => {
+export const WideButton = ({to, onClick, primary, children, onSecondaryPage}: PropsWithChildren<{
+    to: string,
+    onClick?: React.MouseEventHandler<HTMLAnchorElement>,
+    primary?: boolean,
+    onSecondaryPage?: boolean
+}>) => {
     const navigate = useNavigate();
     return <NavLink to={to}
-             onClick={onSecondaryPage ? (() => {
-                navigate(-1);
-             }) : undefined}
-             className={({isActive}) => classNames("wide_button", {"primary": primary, "active": isActive})}>
+                    onClick={onClick || (onSecondaryPage ? (() => {
+                        navigate(-1);
+                    }) : undefined)}
+                    className={({isActive}) => classNames("wide_button", {"primary": primary, "active": isActive})}>
         {children}
     </NavLink>;
 }
