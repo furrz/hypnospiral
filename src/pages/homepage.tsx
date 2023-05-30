@@ -1,26 +1,9 @@
 import * as React from 'react';
-import {Gear, Info, Play, VirtualReality} from "@phosphor-icons/react";
+import {Gear, Info, Play} from "@phosphor-icons/react";
 import {BigHeader, BreadcrumbSpace, FillGap, Page, TextBlock, WideButton} from "components/building_blocks";
 import {ShareBtn} from "components/sharebtn";
-import {useEffect, useState} from "react";
 
 export default function Homepage() {
-    const [vrSupported, setVrSupported] = useState(false);
-
-    useEffect(() => {
-        if (navigator.xr) {
-            const checkXrSupport = () => {
-                navigator.xr.isSessionSupported("immersive-vr").then(setVrSupported);
-            };
-
-
-            checkXrSupport();
-            navigator.xr.addEventListener("devicechange", checkXrSupport);
-
-            return () => { navigator.xr.removeEventListener("devicechange", checkXrSupport); };
-        }
-    }, []);
-
     return (
         <Page>
             <BreadcrumbSpace/>
@@ -41,11 +24,10 @@ export default function Homepage() {
                 about
                 <Info weight="bold"/>
             </WideButton>
-            {vrSupported &&
-                <WideButton to="/vr">
-                    vr mode
-                    <VirtualReality weight="bold"/>
-                </WideButton>}
+            {window.navigator.xr && navigator.xr.isSessionSupported("immersive-vr") &&
+                <WideButton to="/about" onClick={e => {
+                    e.preventDefault();
+                }}>vr mode</WideButton>}
             {window.location.hostname !== "hypno.zyntaks.ca" && window.location.hostname !== "localhost" &&
                 <TextBlock>
                     You appear to be on a beta version of the site.
