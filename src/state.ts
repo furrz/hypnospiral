@@ -28,7 +28,7 @@ if (location.hash && location.hash.length > 2) {
 }
 
 const createHashState = <T>(name: string, defaultValue: T) => {
-    let state = createState(JSON.parse(JSON.stringify(hashState[name] ? hashState[name] : defaultValue)));
+    let state = createState(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue)));
 
     return () => {
         let [value, setValue] = state.useState();

@@ -81,8 +81,11 @@ export default function SpiralSubliminal() {
             timer = setTimeout(wallHandler, messageDuration * 1000);
         };
 
-        if (textWall) wallHandler();
-        else lineHandler();
+
+        if (messages && messages.length >= 1) {
+            if (textWall) wallHandler();
+            else lineHandler();
+        }
 
         return () => clearTimeout(timer);
     }, [messages, messageGap, messageDuration, randomOrder, textWall]);
