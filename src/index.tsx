@@ -25,6 +25,7 @@ import CustomizeSubliminalFontPage from "pages/customize/subliminal/font";
 import './style.css';
 import {useEffect} from "react";
 import {onHashStateUpdate} from "./state";
+import VrPage from "./pages/vr";
 
 function HistoryManager() {
     const navType = useNavigationType();
@@ -61,6 +62,10 @@ const routes = [
             {
                 path: "/spiral",
                 element: <SpiralPage/>
+            },
+            {
+                path: "/vr",
+                element: <VrPage/>
             },
             {
                 path: "/first-time-safety",
