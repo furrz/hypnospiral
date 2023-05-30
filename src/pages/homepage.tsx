@@ -23,6 +23,16 @@ export default function Homepage() {
                 about
                 <Info weight="bold"/>
             </WideButton>
+            {window.location.hostname !== "hypno.zyntaks.ca" &&
+            <TextBlock>
+                You appear to be on a beta version of the site.
+                This could be out of date or unreliable sometimes.
+
+                <a href="#" onClick={e => {
+                    window.location.href = "https://hypno.zyntaks.ca/" + window.location.hash;
+                    e.preventDefault();
+                }}> Switch to the official release.</a>
+            </TextBlock>}
             <FillGap/>
             <TextBlock medium>
                 by <a href="https://twitter.com/PrinceZyntaks">@PrinceZyntaks</a>
