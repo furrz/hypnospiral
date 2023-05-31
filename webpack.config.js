@@ -8,7 +8,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
     entry: './src/index.tsx',
-    devtool: 'source-map',
+    devtool: isDevelopment && 'source-map',
     module: {
         rules: [
             {
