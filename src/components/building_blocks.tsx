@@ -93,7 +93,7 @@ export const Label = function ({value, unit, children, htmlFor, flexExpand}: {
         <div className="label_row">
             <span>{text}</span>
             <span>
-                {(value != undefined) ? value.toFixed(2) : ""}
+                {(value != undefined) ? (value.toFixed?(2) : value) : ""}
                 <span className="label_unit">{unit ?? ""}</span>
             </span>
         </div>
