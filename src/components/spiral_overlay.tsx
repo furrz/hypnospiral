@@ -1,19 +1,19 @@
-import * as React from "react";
-import {useBgImage, useBgImageAlpha} from "state";
+import * as React from 'react'
+import { useBgImage, useBgImageAlpha } from 'state'
 
-export default function SpiralOverlay() {
-    const [url] = useBgImage();
-    const [alpha] = useBgImageAlpha();
+export default function SpiralOverlay () {
+  const [url] = useBgImage()
+  const [alpha] = useBgImageAlpha()
 
-    return <div>
+  return <div>
         <div className="spiral_overlay" style={{
-            backgroundImage: `url(${url})`,
-            opacity: alpha.toString()
+          backgroundImage: `url(${url})`,
+          opacity: alpha.toString()
         }}></div>
         <video autoPlay loop className="spiral_video_overlay" key={url} style={{
-            opacity: alpha.toString()
+          opacity: alpha.toString()
         }}>
             <source src={url}/>
         </video>
-    </div>;
+    </div>
 }

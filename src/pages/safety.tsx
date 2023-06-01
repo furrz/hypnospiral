@@ -1,8 +1,8 @@
-import * as React from "react";
-import {Breadcrumb, Page, TextBlock} from "components/building_blocks";
+import * as React from 'react'
+import { Breadcrumb, Page, TextBlock } from 'components/building_blocks'
 
-export default function AboutSafetyPage() {
-    return <Page>
+export default function AboutSafetyPage () {
+  return <Page>
         <Breadcrumb>About</Breadcrumb>
         <TextBlock>
             This site is designed with safety in mind, but <b>your mind is still your own responsibility</b>

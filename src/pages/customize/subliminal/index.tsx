@@ -1,37 +1,37 @@
-import * as React from "react";
-import {Fragment, useId} from "react";
-import {Pencil, TextT, Timer} from "@phosphor-icons/react";
-import {useMessageAlpha, useTextWall, useTxtColor} from "state";
+import * as React from 'react'
+import { Fragment, useId } from 'react'
+import { Pencil, TextT, Timer } from '@phosphor-icons/react'
+import { useMessageAlpha, useTextWall, useTxtColor } from 'state'
 import {
-    Breadcrumb,
-    ColourBox,
-    FillGap,
-    Label,
-    Page,
-    Radio,
-    RadioOption,
-    Slider,
-    WideButton
-} from "components/building_blocks";
-import Previewer from "components/previewer";
-import CustomizePage from "pages/customize";
+  Breadcrumb,
+  ColourBox,
+  FillGap,
+  Label,
+  Page,
+  Radio,
+  RadioOption,
+  Slider,
+  WideButton
+} from 'components/building_blocks'
+import Previewer from 'components/previewer'
+import CustomizePage from 'pages/customize'
 
-import IconLines from 'assets/LinesText.svg';
-import IconWall from 'assets/WallText.svg';
+import IconLines from 'assets/LinesText.svg'
+import IconWall from 'assets/WallText.svg'
 
-export default function CustomizeSubliminalPage() {
-    let opacitySliderId = useId();
-    let [useWall, setUseWall] = useTextWall();
-    let [opacity, setOpacity] = useMessageAlpha();
-    let [colour, setColour] = useTxtColor();
+export default function CustomizeSubliminalPage () {
+  const opacitySliderId = useId()
+  const [useWall, setUseWall] = useTextWall()
+  const [opacity, setOpacity] = useMessageAlpha()
+  const [colour, setColour] = useTxtColor()
 
-    return <Fragment>
+  return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
             <Breadcrumb>Customizer</Breadcrumb>
             <Label>
                 text mode
-                <Radio value={useWall ? "wall" : "lines"} onChange={v => setUseWall(v === "wall")}>
+                <Radio value={useWall ? 'wall' : 'lines'} onChange={v => { setUseWall(v === 'wall') }}>
                     <RadioOption value="wall"><IconWall/></RadioOption>
                     <RadioOption value="lines"><IconLines/></RadioOption>
                 </Radio>
@@ -58,5 +58,5 @@ export default function CustomizeSubliminalPage() {
             <FillGap/>
             <Previewer/>
         </Page>
-    </Fragment>;
+    </Fragment>
 }

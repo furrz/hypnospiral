@@ -1,20 +1,20 @@
-import * as React from "react";
-import {Fragment} from "react";
-import {Timer} from "@phosphor-icons/react";
-import {Breadcrumb, ColourBox, FillGap, Label, Page, Radio, RadioOption, WideButton} from "components/building_blocks";
-import Previewer from "components/previewer";
-import CustomizePage from "pages/customize";
-import {useBgColor, useFgColor, useSpiralMode} from "state";
+import * as React from 'react'
+import { Fragment } from 'react'
+import { Timer } from '@phosphor-icons/react'
+import { Breadcrumb, ColourBox, FillGap, Label, Page, Radio, RadioOption, WideButton } from 'components/building_blocks'
+import Previewer from 'components/previewer'
+import CustomizePage from 'pages/customize'
+import { useBgColor, useFgColor, useSpiralMode } from 'state'
 
-import IconSpiral from "assets/SpiralStyle.svg";
-import IconCircle from "assets/CirclesStyle.svg";
+import IconSpiral from 'assets/SpiralStyle.svg'
+import IconCircle from 'assets/CirclesStyle.svg'
 
 export default function CustomizeSpiralPage () {
-    let [spiralMode, setSpiralMode] = useSpiralMode();
-    let [bgColor, setBgColor] = useBgColor();
-    let [fgColor, setFgColor] = useFgColor();
+  const [spiralMode, setSpiralMode] = useSpiralMode()
+  const [bgColor, setBgColor] = useBgColor()
+  const [fgColor, setFgColor] = useFgColor()
 
-    return <Fragment>
+  return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
             <Breadcrumb>Customizer</Breadcrumb>
@@ -37,5 +37,5 @@ export default function CustomizeSpiralPage () {
             <FillGap/>
             <Previewer/>
         </Page>
-    </Fragment>;
+    </Fragment>
 }

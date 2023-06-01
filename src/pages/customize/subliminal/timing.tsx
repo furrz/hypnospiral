@@ -1,18 +1,18 @@
-import * as React from "react";
-import {Fragment} from "react";
-import CustomizePage from "pages/customize";
-import {Breadcrumb, Checkbox, FillGap, Label, Page, Slider} from "components/building_blocks";
-import Previewer from "components/previewer";
-import {useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useTextWall} from "state";
+import * as React from 'react'
+import { Fragment } from 'react'
+import CustomizePage from 'pages/customize'
+import { Breadcrumb, Checkbox, FillGap, Label, Page, Slider } from 'components/building_blocks'
+import Previewer from 'components/previewer'
+import { useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useTextWall } from 'state'
 
-export default function CustomizeSubliminalTimingPage() {
-    const [textWall] = useTextWall();
-    const [messageDuration, setMessageDuration] = useMessageDuration();
-    const [blankDuration, setBlankDuration] = useMessageGap();
-    const [oneWord, setOneWord] = useOneWord();
-    const [randomOrder, setRandomOrder] = useRandomOrder();
+export default function CustomizeSubliminalTimingPage () {
+  const [textWall] = useTextWall()
+  const [messageDuration, setMessageDuration] = useMessageDuration()
+  const [blankDuration, setBlankDuration] = useMessageGap()
+  const [oneWord, setOneWord] = useOneWord()
+  const [randomOrder, setRandomOrder] = useRandomOrder()
 
-    return <Fragment>
+  return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
             <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
@@ -31,5 +31,5 @@ export default function CustomizeSubliminalTimingPage() {
             <FillGap/>
             <Previewer/>
         </Page>
-    </Fragment>;
+    </Fragment>
 };

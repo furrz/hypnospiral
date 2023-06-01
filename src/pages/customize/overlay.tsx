@@ -1,15 +1,15 @@
-import * as React from "react";
-import {Fragment} from "react";
-import {useBgImageAlpha, useBgImage} from "state";
-import {Breadcrumb, FillGap, Label, Page, Slider, TextBlock, TextBox} from "components/building_blocks";
-import Previewer from "components/previewer";
-import CustomizePage from "pages/customize";
+import * as React from 'react'
+import { Fragment } from 'react'
+import { useBgImageAlpha, useBgImage } from 'state'
+import { Breadcrumb, FillGap, Label, Page, Slider, TextBlock, TextBox } from 'components/building_blocks'
+import Previewer from 'components/previewer'
+import CustomizePage from 'pages/customize'
 
-export default function CustomizeOverlayPage() {
-    let [url, setUrl] = useBgImage();
-    let [opacity, setOpacity] = useBgImageAlpha();
+export default function CustomizeOverlayPage () {
+  const [url, setUrl] = useBgImage()
+  const [opacity, setOpacity] = useBgImageAlpha()
 
-    return <Fragment>
+  return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
             <Breadcrumb>Customizer</Breadcrumb>
@@ -34,6 +34,5 @@ export default function CustomizeOverlayPage() {
             <FillGap/>
             <Previewer/>
         </Page>
-    </Fragment>;
+    </Fragment>
 };
-

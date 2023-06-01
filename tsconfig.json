@@ -8,6 +8,7 @@
     "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
-    "baseUrl": "./src/"
+    "baseUrl": "./src/",
+    "strictNullChecks": true
   }
 }

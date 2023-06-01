@@ -1,17 +1,17 @@
-import * as React from "react";
-import {Fragment} from "react";
-import {useSpinSpeed, useThrobSpeed, useThrobStrength, useZoom} from "state";
-import {Breadcrumb, FillGap, Label, Page, Slider} from "components/building_blocks";
-import Previewer from 'components/previewer';
-import CustomizePage from "pages/customize";
+import * as React from 'react'
+import { Fragment } from 'react'
+import { useSpinSpeed, useThrobSpeed, useThrobStrength, useZoom } from 'state'
+import { Breadcrumb, FillGap, Label, Page, Slider } from 'components/building_blocks'
+import Previewer from 'components/previewer'
+import CustomizePage from 'pages/customize'
 
-export default function Timing() {
-    const [spinSpeed, setSpinSpeed] = useSpinSpeed();
-    const [throbSpeed, setThrobSpeed] = useThrobSpeed();
-    const [throbStrength, setThrobStrength] = useThrobStrength();
-    const [zoom, setZoom] = useZoom();
+export default function Timing () {
+  const [spinSpeed, setSpinSpeed] = useSpinSpeed()
+  const [throbSpeed, setThrobSpeed] = useThrobSpeed()
+  const [throbStrength, setThrobStrength] = useThrobStrength()
+  const [zoom, setZoom] = useZoom()
 
-    return <Fragment>
+  return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
             <Breadcrumb showInBigPrimary>Spiral Style</Breadcrumb>
@@ -34,5 +34,5 @@ export default function Timing() {
             <FillGap/>
             <Previewer/>
         </Page>
-    </Fragment>;
+    </Fragment>
 };

@@ -1,63 +1,62 @@
-import * as React from "react";
-import {Node, Shaders} from "gl-react";
-import {Surface} from "gl-react-dom";
-import {useCallback, useEffect, useRef, useState} from "react";
-import {useBgColor, useFgColor, useSpinSpeed, useSpiralMode, useThrobSpeed, useThrobStrength, useZoom} from "state";
+import * as React from 'react'
+import { Node, Shaders } from 'gl-react'
+import { Surface } from 'gl-react-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useBgColor, useFgColor, useSpinSpeed, useSpiralMode, useThrobSpeed, useThrobStrength, useZoom } from 'state'
 
-import spiralFrag from 'assets/spiral.frag';
-import concentricFrag from 'assets/concentric.frag';
+import spiralFrag from 'assets/spiral.frag'
+import concentricFrag from 'assets/concentric.frag'
 
 const shaders = Shaders.create({
-    spiral: {
-        frag: spiralFrag
-    },
-    circle: {
-        frag: concentricFrag
-    }
+  spiral: {
+    frag: spiralFrag
+  },
+  circle: {
+    frag: concentricFrag
+  }
 })
 
-export default function SpiralCanvas() {
-    const targetRef = useRef<HTMLDivElement>();
+export default function SpiralCanvas () {
+  const targetRef = useRef<HTMLDivElement>(null)
 
-    const [dimensions, setDimensions] = useState({width: 0, height: 0});
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
-    const [spinSpeed] = useSpinSpeed();
-    const [throbSpeed] = useThrobSpeed();
-    const [throbStrength] = useThrobStrength();
-    const [zoom] = useZoom();
-    const [fgColor] = useFgColor();
-    const [bgColor] = useBgColor();
-    const [spiralMode] = useSpiralMode();
+  const [spinSpeed] = useSpinSpeed()
+  const [throbSpeed] = useThrobSpeed()
+  const [throbStrength] = useThrobStrength()
+  const [zoom] = useZoom()
+  const [fgColor] = useFgColor()
+  const [bgColor] = useBgColor()
+  const [spiralMode] = useSpiralMode()
 
-    const animFrame = useCallback(() => {
-        if (targetRef.current) {
-            setDimensions({
-                width: targetRef.current.offsetWidth,
-                height: targetRef.current.offsetHeight
-            });
+  const animFrame = useCallback(() => {
+    if (targetRef.current != null) {
+      setDimensions({
+        width: targetRef.current.offsetWidth,
+        height: targetRef.current.offsetHeight
+      })
 
-            requestAnimationFrame(animFrame);
-        }
-    }, []);
+      requestAnimationFrame(animFrame)
+    }
+  }, [])
 
-    useEffect(() => {
-        requestAnimationFrame(animFrame);
-    }, [targetRef]);
+  useEffect(() => {
+    requestAnimationFrame(animFrame)
+  }, [targetRef])
 
-
-    return <div className="spiral_canvas_div" ref={targetRef}>
+  return <div className="spiral_canvas_div" ref={targetRef}>
         <Surface width={dimensions.width} height={dimensions.height}>
-            <Node shader={spiralMode === "circle" ? shaders.circle : shaders.spiral}
+            <Node shader={spiralMode === 'circle' ? shaders.circle : shaders.spiral}
                   uniforms={{
-                      iTime: performance.now() / 1000.0,
-                      iRes: [dimensions.width, dimensions.height],
-                      spinSpeed,
-                      throbSpeed,
-                      throbStrength,
-                      zoom,
-                      spiralColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255],
-                      bgColor: [bgColor.r / 255,bgColor.g / 255,bgColor.b / 255]
+                    iTime: performance.now() / 1000.0,
+                    iRes: [dimensions.width, dimensions.height],
+                    spinSpeed,
+                    throbSpeed,
+                    throbStrength,
+                    zoom,
+                    spiralColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255],
+                    bgColor: [bgColor.r / 255, bgColor.g / 255, bgColor.b / 255]
                   }}/>
         </Surface>
-    </div>;
+    </div>
 }

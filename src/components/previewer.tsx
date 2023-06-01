@@ -1,15 +1,15 @@
-import * as React from "react";
-import {createState} from "state-pool";
-import Spiral from "components/spiral";
+import * as React from 'react'
+import { createState } from 'state-pool'
+import Spiral from 'components/spiral'
 
-const previewState = createState(false);
+const previewState = createState(false)
 
-export default function Previewer() {
-    let [doPreview, setDoPreview] = previewState.useState();
+export default function Previewer () {
+  const [doPreview, setDoPreview] = previewState.useState()
 
-    return <div
+  return <div
         className="preview_box hide_when_big_primary"
-        onClick={() => setDoPreview(!doPreview)}>
+        onClick={() => { setDoPreview(!doPreview) }}>
         {doPreview ? <Spiral/> : <div className="preview_inactive_text">tap to toggle preview</div>}
-    </div>;
+    </div>
 }
