@@ -10,12 +10,12 @@ export const onHashStateUpdate = debounce(() => {
   }
 })
 
-function debounce (func: () => void, timeout = 100) {
+function debounce<Args extends any[]> (func: (...args: Args) => void, timeout = 100) {
   let timer: any
-  return () => {
+  return (...args: Args) => {
     clearTimeout(timer)
     timer = setTimeout(() => {
-      func.apply(this)
+      func.apply(this, args)
     }, timeout)
   }
 }
