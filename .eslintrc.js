@@ -15,6 +15,7 @@ module.exports = {
   plugins: [
     'react'
   ],
+  ignorePatterns: ['webpack.config.js'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-dynamic-delete': 'off'

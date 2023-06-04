@@ -22,7 +22,7 @@ export default function SpiralPage () {
 
       const fsExitRequest = document.exitFullscreen ?? document.webkitExitFullscreen ?? (() => {})
 
-      if (fsElement !== null) {
+      if (fsElement !== null && fsElement !== undefined) {
         fsExitRequest.call(document)
       } else {
         fsRequest.call(document.documentElement, { navigationUI: 'hide' })

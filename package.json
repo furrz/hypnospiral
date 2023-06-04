@@ -11,6 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/furrz/hypnospiral.git"
   },
+  "exports": {
+    ".": "./src"
+  },
   "keywords": [],
   "author": "Zyntaks",
   "license": "MIT",

@@ -1,4 +1,5 @@
 import { createState } from 'state-pool'
+import { locStorage } from 'local_storage'
 
 let hashState: any = {}
 
@@ -20,7 +21,7 @@ function debounce<Args extends any[]> (func: (...args: Args) => void, timeout = 
   }
 }
 
-if (location.hash.length > 2) {
+if (typeof location !== 'undefined' && location.hash.length > 2) {
   try {
     // If it loads, change all the relevant state values.
     hashState = { ...JSON.parse(decodeURIComponent(location.hash.substring(1))) }
@@ -65,4 +66,4 @@ export const useBgImageAlpha = createHashState('bgImageAlpha', 0.5)
 export const useTextWall = createHashState('textWall', true)
 export const useCustomGoogleFont = createHashState('customGoogleFont', '')
 export const useSpiralMode = createHashState('spiralMode', 'spiral')
-export const dyslexiaState = createState(localStorage.getItem('dyslexic') !== null)
+export const dyslexiaState = createState(locStorage.getItem('dyslexic') !== null)

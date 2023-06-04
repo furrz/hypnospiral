@@ -25,7 +25,7 @@ export default function SpiralSubliminal () {
   const [oneWord] = useOneWord()
 
   let [fontFamily, fontWeight] = (googleFont ?? '').trim().split(':', 2)
-  if (fontWeight === '') fontWeight = ''
+  if (typeof fontWeight === 'undefined' || fontWeight === '') fontWeight = ''
   const fontItalic = fontWeight.startsWith('i')
   if (fontItalic) fontWeight = fontWeight.substring(1)
 

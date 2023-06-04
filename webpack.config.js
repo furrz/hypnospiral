@@ -3,12 +3,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const ReactRefreshTypeScript = require('react-refresh-typescript');
-
+const ReactDOM = require('react-dom/server');
+const React = require('react');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-module.exports = {
-    entry: './src/index.tsx',
-    devtool: isDevelopment && 'source-map',
+const commonConfig = (isNodeSide) => ({
     module: {
         rules: [
             {
@@ -17,9 +16,9 @@ module.exports = {
                     loader: 'ts-loader',
                     options: {
                         getCustomTransformers: () => ({
-                            before: [isDevelopment && ReactRefreshTypeScript()].filter(Boolean)
+                            before: [(!isNodeSide) && isDevelopment && ReactRefreshTypeScript()].filter(Boolean)
                         }),
-                        transpileOnly: isDevelopment
+                        transpileOnly: isDevelopment,
                     }
                 },
                 exclude: /node_modules/,
@@ -27,7 +26,7 @@ module.exports = {
             {
                 test: /\.svg$/,
                 issuer: /\.[jt]sx?$/,
-                use: [{loader:'@svgr/webpack', options: {typescript: true}}],
+                use: [{loader: '@svgr/webpack', options: {typescript: true}}],
             },
             {
                 test: /\.frag$/i,
@@ -48,26 +47,62 @@ module.exports = {
             path.resolve('./web/')
         ]
     },
-    plugins: [
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: 'web' }
-            ]
-        }),
-        new HtmlWebpackPlugin(),
-        isDevelopment && new ReactRefreshWebpackPlugin()
-    ].filter(Boolean),
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
-        clean: true
-    },
-    devServer: {
-        static: {
-            directory: path.join(__dirname, 'web'),
+})
+
+const serverConfig = {
+    ...commonConfig(true), ...{
+        entry: './src/components/app.tsx',
+        target: 'node',
+        devtool: 'eval',
+        output: {
+            filename: 'bundle.server.js',
+            path: path.resolve(__dirname, 'tmp'),
+            clean: true,
+            library: {
+                name: 'App',
+                type: 'commonjs-static'
+            }
         },
-        compress: true,
-        port: 9000,
-        hot: true,
-    },
+        externals: {
+            "react": "commonjs react",
+            "react-dom": "commonjs react-dom"
+        },
+        ...commonConfig
+    }
 };
+
+const clientConfig = {
+    ...commonConfig(false), ...{
+        entry: './src/index.tsx',
+        devtool: isDevelopment && 'source-map',
+        plugins: [
+            new CopyWebpackPlugin({
+                patterns: [
+                    {from: 'web'}
+                ]
+            }),
+            new HtmlWebpackPlugin({
+                templateParameters: () => {
+                    const {App} = require('./tmp/bundle.server.js')
+                    return {injectCode: ReactDOM.renderToStaticMarkup(React.createElement(App.default, null, null))}
+                }
+            }),
+            isDevelopment && new ReactRefreshWebpackPlugin()
+        ].filter(Boolean),
+        output: {
+            filename: 'bundle.js',
+            path: path.resolve(__dirname, 'dist'),
+            clean: true
+        },
+        devServer: {
+            static: {
+                directory: path.join(__dirname, 'web'),
+            },
+            compress: true,
+            port: 9000,
+            hot: true,
+        },
+    }
+};
+
+module.exports = [serverConfig, clientConfig];

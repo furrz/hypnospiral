@@ -2,6 +2,9 @@ import * as React from 'react'
 import { Gear, Info, Play } from '@phosphor-icons/react'
 import { BigHeader, BreadcrumbSpace, FillGap, Page, TextBlock, WideButton } from 'components/building_blocks'
 import { ShareBtn } from 'components/sharebtn'
+import { locStorage } from 'local_storage'
+
+const win = (typeof window === 'undefined') ? { location: { hostname: 'hypno.zyntaks.ca' } } : window
 
 export default function Homepage () {
   return (
@@ -10,7 +13,7 @@ export default function Homepage () {
             <BigHeader>
                 hypnospiral<br/><b>visualizer</b>.
             </BigHeader>
-            <WideButton primary to={localStorage.getItem('has-seen-safety') === null ? '/first-time-safety' : '/spiral'}>
+            <WideButton primary to={locStorage.getItem('has-seen-safety') === null ? '/first-time-safety' : '/spiral'}>
                 begin hypnosis
                 <Play weight="bold"/>
             </WideButton>
@@ -23,7 +26,7 @@ export default function Homepage () {
                 about
                 <Info weight="bold"/>
             </WideButton>
-            {window.location.hostname !== 'hypno.zyntaks.ca' && window.location.hostname !== 'localhost' &&
+            {win.location.hostname !== 'hypno.zyntaks.ca' && win.location.hostname !== 'localhost' &&
             <TextBlock>
                 You appear to be on a beta version of the site.
                 This could be out of date or unreliable sometimes.
