@@ -84,6 +84,8 @@ const clientConfig = {
             new HtmlWebpackPlugin({
                 templateParameters: () => {
                     const {App} = require('./tmp/bundle.server.js')
+                    // evil
+                    React.useLayoutEffect = React.useEffect
                     return {injectCode: ReactDOM.renderToStaticMarkup(React.createElement(App.default, null, null))}
                 }
             }),
