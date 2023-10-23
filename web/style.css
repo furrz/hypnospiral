@@ -417,9 +417,37 @@ input[type=checkbox]:checked {
     transition: background-color 0.3s;
 }
 
+
 .wide_button:hover, .wide_button.active {
     background-color: var(--hover-color);
 }
+
+.patron_button {
+    border: 2px solid var(--dark-accent-color);
+    background-color: var(--hover-color);
+    border-radius: 1px;
+    flex-direction: column;
+    align-items: start;
+    font-size: 2vh;
+    gap: 1vh;
+    padding-bottom: 2vh;
+    font-weight: normal;
+}
+
+.patron_button:hover {
+    background-color: var(--dark-accent-color);
+    color: var(--bg-color);
+}
+
+.patron_button_inner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex: 1;
+    width: 100%;
+    font-size: 5vh;
+}
+
 
 .wide_button.primary {
     background-color: var(--accent-color);
