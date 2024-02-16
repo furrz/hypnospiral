@@ -95,7 +95,6 @@ export const useBgImageAlpha = createHashState('bgImageAlpha', 0.5)
 export const useTextWall = createHashState('textWall', true)
 export const useCustomGoogleFont = createHashState('customGoogleFont', '')
 export const useSpiralMode = createHashState('spiralMode', 'spiral')
-
 export const useRainbowColors = createHashState('rainbowColors', false)
 export const useRainbowSaturation = createHashState('rainbowSaturation', 100)
 export const useRainbowLightness = createHashState('rainbowLightness', 50)
