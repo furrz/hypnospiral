@@ -2,10 +2,20 @@ import * as React from 'react'
 import { Node, Shaders } from 'gl-react'
 import { Surface } from 'gl-react-dom'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useBgColor, useFgColor, useSpinSpeed, useSpiralMode, useThrobSpeed, useThrobStrength, useZoom } from 'state'
+import {
+  useBgColor,
+  useFgColor,
+  useRainbowColors, useRainbowHueSpeed, useRainbowLightness, useRainbowSaturation,
+  useSpinSpeed,
+  useSpiralMode,
+  useThrobSpeed,
+  useThrobStrength,
+  useZoom
+} from 'state'
 
 import spiralFrag from 'assets/spiral.frag'
 import concentricFrag from 'assets/concentric.frag'
+import {colord} from "colord";
 
 const shaders = Shaders.create({
   spiral: {
@@ -17,6 +27,8 @@ const shaders = Shaders.create({
 })
 
 export default function SpiralCanvas () {
+  const iTime = performance.now() / 1000.0
+
   const targetRef = useRef<HTMLDivElement>(null)
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
@@ -28,6 +40,17 @@ export default function SpiralCanvas () {
   const [fgColor] = useFgColor()
   const [bgColor] = useBgColor()
   const [spiralMode] = useSpiralMode()
+  const [rainbowColors] = useRainbowColors()
+  const [rainbowSaturation] = useRainbowSaturation()
+  const [rainbowLightness] = useRainbowLightness()
+  const [rainbowHueSpeed] = useRainbowHueSpeed()
+
+  if (rainbowColors) {
+    const newColor = colord({ h: (iTime * 10.0 * rainbowHueSpeed) % 360, s: rainbowSaturation, l: rainbowLightness }).toRgb()
+    bgColor.r = newColor.r
+    bgColor.g = newColor.g
+    bgColor.b = newColor.b
+  }
 
   const animFrame = useCallback(() => {
     if (targetRef.current != null) {
@@ -48,7 +71,7 @@ export default function SpiralCanvas () {
         <Surface width={dimensions.width} height={dimensions.height}>
             <Node shader={spiralMode === 'circle' ? shaders.circle : shaders.spiral}
                   uniforms={{
-                    iTime: performance.now() / 1000.0,
+                    iTime,
                     iRes: [dimensions.width, dimensions.height],
                     spinSpeed,
                     throbSpeed,
