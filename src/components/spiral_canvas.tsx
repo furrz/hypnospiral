@@ -1,11 +1,14 @@
 import * as React from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Node, Shaders } from 'gl-react'
 import { Surface } from 'gl-react-dom'
-import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   useBgColor,
   useFgColor,
-  useRainbowColors, useRainbowHueSpeed, useRainbowLightness, useRainbowSaturation,
+  useRainbowColors,
+  useRainbowHueSpeed,
+  useRainbowLightness,
+  useRainbowSaturation,
   useSpinSpeed,
   useSpiralMode,
   useThrobSpeed,
@@ -15,7 +18,7 @@ import {
 
 import spiralFrag from 'assets/spiral.frag'
 import concentricFrag from 'assets/concentric.frag'
-import {colord} from "colord";
+import { colord } from 'colord'
 
 const shaders = Shaders.create({
   spiral: {
@@ -46,7 +49,11 @@ export default function SpiralCanvas () {
   const [rainbowHueSpeed] = useRainbowHueSpeed()
 
   if (rainbowColors) {
-    const newColor = colord({ h: (iTime * 10.0 * rainbowHueSpeed) % 360, s: rainbowSaturation, l: rainbowLightness }).toRgb()
+    const newColor = colord({
+      h: (iTime * 10.0 * rainbowHueSpeed) % 360,
+      s: rainbowSaturation,
+      l: rainbowLightness
+    }).toRgb()
     bgColor.r = newColor.r
     bgColor.g = newColor.g
     bgColor.b = newColor.b
@@ -68,18 +75,18 @@ export default function SpiralCanvas () {
   }, [targetRef])
 
   return <div className="spiral_canvas_div" ref={targetRef}>
-        <Surface width={dimensions.width} height={dimensions.height}>
-            <Node shader={spiralMode === 'circle' ? shaders.circle : shaders.spiral}
-                  uniforms={{
-                    iTime,
-                    iRes: [dimensions.width, dimensions.height],
-                    spinSpeed,
-                    throbSpeed,
-                    throbStrength,
-                    zoom,
-                    spiralColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255],
-                    bgColor: [bgColor.r / 255, bgColor.g / 255, bgColor.b / 255]
-                  }}/>
-        </Surface>
-    </div>
+    <Surface width={dimensions.width} height={dimensions.height}>
+      <Node shader={spiralMode === 'circle' ? shaders.circle : shaders.spiral}
+            uniforms={{
+              iTime,
+              iRes: [dimensions.width, dimensions.height],
+              spinSpeed,
+              throbSpeed,
+              throbStrength,
+              zoom,
+              spiralColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255],
+              bgColor: [bgColor.r / 255, bgColor.g / 255, bgColor.b / 255]
+            }}/>
+    </Surface>
+  </div>
 }

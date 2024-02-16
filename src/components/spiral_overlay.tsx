@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useBgImage, useBgImageAlpha, useMuteOverlay} from 'state'
+import { useBgImage, useBgImageAlpha, useMuteOverlay } from 'state'
 
 const ytVideoIDRegex = /^[a-zA-Z0-9]{11}$/
 
@@ -25,13 +25,14 @@ export default function SpiralOverlay () {
       return <div>
         <iframe className="spiral_video_overlay"
                 src={`https://www.youtube.com/embed/${ytVideoID}?controls=0&autoplay=1&loop=1&playlist=${ytVideoID}&mute=${muteOverlay ? 1 : 0}`}
-                title="YouTube video player" frameBorder="0"
+                title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
-                style={{opacity: alpha.toString(), pointerEvents: 'none'}}></iframe>
+                style={{ opacity: alpha.toString(), pointerEvents: 'none', border: 0 }}></iframe>
       </div>
     }
-  } catch (e) {}
+  } catch (e) {
+  }
 
   return <div>
     <div className="spiral_overlay" style={{
