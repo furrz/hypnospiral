@@ -12,7 +12,7 @@ export default function CustomizePage ({ secondary }: { secondary?: boolean }) {
         </BigHeader>
         <WideButton to="/customize/spiral" onSecondaryPage={secondary}>spiral style <Gear weight="bold"/></WideButton>
         <WideButton to="/customize/subliminal" onSecondaryPage={secondary}>subliminal text <TextAa weight="bold"/></WideButton>
-        <WideButton to="/customize/overlay" onSecondaryPage={secondary}>overlays <StackSimple weight="bold"/></WideButton>
+        <WideButton to="/customize/overlay" onSecondaryPage={secondary}>overlays & audio <StackSimple weight="bold"/></WideButton>
         <FillGap/>
         <ShareBtn/>
         <Previewer/>
