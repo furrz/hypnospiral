@@ -1,17 +1,40 @@
 import { createState } from 'state-pool'
 import { locStorage } from 'local_storage'
+import { getStreamAsArrayBuffer } from 'get-stream'
 
 let hashState: any = {}
+const hashStateRefreshers: Array<() => void> = []
 
-export const onHashStateUpdate = debounce(() => {
+function base64ToBytes (base64: string) {
+  const binString = atob(base64)
+  return Uint8Array.from(binString, (m) => m.codePointAt(0) ?? 0)
+}
+
+function bytesToBase64 (bytes: Uint8Array) {
+  const binString = String.fromCodePoint(...bytes)
+  return btoa(binString)
+}
+
+export const onHashStateUpdate = debounce(async () => {
   if (Object.keys(hashState).length > 0) {
-    history.replaceState(undefined, '', '#' + encodeURIComponent(JSON.stringify(hashState)))
+    const jsonString = JSON.stringify(hashState)
+    // Compress with gzip
+    const compressedBytes = await getStreamAsArrayBuffer(
+      new Blob([jsonString])
+        .stream()
+        .pipeThrough(new CompressionStream('gzip')))
+    const b64 = bytesToBase64(new Uint8Array(compressedBytes))
+    // Pick shorter encoding choice
+    const candidate1 = encodeURIComponent(b64)
+    const candidate2 = encodeURIComponent(jsonString)
+    const choice = candidate1.length < candidate2.length ? candidate1 : candidate2
+    history.replaceState(undefined, '', '#' + choice)
   } else {
     history.replaceState(undefined, '', '#')
   }
 })
 
-function debounce<Args extends any[]> (func: (...args: Args) => void, timeout = 100) {
+function debounce<Args extends any[]> (func: (...args: Args) => void | Promise<void>, timeout = 100) {
   let timer: any
   return (...args: Args) => {
     clearTimeout(timer)
@@ -22,17 +45,23 @@ function debounce<Args extends any[]> (func: (...args: Args) => void, timeout = 
 }
 
 if (typeof location !== 'undefined' && location.hash.length > 2) {
-  try {
+  (async () => {
     // If it loads, change all the relevant state values.
-    hashState = { ...JSON.parse(decodeURIComponent(location.hash.substring(1))) }
-  } catch (e) {
+    const text = decodeURIComponent(location.hash.substring(1))
+    if (text.startsWith('{')) hashState = { ...JSON.parse(text) }
+    else {
+      const decoded = await getStreamAsArrayBuffer(new Blob([base64ToBytes(text)]).stream().pipeThrough(new DecompressionStream('gzip')))
+      hashState = { ...JSON.parse(new TextDecoder().decode(decoded)) }
+      hashStateRefreshers.forEach(c => { c() })
+    }
+  })().catch(e => {
     console.log(e)
-  }
+  })
 }
 
-const createHashState = <T>(name: string, defaultValue: T) => {
+const createHashState = <T> (name: string, defaultValue: T) => {
   const state = createState(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue)))
-
+  hashStateRefreshers.push(() => { state.setValue(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue))) })
   return () => {
     const [value, setValue] = state.useState()
 

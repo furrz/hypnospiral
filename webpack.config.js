@@ -60,7 +60,7 @@ const serverConfig = {
             clean: true,
             library: {
                 name: 'App',
-                type: 'commonjs-static'
+                type: 'commonjs-static',
             }
         },
         externals: {
@@ -82,8 +82,8 @@ const clientConfig = {
                 ]
             }),
             new HtmlWebpackPlugin({
-                templateParameters: () => {
-                    const {App} = require('./tmp/bundle.server.js')
+                templateParameters: async () => {
+                    const { App } = (require('./tmp/bundle.server.js'));
                     // evil
                     React.useLayoutEffect = React.useEffect
                     return {injectCode: ReactDOM.renderToStaticMarkup(React.createElement(App.default, null, null))}
