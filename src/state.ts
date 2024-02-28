@@ -18,16 +18,23 @@ function bytesToBase64 (bytes: Uint8Array) {
 export const onHashStateUpdate = debounce(async () => {
   if (Object.keys(hashState).length > 0) {
     const jsonString = JSON.stringify(hashState)
-    // Compress with gzip
-    const compressedBytes = await getStreamAsArrayBuffer(
-      new Blob([jsonString])
-        .stream()
-        .pipeThrough(new CompressionStream('gzip')))
-    const b64 = bytesToBase64(new Uint8Array(compressedBytes))
-    // Pick shorter encoding choice
-    const candidate1 = encodeURIComponent(b64)
     const candidate2 = encodeURIComponent(jsonString)
-    const choice = candidate1.length < candidate2.length ? candidate1 : candidate2
+
+    let choice = candidate2
+
+    try {
+      // Compress with gzip
+      const compressedBytes = await getStreamAsArrayBuffer(
+        new Blob([jsonString])
+          .stream()
+          .pipeThrough(new CompressionStream('gzip')))
+      const b64 = bytesToBase64(new Uint8Array(compressedBytes))
+      // Pick shorter encoding choice
+      const candidate1 = encodeURIComponent(b64)
+      choice = candidate1.length < candidate2.length ? candidate1 : candidate2
+    } catch (e) {
+      console.error(e)
+    }
     history.replaceState(undefined, '', '#' + choice)
   } else {
     history.replaceState(undefined, '', '#')
