@@ -1,9 +1,24 @@
 import { createState } from 'state-pool'
 import { locStorage } from 'local_storage'
-import { getStreamAsArrayBuffer } from 'get-stream'
 
 let hashState: any = {}
 const hashStateRefreshers: Array<() => void> = []
+
+async function readStream (stream: ReadableStream) {
+  const reader = stream.getReader()
+
+  let state = new Uint8Array()
+
+  do {
+    const { done, value } = await reader.read() as ReadableStreamReadResult<Uint8Array>
+    if (done) return state
+
+    const newValue = new Uint8Array(value.length + state.length)
+    newValue.set(state, 0)
+    newValue.set(value, state.length)
+    state = newValue
+  } while (true)
+}
 
 function base64ToBytes (base64: string) {
   const binString = atob(base64)
@@ -24,11 +39,11 @@ export const onHashStateUpdate = debounce(async () => {
 
     try {
       // Compress with gzip
-      const compressedBytes = await getStreamAsArrayBuffer(
+      const compressedBytes = await readStream(
         new Blob([jsonString])
           .stream()
           .pipeThrough(new CompressionStream('gzip')))
-      const b64 = bytesToBase64(new Uint8Array(compressedBytes))
+      const b64 = bytesToBase64(compressedBytes)
       // Pick shorter encoding choice
       const candidate1 = encodeURIComponent(b64)
       choice = candidate1.length < candidate2.length ? candidate1 : candidate2
@@ -57,7 +72,7 @@ if (typeof location !== 'undefined' && location.hash.length > 2) {
     const text = decodeURIComponent(location.hash.substring(1))
     if (text.startsWith('{')) hashState = { ...JSON.parse(text) }
     else {
-      const decoded = await getStreamAsArrayBuffer(new Blob([base64ToBytes(text)]).stream().pipeThrough(new DecompressionStream('gzip')))
+      const decoded = await readStream(new Blob([base64ToBytes(text)]).stream().pipeThrough(new DecompressionStream('gzip')))
       hashState = { ...JSON.parse(new TextDecoder().decode(decoded)) }
       hashStateRefreshers.forEach(c => { c() })
     }
