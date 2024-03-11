@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useAudioSource, useBgImage, useBgImageAlpha, useMuteOverlay } from 'state'
 
-const ytVideoIDRegex = /^[a-zA-Z0-9]{11}$/
+const ytVideoIDRegex = /^[a-zA-Z0-9-]{11}$/
 
 function EmbeddedVideo ({ muted, url, style, className }: {
   muted: boolean
