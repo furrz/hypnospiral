@@ -47,6 +47,7 @@ export default function SpiralCanvas () {
   const [rainbowSaturation] = useRainbowSaturation()
   const [rainbowLightness] = useRainbowLightness()
   const [rainbowHueSpeed] = useRainbowHueSpeed()
+  const bgc = { ...bgColor }
 
   if (rainbowColors) {
     const newColor = colord({
@@ -54,9 +55,9 @@ export default function SpiralCanvas () {
       s: rainbowSaturation,
       l: rainbowLightness
     }).toRgb()
-    bgColor.r = newColor.r
-    bgColor.g = newColor.g
-    bgColor.b = newColor.b
+    bgc.r = newColor.r
+    bgc.g = newColor.g
+    bgc.b = newColor.b
   }
 
   const animFrame = useCallback(() => {
@@ -85,7 +86,7 @@ export default function SpiralCanvas () {
               throbStrength,
               zoom,
               spiralColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255],
-              bgColor: [bgColor.r / 255, bgColor.g / 255, bgColor.b / 255]
+              bgColor: [bgc.r / 255, bgc.g / 255, bgc.b / 255]
             }}/>
     </Surface>
   </div>
