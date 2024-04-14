@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { Play } from '@phosphor-icons/react'
 import { BigHeader, Breadcrumb, FillGap, Page, TextBlock, WideButton } from 'components/building_blocks'
 
@@ -10,7 +10,7 @@ export default function FirstTimeSafetyPage () {
             hypnospiral<br/>
             <b>safety</b>alizer.
         </BigHeader>
-        <TextBlock medium><Link to="/about/safety">More Safety Information</Link></TextBlock>
+        <TextBlock medium><NavLink to="/about/safety">More Safety Information</NavLink></TextBlock>
         <TextBlock medium>
             We&apos;ll only force you to read this once, but it&apos;s available in <i>about</i> anytime.
         </TextBlock>
