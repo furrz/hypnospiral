@@ -1,0 +1,11 @@
+Hypnospiral Visualizer
+
+Developed by Prince Zyntaks (zyntaks.ca, twitter@PrinceZyntaks, tele@PrinceZyntaks)
+
+Funded by the community on Patreon! Massive thanks to all of you, and everyone who encouraged
+me or spread the word about this site, reported bugs, or just likes to use it.
+
+Ideas were contributed by many lovely people.
+
+Assets for an incomplete 'metronome' feature hosted at /test_metronome.html on this site
+were provided by GooeyBlueBoye.
