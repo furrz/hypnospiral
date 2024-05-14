@@ -443,6 +443,8 @@ input[type=checkbox]:checked {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
     flex: 1;
     width: 100%;
     font-size: 5vh;
