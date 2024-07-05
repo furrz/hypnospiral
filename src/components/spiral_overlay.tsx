@@ -42,7 +42,7 @@ function EmbeddedVideo ({ muted, url, style, className }: {
   }
 
   if (isScAudioLink) {
-    const ctlUrl = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true`
+    const ctlUrl = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false`
 
     return <div>
       <iframe width="100%" height="166" scrolling="no" frameBorder="no" allow="autoplay"
