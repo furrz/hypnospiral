@@ -37,9 +37,6 @@ export default function CustomizeOverlayPage () {
       <TextBlock>
         <b>Links to imgur albums, FA posts, etc. will NOT work directly.</b>
       </TextBlock>
-      <TextBlock>
-        <b>If you only want the audio from a video, simply set overlay opacity to 0.00.</b>
-      </TextBlock>
       <FillGap/>
       <Previewer/>
     </Page>
