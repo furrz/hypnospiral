@@ -10,6 +10,7 @@ function EmbeddedVideo ({ muted, url, style, className }: {
   className?: string | undefined
 }) {
   let ytVideoID: string | null = null
+  let isScAudioLink: boolean = false
 
   try {
     const parsedURL = new URL(url)
@@ -19,6 +20,8 @@ function EmbeddedVideo ({ muted, url, style, className }: {
       ytVideoID = parsedURL.searchParams.get('v')
     } else if (parsedURL.hostname === 'youtu.be' || parsedURL.hostname === 'www.youtu.be') {
       ytVideoID = parsedURL.pathname.split('/')[1]
+    } else if (parsedURL.hostname === 'soundcloud.com' || parsedURL.hostname === 'www.soundcloud.com' || parsedURL.hostname === 'on.soundcloud.com' || parsedURL.hostname === 'www.on.soundcloud.com') {
+      isScAudioLink = true
     }
 
     // Only valid YouTube video IDs will be interpreted as a YT video
@@ -36,6 +39,16 @@ function EmbeddedVideo ({ muted, url, style, className }: {
       </div>
     }
   } catch (e) {
+  }
+
+  if (isScAudioLink) {
+    const ctlUrl = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true`
+
+    return <div>
+      <iframe width="100%" height="166" scrolling="no" frameBorder="no" allow="autoplay"
+              src={ctlUrl}
+              style={{ opacity: 0, position: 'fixed', pointerEvents: 'none' }}></iframe>
+    </div>
   }
 
   return <video autoPlay loop muted={muted} className={className} key={url} style={{

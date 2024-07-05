@@ -29,7 +29,8 @@ export default function CustomizeOverlayPage () {
         <TextBox placeholder="https://youtube.com/watch?v=jsnkdjnd" value={audioUrl} onChange={setAudioUrl}/>
       </Label>}
       <TextBlock medium>
-        The overlay url <b>must</b> link to an image, video, or audio <b>file</b>, or to a YouTube video.
+        The overlay url <b>must</b> link to an image, video, or audio <b>file</b>, or a YouTube video or
+        SoundCloud song that has embedding enabled.
         Some media cannot be embedded.
         A proper file link usually ends in .png, .jpg, .mp4, .mp3, etc.
       </TextBlock>
