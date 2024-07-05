@@ -23,15 +23,15 @@ export default function CustomizeOverlayPage () {
         overlay opacity
         <Slider value={opacity} onChange={setOpacity}/>
       </Label>
-      <Checkbox value={muteOverlay} onChange={setMuteOverlay}>mute video overlay</Checkbox>
+      <Checkbox value={muteOverlay} onChange={setMuteOverlay}>use separate audio</Checkbox>
       {muteOverlay && <Label>
-        audio source (video) URL
+        audio source URL
         <TextBox placeholder="https://youtube.com/watch?v=jsnkdjnd" value={audioUrl} onChange={setAudioUrl}/>
       </Label>}
       <TextBlock medium>
-        The overlay url <b>must</b> link to an image or video <b>file</b>, or to a YouTube video.
-        Some videos cannot be embedded.
-        A proper file link usually ends in .png, .jpg, .mp4, etc.
+        The overlay url <b>must</b> link to an image, video, or audio <b>file</b>, or to a YouTube video.
+        Some media cannot be embedded.
+        A proper file link usually ends in .png, .jpg, .mp4, .mp3, etc.
       </TextBlock>
       <TextBlock>
         <b>Links to imgur albums, FA posts, etc. will NOT work directly.</b>
