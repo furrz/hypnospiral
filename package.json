@@ -64,6 +64,7 @@
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.11.2",
     "state-pool": "^0.10.0",
-    "use-onclickoutside": "^0.4.1"
+    "use-onclickoutside": "^0.4.1",
+    "compression-streams-polyfill": "^0.1.7"
   }
 }
