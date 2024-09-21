@@ -11,6 +11,8 @@ import {
 } from 'state'
 import { Fragment, useEffect, useState } from 'react'
 
+const waitMatch = /{wait:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
+
 export default function SpiralSubliminal () {
   const [textWall] = useTextWall()
   const [googleFont] = useCustomGoogleFont()
@@ -40,12 +42,23 @@ export default function SpiralSubliminal () {
     }
 
     const lineWordHandler = () => {
-      setCurrentText(wordQueue.shift() ?? '')
+      const word = wordQueue.shift() ?? ''
+
+      const waitMatches = word.matchAll(waitMatch)
+
+      let customDelay = 0
+      for (const match of waitMatches) {
+        customDelay += parseFloat(match[1])
+      }
+
+      setCurrentText(word.replace(waitMatch, ''))
+
+      const messageDelay = customDelay !== 0 ? customDelay : messageDuration
 
       if (wordQueue.length < 1) {
-        timer = setTimeout(gapHandler, messageDuration * 1000)
+        timer = setTimeout(gapHandler, messageDelay * 1000)
       } else {
-        timer = setTimeout(lineWordHandler, messageDuration * 1000)
+        timer = setTimeout(lineWordHandler, messageDelay * 1000)
       }
     }
 
@@ -65,7 +78,8 @@ export default function SpiralSubliminal () {
         }
       }
 
-      wordQueue = oneWord ? (lineQueue.shift()?.split(' ') ?? []) : [lineQueue.shift() ?? '']
+      const nextLine = lineQueue.shift()
+      wordQueue = oneWord ? (nextLine?.split(' ') ?? []) : [nextLine ?? '']
       lineWordHandler()
     }
 
