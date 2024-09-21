@@ -18,7 +18,7 @@ export default function SpiralSubliminal () {
   const [googleFont] = useCustomGoogleFont()
   const [txtColor] = useTxtColor()
   const [txtAlpha] = useMessageAlpha()
-  const [currentText, setCurrentText] = useState('')
+  const [currentText, setCurrentText] = useState([] as string[])
 
   const [messages] = useMessages()
   const [randomOrder] = useRandomOrder()
@@ -37,7 +37,7 @@ export default function SpiralSubliminal () {
     let wordQueue: string[] = []
 
     const gapHandler = () => {
-      setCurrentText('')
+      setCurrentText([])
       timer = setTimeout(lineHandler, messageGap * 1000)
     }
 
@@ -51,7 +51,7 @@ export default function SpiralSubliminal () {
         customDelay += parseFloat(match[1])
       }
 
-      setCurrentText(word.replace(waitMatch, ''))
+      setCurrentText(word.replace(waitMatch, '').split('\\n'))
 
       const messageDelay = customDelay !== 0 ? customDelay : messageDuration
 
@@ -90,7 +90,7 @@ export default function SpiralSubliminal () {
         wallText += messages[Math.floor(Math.random() * messages.length)] + ' '
       }
 
-      setCurrentText(wallText)
+      setCurrentText([wallText])
 
       timer = setTimeout(wallHandler, messageDuration * 1000)
     }
@@ -111,7 +111,8 @@ export default function SpiralSubliminal () {
           fontStyle: fontItalic ? 'italic' : 'normal',
           color: colord({ a: txtAlpha, ...txtColor }).toRgbString()
         }}>
-            {currentText}
+            {currentText.map((item, i) =>
+              (i === 0) ? <>{item}</> : <><br/>{item}</>)}
         </div>
     </Fragment>
 }
