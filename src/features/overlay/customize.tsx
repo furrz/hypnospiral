@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Fragment } from 'react'
-import { useAudioSource, useBgImage, useBgImageAlpha, useMuteOverlay } from 'state'
+import { useAudioSource, useBgImage, useBgImageAlpha, useMuteOverlay } from './state'
 import { Breadcrumb, Checkbox, FillGap, Label, Page, Slider, TextBlock, TextBox } from 'components/building_blocks'
 import Previewer from 'components/previewer'
 import CustomizePage from 'pages/customize'

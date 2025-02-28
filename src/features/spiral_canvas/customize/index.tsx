@@ -22,7 +22,7 @@ import {
   useRainbowLightness,
   useRainbowSaturation,
   useSpiralMode
-} from 'state'
+} from '../state'
 
 import IconSpiral from 'assets/SpiralStyle.svg'
 import IconCircle from 'assets/CirclesStyle.svg'

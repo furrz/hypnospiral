@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import CustomizePage from 'pages/customize'
 import { Breadcrumb, FillGap, Label, Page, TextArea } from 'components/building_blocks'
 import Previewer from 'components/previewer'
-import { useMessages } from 'state'
+import { useMessages } from '../state'
 
 export default function CustomizeSubliminalMessagesPage () {
   const [messages, setMessages] = useMessages()

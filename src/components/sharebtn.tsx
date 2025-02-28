@@ -18,14 +18,14 @@ export const ShareBtn = function () {
   }
 
   return <a href="#" onClick={handleShare} className="wide_button">
-        share spiral
-        <Share weight="bold"/>
-        <Toaster toastOptions={{
-          className: 'toast',
-          style: {
-            color: 'var(--bg-color)',
-            background: 'var(--accent-color)'
-          }
-        }}/>
-    </a>
+    share spiral
+    <Share weight="bold"/>
+    <Toaster toastOptions={{
+      className: 'toast',
+      style: {
+        color: 'var(--bg-color)',
+        background: 'var(--accent-color)'
+      }
+    }}/>
+  </a>
 }

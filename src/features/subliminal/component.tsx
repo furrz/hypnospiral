@@ -1,15 +1,17 @@
 import * as React from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { colord } from 'colord'
 import {
   useCustomGoogleFont,
-  useMessageAlpha, useMessageDuration,
+  useMessageAlpha,
+  useMessageDuration,
   useMessageGap,
-  useMessages, useOneWord,
+  useMessages,
+  useOneWord,
   useRandomOrder,
   useTextWall,
   useTxtColor
-} from 'state'
-import { Fragment, useEffect, useState } from 'react'
+} from './state'
 
 const waitMatch = /{wait:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
 
@@ -104,15 +106,15 @@ export default function SpiralSubliminal () {
   }, [messages, messageGap, messageDuration, randomOrder, textWall, oneWord])
 
   return <Fragment>
-        <link rel="stylesheet" href={'https://fonts.googleapis.com/css?family=' + googleFont}/>
-        <div className={'subliminal_text' + (textWall ? ' wall' : '')} style={{
-          fontFamily,
-          fontWeight,
-          fontStyle: fontItalic ? 'italic' : 'normal',
-          color: colord({ a: txtAlpha, ...txtColor }).toRgbString()
-        }}>
-            {currentText.map((item, i) =>
-              (i === 0) ? <>{item}</> : <><br/>{item}</>)}
-        </div>
-    </Fragment>
+    <link rel="stylesheet" href={'https://fonts.googleapis.com/css?family=' + googleFont}/>
+    <div className={'subliminal_text' + (textWall ? ' wall' : '')} style={{
+      fontFamily,
+      fontWeight,
+      fontStyle: fontItalic ? 'italic' : 'normal',
+      color: colord({ a: txtAlpha, ...txtColor }).toRgbString()
+    }}>
+      {currentText.map((item, i) =>
+        (i === 0) ? <>{item}</> : <><br/>{item}</>)}
+    </div>
+  </Fragment>
 }

@@ -82,7 +82,7 @@ if (typeof location !== 'undefined' && location.hash.length > 2) {
   })
 }
 
-const createHashState = <T> (name: string, defaultValue: T) => {
+export const createHashState = <T> (name: string, defaultValue: T) => {
   const state = createState(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue)))
   hashStateRefreshers.push(() => { state.setValue(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue))) })
   return () => {
@@ -99,29 +99,3 @@ const createHashState = <T> (name: string, defaultValue: T) => {
     }] as [T, (_: T) => void]
   }
 }
-
-export const useBgColor = createHashState('bgColor', { r: 0, g: 0, b: 0 })
-export const useFgColor = createHashState('spColor', { r: 96, g: 255, b: 43 })
-export const useTxtColor = createHashState('txtColor', { r: 255, g: 255, b: 255 })
-export const useSpinSpeed = createHashState('spinSpeed', 1)
-export const useThrobSpeed = createHashState('throbSpeed', 1)
-export const useThrobStrength = createHashState('throbStrength', 1)
-export const useZoom = createHashState('zoom', 1)
-export const useMessages = createHashState('messages', [] as string[])
-export const useMessageAlpha = createHashState('messageAlpha', 0.25)
-export const useMessageDuration = createHashState('messageDuration', 0.1)
-export const useMessageGap = createHashState('messageGap', 1)
-export const useOneWord = createHashState('oneWord', true)
-export const useRandomOrder = createHashState('randomOrder', true)
-export const useBgImage = createHashState('bgImage', '')
-export const useBgImageAlpha = createHashState('bgImageAlpha', 0.5)
-export const useTextWall = createHashState('textWall', true)
-export const useCustomGoogleFont = createHashState('customGoogleFont', '')
-export const useSpiralMode = createHashState('spiralMode', 'spiral')
-export const useRainbowColors = createHashState('rainbowColors', false)
-export const useRainbowSaturation = createHashState('rainbowSaturation', 100)
-export const useRainbowLightness = createHashState('rainbowLightness', 50)
-export const useRainbowHueSpeed = createHashState('rainbowHueSpeed', 1)
-export const useMuteOverlay = createHashState('muteOverlay', false)
-export const useAudioSource = createHashState('audioSource', '')
-export const dyslexiaState = createState(locStorage.getItem('dyslexic') !== null)

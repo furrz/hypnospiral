@@ -3,23 +3,24 @@ import { useEffect } from 'react'
 import {
   createMemoryRouter,
   Outlet,
+  type RouteObject,
   RouterProvider,
   useNavigate,
   useNavigation,
   useNavigationType
 } from 'react-router-dom'
-import { onHashStateUpdate } from 'state'
+import { onHashStateUpdate } from 'hash_state'
 import Homepage from 'pages/homepage'
 import SpiralPage from 'pages/spiral_page'
 import FirstTimeSafetyPage from 'pages/first_time_safety'
 import CustomizePage from 'pages/customize'
-import CustomizeSpiralPage from 'pages/customize/spiral'
-import CustomizeSpiralTimingPage from 'pages/customize/spiral/timing'
-import CustomizeSubliminalPage from 'pages/customize/subliminal'
-import CustomizeSubliminalMessagesPage from 'pages/customize/subliminal/messages'
-import CustomizeSubliminalTimingPage from 'pages/customize/subliminal/timing'
-import CustomizeSubliminalFontPage from 'pages/customize/subliminal/font'
-import CustomizeOverlayPage from 'pages/customize/overlay'
+import CustomizeSpiralPage from 'features/spiral_canvas/customize'
+import CustomizeSpiralTimingPage from 'features/spiral_canvas/customize/timing'
+import CustomizeSubliminalPage from 'features/subliminal/customize'
+import CustomizeSubliminalMessagesPage from 'features/subliminal/customize/messages'
+import CustomizeSubliminalTimingPage from 'features/subliminal/customize/timing'
+import CustomizeSubliminalFontPage from 'features/subliminal/customize/font'
+import CustomizeOverlayPage from 'features/overlay/customize'
 import AboutPage from 'pages/about'
 import AboutSafetyPage from 'pages/safety'
 
@@ -50,7 +51,7 @@ function HistoryManager () {
   return <Outlet/>
 }
 
-const routes = [
+const routes: RouteObject[] = [
   {
     element: <HistoryManager/>,
     children: [

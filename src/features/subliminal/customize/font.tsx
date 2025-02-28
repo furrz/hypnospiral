@@ -10,7 +10,7 @@ import {
   TextBox
 } from 'components/building_blocks'
 import Previewer from 'components/previewer'
-import { useCustomGoogleFont } from 'state'
+import { useCustomGoogleFont } from '../state'
 
 export default function CustomizeSubliminalFontPage () {
   const [font, setFont] = useCustomGoogleFont()

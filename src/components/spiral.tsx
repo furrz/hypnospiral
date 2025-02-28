@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { lazy, Suspense } from 'react'
 
-import SpiralOverlay from 'components/spiral_overlay'
-import SpiralSubliminal from 'components/spiral_subliminal'
+import SpiralOverlay from 'features/overlay/component'
+import SpiralSubliminal from 'features/subliminal/component'
 
-const SpiralCanvas = lazy(async () => await import('components/spiral_canvas'))
+const SpiralCanvas = lazy(async () => await import('features/spiral_canvas/component'))
 
 export default function Spiral () {
   return <div className="spiral_container">

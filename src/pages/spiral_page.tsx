@@ -17,8 +17,8 @@ export default function SpiralPage () {
       const fsElement = document.fullscreenElement ?? document.webkitFullscreenElement
 
       const fsRequest = document.documentElement.requestFullscreen ??
-                document.documentElement.webkitRequestFullscreen ??
-                document.documentElement.mozRequestFullscreen ?? ((_: any) => {})
+        document.documentElement.webkitRequestFullscreen ??
+        document.documentElement.mozRequestFullscreen ?? ((_: any) => {})
 
       const fsExitRequest = document.exitFullscreen ?? document.webkitExitFullscreen ?? (() => {})
 

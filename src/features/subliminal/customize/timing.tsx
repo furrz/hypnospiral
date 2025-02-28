@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import CustomizePage from 'pages/customize'
 import { Breadcrumb, Checkbox, FillGap, Label, Page, Slider } from 'components/building_blocks'
 import Previewer from 'components/previewer'
-import { useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useTextWall } from 'state'
+import { useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useTextWall } from '../state'
 
 export default function CustomizeSubliminalTimingPage () {
   const [textWall] = useTextWall()

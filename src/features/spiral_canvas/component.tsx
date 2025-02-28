@@ -14,7 +14,7 @@ import {
   useThrobSpeed,
   useThrobStrength,
   useZoom
-} from 'state'
+} from './state'
 
 import spiralFrag from 'assets/spiral.frag'
 import concentricFrag from 'assets/concentric.frag'
