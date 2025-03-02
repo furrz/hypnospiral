@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState, type UIEvent } from 'react'
 import { colord } from 'colord'
 import {
   useCustomGoogleFont,
@@ -8,6 +8,7 @@ import {
   useMessageGap,
   useMessages,
   useOneWord,
+  useWritingMode,
   useRandomOrder,
   useTextWall,
   useTxtColor
@@ -27,11 +28,17 @@ export default function SpiralSubliminal () {
   const [messageGap] = useMessageGap()
   const [messageDuration] = useMessageDuration()
   const [oneWord] = useOneWord()
+  const [writingMode] = useWritingMode()
+  const writingInputRef = useRef<HTMLInputElement>(null)
 
   let [fontFamily, fontWeight] = (googleFont ?? '').trim().split(':', 2)
   if (typeof fontWeight === 'undefined') fontWeight = ''
   const fontItalic = fontWeight.startsWith('i')
   if (fontItalic) fontWeight = fontWeight.substring(1)
+
+  const writingInputUpdated = useCallback((writingValue: string) => {
+    if (!writingMode) return
+  }, [writingMode])
 
   useEffect(() => {
     if (messages === null || messages.length < 1) return
@@ -64,6 +71,17 @@ export default function SpiralSubliminal () {
     }}>
       {currentText.map((item, i) =>
         (i === 0) ? <>{item}</> : <><br/>{item}</>)}
+      <div className="subliminal_input">
+        <input type="text" ref={writingInputRef}
+               onMouseDown={justStopPropagation}
+               onKeyDown={justStopPropagation}
+               onClick={justStopPropagation}
+               onChange={e => { writingInputUpdated(e.target.value) }}/>
+      </div>
     </div>
   </Fragment>
+}
+
+function justStopPropagation (e: UIEvent) {
+  e.stopPropagation()
 }

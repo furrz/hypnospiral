@@ -550,7 +550,29 @@ input[type=checkbox]:checked {
     font-size: var(--subliminal-font-size);
 }
 
-.preview_box .subliminal_text {
+.subliminal_input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-size: var(--subliminal-font-size);
+}
+
+.subliminal_input input {
+    margin-top: 3em;
+    font-size: var(--subliminal-font-size);
+    max-width: 90%;
+    width: 10px;
+    z-index: 1000;
+    display: block;
+    pointer-events: all !important;
+}
+
+.preview_box .subliminal_text, .preview_box .subliminal_input input {
     font-size: calc(var(--subliminal-font-size)*(var(--preview-size)/100));
 }
 

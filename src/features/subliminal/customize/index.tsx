@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { Fragment, useId } from 'react'
+import { Fragment, useCallback, useId } from 'react'
 import { Pencil, TextT, Timer } from '@phosphor-icons/react'
-import { useMessageAlpha, useTextWall, useTxtColor } from '../state'
+import { useMessageAlpha, useTextWall, useTxtColor, useWritingMode } from '../state'
 import {
   Breadcrumb,
   ColourBox,
@@ -18,12 +18,20 @@ import CustomizePage from 'pages/customize'
 
 import IconLines from 'assets/LinesText.svg'
 import IconWall from 'assets/WallText.svg'
+import IconWriteLines from 'assets/WriteLines.svg'
 
 export default function CustomizeSubliminalPage () {
   const opacitySliderId = useId()
   const [useWall, setUseWall] = useTextWall()
   const [opacity, setOpacity] = useMessageAlpha()
   const [colour, setColour] = useTxtColor()
+  const [writingMode, setWritingMode] = useWritingMode()
+
+  const currentMode = useWall ? 'wall' : (writingMode ? 'writing' : 'lines')
+  const setMode = useCallback((value: string) => {
+    setUseWall(value === 'wall')
+    setWritingMode(value === 'writing')
+  }, [])
 
   return <Fragment>
     <CustomizePage secondary/>
@@ -31,9 +39,10 @@ export default function CustomizeSubliminalPage () {
       <Breadcrumb>Customizer</Breadcrumb>
       <Label>
         text mode
-        <Radio value={useWall ? 'wall' : 'lines'} onChange={v => { setUseWall(v === 'wall') }}>
+        <Radio value={currentMode} onChange={setMode}>
           <RadioOption value="wall"><IconWall/></RadioOption>
           <RadioOption value="lines"><IconLines/></RadioOption>
+          <RadioOption value="writing"><IconWriteLines/></RadioOption>
         </Radio>
       </Label>
       <Label value={opacity} htmlFor={opacitySliderId}>
