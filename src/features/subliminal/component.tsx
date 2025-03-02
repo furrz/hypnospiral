@@ -12,6 +12,8 @@ import {
   useTextWall,
   useTxtColor
 } from './state'
+import { pickRandom, repeat, shuffle } from 'util/array'
+import { CancellableTimeout } from 'util/cancellable_timeout'
 
 const waitMatch = /{wait:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
 
@@ -34,13 +36,13 @@ export default function SpiralSubliminal () {
   if (fontItalic) fontWeight = fontWeight.substring(1)
 
   useEffect(() => {
-    let timer: any
+    const timer = new CancellableTimeout()
     let lineQueue: string[] = []
     let wordQueue: string[] = []
 
     const gapHandler = () => {
       setCurrentText([])
-      timer = setTimeout(lineHandler, messageGap * 1000)
+      timer.schedule(lineHandler, messageGap)
     }
 
     const lineWordHandler = () => {
@@ -57,27 +59,15 @@ export default function SpiralSubliminal () {
 
       const messageDelay = customDelay !== 0 ? customDelay : messageDuration
 
-      if (wordQueue.length < 1) {
-        timer = setTimeout(gapHandler, messageDelay * 1000)
-      } else {
-        timer = setTimeout(lineWordHandler, messageDelay * 1000)
-      }
+      const nextHandler = (wordQueue.length < 1) ? gapHandler : lineWordHandler
+      timer.schedule(nextHandler, messageDelay)
     }
 
     const lineHandler = () => {
       // Repopulate the Line Queue if it's empty
       if (lineQueue.length < 1) {
         lineQueue = [...messages]
-
-        if (randomOrder) {
-          // Durstenfeld shuffle
-          for (let i = lineQueue.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1))
-            const temp = lineQueue[i]
-            lineQueue[i] = lineQueue[j]
-            lineQueue[j] = temp
-          }
-        }
+        if (randomOrder) shuffle(lineQueue)
       }
 
       const nextLine = lineQueue.shift()
@@ -86,15 +76,9 @@ export default function SpiralSubliminal () {
     }
 
     const wallHandler = () => {
-      let wallText = ''
-
-      for (let i = 0; i < 800; i++) {
-        wallText += messages[Math.floor(Math.random() * messages.length)] + ' '
-      }
-
+      const wallText = generateWallText(messages)
       setCurrentText([wallText])
-
-      timer = setTimeout(wallHandler, messageDuration * 1000)
+      timer.schedule(wallHandler, messageDuration)
     }
 
     if (messages !== null && messages.length >= 1) {
@@ -102,7 +86,7 @@ export default function SpiralSubliminal () {
       else lineHandler()
     }
 
-    return () => { clearTimeout(timer) }
+    return () => { timer.cancel() }
   }, [messages, messageGap, messageDuration, randomOrder, textWall, oneWord])
 
   return <Fragment>
@@ -117,4 +101,8 @@ export default function SpiralSubliminal () {
         (i === 0) ? <>{item}</> : <><br/>{item}</>)}
     </div>
   </Fragment>
+}
+
+function generateWallText (messages: string[]) {
+  return repeat(800, () => pickRandom(messages)).join(' ')
 }
