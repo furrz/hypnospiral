@@ -12,10 +12,8 @@ import {
   useTextWall,
   useTxtColor
 } from './state'
-import { pickRandom, repeat, shuffle } from 'util/array'
 import { CancellableTimeout } from 'util/cancellable_timeout'
-
-const waitMatch = /{wait:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
+import { messageSequence, wallTextSequence } from './message_sequence'
 
 export default function SpiralSubliminal () {
   const [textWall] = useTextWall()
@@ -31,60 +29,27 @@ export default function SpiralSubliminal () {
   const [oneWord] = useOneWord()
 
   let [fontFamily, fontWeight] = (googleFont ?? '').trim().split(':', 2)
-  if (typeof fontWeight === 'undefined' || fontWeight === '') fontWeight = ''
+  if (typeof fontWeight === 'undefined') fontWeight = ''
   const fontItalic = fontWeight.startsWith('i')
   if (fontItalic) fontWeight = fontWeight.substring(1)
 
   useEffect(() => {
+    if (messages === null || messages.length < 1) return
+
     const timer = new CancellableTimeout()
-    let lineQueue: string[] = []
-    let wordQueue: string[] = []
+    const messagesWithSplitWords = messages.map(m => oneWord ? (m.split(' ') ?? []) : [m ?? ''])
+    const sequence = textWall
+      ? wallTextSequence(messages, messageDuration)
+      : messageSequence(messagesWithSplitWords, messageDuration, messageGap, randomOrder)
 
-    const gapHandler = () => {
-      setCurrentText([])
-      timer.schedule(lineHandler, messageGap)
+    function nextStepInSequence () {
+      const nextInSequence = sequence.next()
+      if (nextInSequence.done !== false) return
+      setCurrentText(nextInSequence.value.word)
+      timer.schedule(nextStepInSequence, nextInSequence.value.waitTime)
     }
 
-    const lineWordHandler = () => {
-      const word = wordQueue.shift() ?? ''
-
-      const waitMatches = word.matchAll(waitMatch)
-
-      let customDelay = 0
-      for (const match of waitMatches) {
-        customDelay += parseFloat(match[1])
-      }
-
-      setCurrentText(word.replace(waitMatch, '').split('\\n'))
-
-      const messageDelay = customDelay !== 0 ? customDelay : messageDuration
-
-      const nextHandler = (wordQueue.length < 1) ? gapHandler : lineWordHandler
-      timer.schedule(nextHandler, messageDelay)
-    }
-
-    const lineHandler = () => {
-      // Repopulate the Line Queue if it's empty
-      if (lineQueue.length < 1) {
-        lineQueue = [...messages]
-        if (randomOrder) shuffle(lineQueue)
-      }
-
-      const nextLine = lineQueue.shift()
-      wordQueue = oneWord ? (nextLine?.split(' ') ?? []) : [nextLine ?? '']
-      lineWordHandler()
-    }
-
-    const wallHandler = () => {
-      const wallText = generateWallText(messages)
-      setCurrentText([wallText])
-      timer.schedule(wallHandler, messageDuration)
-    }
-
-    if (messages !== null && messages.length >= 1) {
-      if (textWall) wallHandler()
-      else lineHandler()
-    }
+    nextStepInSequence()
 
     return () => { timer.cancel() }
   }, [messages, messageGap, messageDuration, randomOrder, textWall, oneWord])
@@ -101,8 +66,4 @@ export default function SpiralSubliminal () {
         (i === 0) ? <>{item}</> : <><br/>{item}</>)}
     </div>
   </Fragment>
-}
-
-function generateWallText (messages: string[]) {
-  return repeat(800, () => pickRandom(messages)).join(' ')
 }
