@@ -1,5 +1,4 @@
 import { createState } from 'state-pool'
-import { locStorage } from 'local_storage'
 import 'compression-streams-polyfill'
 
 let hashState: any = {}
