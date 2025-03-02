@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Fragment, useCallback, useEffect, useRef, useState, type UIEvent } from 'react'
+import { Fragment, type UIEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { colord } from 'colord'
 import {
   useCustomGoogleFont,
@@ -8,13 +8,14 @@ import {
   useMessageGap,
   useMessages,
   useOneWord,
-  useWritingMode,
   useRandomOrder,
   useTextWall,
-  useTxtColor
+  useTxtColor,
+  useWritingMode
 } from './state'
 import { CancellableTimeout } from 'util/cancellable_timeout'
 import { messageSequence, wallTextSequence } from './message_sequence'
+import { textIsRoughlySimilar } from './text_similarity'
 
 export default function SpiralSubliminal () {
   const [textWall] = useTextWall()
@@ -22,6 +23,7 @@ export default function SpiralSubliminal () {
   const [txtColor] = useTxtColor()
   const [txtAlpha] = useMessageAlpha()
   const [currentText, setCurrentText] = useState([] as string[])
+  const [writingGoal, setWritingGoal] = useState(null as (null | { text: string, callback: () => void }))
 
   const [messages] = useMessages()
   const [randomOrder] = useRandomOrder()
@@ -38,28 +40,50 @@ export default function SpiralSubliminal () {
 
   const writingInputUpdated = useCallback((writingValue: string) => {
     if (!writingMode) return
-  }, [writingMode])
+    if (writingGoal === null) return
+    if (textIsRoughlySimilar(writingValue, writingGoal.text)) {
+      setWritingGoal(null)
+      if (writingInputRef.current !== null) writingInputRef.current.value = ''
+      writingGoal.callback()
+    }
+  }, [writingMode, writingGoal])
 
   useEffect(() => {
     if (messages === null || messages.length < 1) return
 
     const timer = new CancellableTimeout()
     const messagesWithSplitWords = messages.map(m => oneWord ? (m.split(' ') ?? []) : [m ?? ''])
+    const trueMessageGap = writingMode ? 0 : messageGap
     const sequence = textWall
       ? wallTextSequence(messages, messageDuration)
-      : messageSequence(messagesWithSplitWords, messageDuration, messageGap, randomOrder)
+      : messageSequence(messagesWithSplitWords, messageDuration, trueMessageGap, randomOrder)
 
     function nextStepInSequence () {
       const nextInSequence = sequence.next()
       if (nextInSequence.done !== false) return
+
       setCurrentText(nextInSequence.value.word)
-      timer.schedule(nextStepInSequence, nextInSequence.value.waitTime)
+
+      if (writingMode) {
+        setWritingGoal({
+          text: nextInSequence.value.word.join(' '),
+          callback: () => {
+            setWritingGoal(null)
+            nextStepInSequence()
+          }
+        })
+      } else {
+        timer.schedule(nextStepInSequence, nextInSequence.value.waitTime)
+      }
     }
 
     nextStepInSequence()
 
-    return () => { timer.cancel() }
-  }, [messages, messageGap, messageDuration, randomOrder, textWall, oneWord])
+    return () => {
+      setWritingGoal(null)
+      timer.cancel()
+    }
+  }, [messages, messageGap, messageDuration, randomOrder, textWall, oneWord, writingMode])
 
   return <Fragment>
     <link rel="stylesheet" href={'https://fonts.googleapis.com/css?family=' + googleFont}/>
@@ -71,13 +95,13 @@ export default function SpiralSubliminal () {
     }}>
       {currentText.map((item, i) =>
         (i === 0) ? <>{item}</> : <><br/>{item}</>)}
-      <div className="subliminal_input">
+      {writingGoal !== null && <div className="subliminal_input">
         <input type="text" ref={writingInputRef}
                onMouseDown={justStopPropagation}
                onKeyDown={justStopPropagation}
                onClick={justStopPropagation}
                onChange={e => { writingInputUpdated(e.target.value) }}/>
-      </div>
+      </div>}
     </div>
   </Fragment>
 }

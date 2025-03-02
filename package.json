@@ -25,6 +25,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@svgr/webpack": "^8.0.1",
     "@types/gl-react-dom": "^3.15.4",
+    "@types/js-levenshtein": "^1.1.3",
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
@@ -56,15 +57,16 @@
     "buffer": "^6.0.3",
     "classnames": "^2.3.2",
     "colord": "^2.9.3",
+    "compression-streams-polyfill": "^0.1.7",
     "gl-react": "^5.2.0",
     "gl-react-dom": "^5.2.1",
+    "js-levenshtein": "1.1.6",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.11.2",
     "state-pool": "^0.10.0",
-    "use-onclickoutside": "^0.4.1",
-    "compression-streams-polyfill": "^0.1.7"
+    "use-onclickoutside": "^0.4.1"
   }
 }
