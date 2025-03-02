@@ -27,6 +27,8 @@ export default function CustomizeSubliminalTimingPage () {
           <Slider value={blankDuration} onChange={setBlankDuration} max={10}/>
         </Label>
         <Checkbox value={oneWord} onChange={setOneWord}>one word at a time</Checkbox>
+      </Fragment>}
+      {!textWall && <Fragment>
         <Checkbox value={randomOrder} onChange={setRandomOrder}>random order</Checkbox>
       </Fragment>}
       <FillGap/>

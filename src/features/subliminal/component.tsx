@@ -51,8 +51,9 @@ export default function SpiralSubliminal () {
   useEffect(() => {
     if (messages === null || messages.length < 1) return
 
+    const doOneWord = oneWord && !writingMode
     const timer = new CancellableTimeout()
-    const messagesWithSplitWords = messages.map(m => oneWord ? (m.split(' ') ?? []) : [m ?? ''])
+    const messagesWithSplitWords = messages.map(m => doOneWord ? (m.split(' ') ?? []) : [m ?? ''])
     const trueMessageGap = writingMode ? 0 : messageGap
     const sequence = textWall
       ? wallTextSequence(messages, messageDuration)
