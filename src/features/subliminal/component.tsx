@@ -100,6 +100,7 @@ export default function SpiralSubliminal () {
                onMouseDown={justStopPropagation}
                onKeyDown={justStopPropagation}
                onClick={justStopPropagation}
+               placeholder="Type Here"
                onChange={e => { writingInputUpdated(e.target.value) }}/>
       </div>}
     </div>
