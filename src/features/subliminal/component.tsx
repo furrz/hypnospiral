@@ -59,12 +59,22 @@ export default function SpiralSubliminal () {
       : messageSequence(messagesWithSplitWords, messageDuration, trueMessageGap, randomOrder)
 
     function nextStepInSequence () {
-      const nextInSequence = sequence.next()
+      let nextInSequence = sequence.next()
       if (nextInSequence.done !== false) return
 
       setCurrentText(nextInSequence.value.word)
 
       if (writingMode) {
+        // Writing mode doesn't like blank lines.
+        let infiniteLoopEscapeCountdown = 32
+        while (nextInSequence.value.word.length === 0 || nextInSequence.value.word.every((s: string) => s.trim() === '')) {
+          nextInSequence = sequence.next()
+          if (nextInSequence.done !== false) return
+          infiniteLoopEscapeCountdown--
+          if (infiniteLoopEscapeCountdown <= 0) break
+        }
+        setCurrentText(nextInSequence.value.word)
+
         setWritingGoal({
           text: nextInSequence.value.word.join(' '),
           callback: () => {
