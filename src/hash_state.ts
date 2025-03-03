@@ -1,52 +1,27 @@
 import { createState } from 'state-pool'
-import 'compression-streams-polyfill'
+import { base64ToBytes, bytesToBase64 } from 'util/base64'
+import { compress, decompress } from 'util/compression'
 
 let hashState: any = {}
 const hashStateRefreshers: Array<() => void> = []
 
-async function readStream (stream: ReadableStream) {
-  const reader = stream.getReader()
-
-  let state = new Uint8Array()
-
-  do {
-    const { done, value } = await reader.read() as ReadableStreamReadResult<Uint8Array>
-    if (done) return state
-
-    const newValue = new Uint8Array(value.length + state.length)
-    newValue.set(state, 0)
-    newValue.set(value, state.length)
-    state = newValue
-  } while (true)
-}
-
-function base64ToBytes (base64: string) {
-  const binString = atob(base64)
-  return Uint8Array.from(binString, (m) => m.codePointAt(0) ?? 0)
-}
-
-function bytesToBase64 (bytes: Uint8Array) {
-  const binString = String.fromCodePoint(...bytes)
-  return btoa(binString)
-}
-
 export const onHashStateUpdate = debounce(async () => {
   if (Object.keys(hashState).length > 0) {
     const jsonString = JSON.stringify(hashState)
-    const candidate2 = encodeURIComponent(jsonString)
+    const encodedJsonCandidate = encodeURIComponent(jsonString)
 
-    let choice = candidate2
+    let choice = encodedJsonCandidate
 
     try {
       // Compress with gzip
-      const compressedBytes = await readStream(
-        new Blob([jsonString])
-          .stream()
-          .pipeThrough(new CompressionStream('gzip')))
+      const compressedBytes = await compress(jsonString)
       const b64 = bytesToBase64(compressedBytes)
+
       // Pick shorter encoding choice
-      const candidate1 = encodeURIComponent(b64)
-      choice = candidate1.length < candidate2.length ? candidate1 : candidate2
+      const compressedDataCandidate = encodeURIComponent(b64)
+      choice = compressedDataCandidate.length < encodedJsonCandidate.length
+        ? compressedDataCandidate
+        : encodedJsonCandidate
     } catch (e) {
       console.error(e)
     }
@@ -72,7 +47,7 @@ if (typeof location !== 'undefined' && location.hash.length > 2) {
     const text = decodeURIComponent(location.hash.substring(1))
     if (text.startsWith('{')) hashState = { ...JSON.parse(text) }
     else {
-      const decoded = await readStream(new Blob([base64ToBytes(text)]).stream().pipeThrough(new DecompressionStream('gzip')))
+      const decoded = await decompress(base64ToBytes(text))
       hashState = { ...JSON.parse(new TextDecoder().decode(decoded)) }
       hashStateRefreshers.forEach(c => { c() })
     }
