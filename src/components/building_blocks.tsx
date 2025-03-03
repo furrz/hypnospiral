@@ -172,8 +172,9 @@ export const Radio = function ({ children, value, onChange }: PropsWithChildren<
   </RadioParamsContext.Provider>
 }
 
-export const RadioOption = function ({ value, children }: PropsWithChildren<{
+export const RadioOption = function ({ value, label, children }: PropsWithChildren<{
   value: string
+  label: string
 }>) {
   const radioParams = useContext(RadioParamsContext)
   const id = useId()
@@ -181,6 +182,7 @@ export const RadioOption = function ({ value, children }: PropsWithChildren<{
   return <Fragment>
     <input type="radio"
            name={radioParams.name}
+           aria-label={label}
            value={value} id={id}
            checked={radioParams.value === value}
            onChange={e => { radioParams.onChange(e.target.value) }}/>

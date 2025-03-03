@@ -43,8 +43,8 @@ export default function CustomizeSpiralPage () {
             <Label>
                 spiral type
                 <Radio value={spiralMode} onChange={setSpiralMode}>
-                    <RadioOption value="spiral"><IconSpiral/></RadioOption>
-                    <RadioOption value="circle"><IconCircle/></RadioOption>
+                    <RadioOption value="spiral" label="Spiral Style"><IconSpiral/></RadioOption>
+                    <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
                 </Radio>
             </Label>
             <Label>

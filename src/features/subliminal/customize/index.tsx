@@ -40,9 +40,9 @@ export default function CustomizeSubliminalPage () {
       <Label>
         text mode
         <Radio value={currentMode} onChange={setMode}>
-          <RadioOption value="wall"><IconWall/></RadioOption>
-          <RadioOption value="lines"><IconLines/></RadioOption>
-          <RadioOption value="writing"><IconWriteLines/></RadioOption>
+          <RadioOption value="wall" label="Wall of Text Mode"><IconWall/></RadioOption>
+          <RadioOption value="lines" label="Lines Mode"><IconLines/></RadioOption>
+          <RadioOption value="writing" label="Line-Writing Mode"><IconWriteLines/></RadioOption>
         </Radio>
       </Label>
       <Label value={opacity} htmlFor={opacitySliderId}>
