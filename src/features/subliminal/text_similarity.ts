@@ -5,7 +5,7 @@ export function textIsRoughlySimilar (text: string, goalText: string): boolean {
   const normalValue = normalize(text)
 
   return normalValue.length >= normalGoal.length &&
-    levenshtein(normalGoal, normalValue) < Math.max(normalGoal.length / 6, 2)
+    levenshtein(normalGoal, normalValue) <= Math.max(Math.ceil(normalGoal.length / 6), 2)
 }
 
 function normalize (text: string): string {
