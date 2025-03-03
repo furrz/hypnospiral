@@ -1,6 +1,7 @@
 import { createState } from 'state-pool'
 import { base64ToBytes, bytesToBase64 } from 'util/base64'
 import { compress, decompress } from 'util/compression'
+import { debounce } from 'util/timer'
 
 let hashState: any = {}
 const hashStateRefreshers: Array<() => void> = []
@@ -30,16 +31,6 @@ export const onHashStateUpdate = debounce(async () => {
     history.replaceState(undefined, '', '#')
   }
 })
-
-function debounce<Args extends any[]> (func: (...args: Args) => void | Promise<void>, timeout = 100) {
-  let timer: any
-  return (...args: Args) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      func.apply(this, args)
-    }, timeout)
-  }
-}
 
 export const createHashState = <T> (name: string, defaultValue: T) => {
   const state = createState(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue)))

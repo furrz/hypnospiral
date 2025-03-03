@@ -13,7 +13,7 @@ import {
   useTxtColor,
   useWritingMode
 } from './state'
-import { CancellableTimeout } from 'util/cancellable_timeout'
+import { CancellableTimeout } from 'util/timer'
 import { messageSequence, wallTextSequence } from './message_sequence'
 import { textIsRoughlySimilar } from './text_similarity'
 
