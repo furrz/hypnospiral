@@ -1,5 +1,5 @@
 import { afterEach, describe, it, vi, expect, beforeEach } from 'vitest'
-import { CancellableTimeout } from './cancellable_timeout'
+import { CancellableTimeout, debounce } from './timer'
 
 describe('CancellableTimeout', () => {
   beforeEach(() => vi.useFakeTimers())
@@ -70,5 +70,73 @@ describe('CancellableTimeout', () => {
 
     expect(cbA).not.toHaveBeenCalled()
     expect(cbB).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('debounce', () => {
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => vi.restoreAllMocks())
+
+  it('does not call the wrapped function immediately', () => {
+    const cb = vi.fn()
+    const wrapped = debounce(cb, 10)
+    wrapped()
+    expect(cb).not.toHaveBeenCalled()
+  })
+
+  it('calls the wrapped function after the timeout', () => {
+    const cb = vi.fn()
+    const wrapped = debounce(cb, 10)
+
+    wrapped()
+    vi.runAllTimers()
+    expect(cb).toHaveBeenCalledOnce()
+  })
+
+  it('keeps delaying the call when it is repeated', () => {
+    const cb = vi.fn()
+    const wrapped = debounce(cb, 10)
+
+    wrapped()
+    vi.advanceTimersByTime(9)
+    expect(cb).not.toHaveBeenCalled()
+
+    wrapped()
+    vi.advanceTimersByTime(5)
+    expect(cb).not.toHaveBeenCalled()
+
+    wrapped()
+    vi.runAllTimers()
+    expect(cb).toHaveBeenCalledOnce()
+  })
+
+  it('passes the most recently provided arguments once called', () => {
+    const cb = vi.fn()
+    const wrapped = debounce(cb, 10)
+
+    wrapped(10)
+    wrapped(20)
+    vi.advanceTimersByTime(5)
+    wrapped(30)
+    vi.advanceTimersByTime(5)
+    wrapped(40)
+    vi.runAllTimers()
+
+    expect(cb).toHaveBeenCalledOnce()
+    expect(cb).toHaveBeenCalledWith(40)
+  })
+
+  it('can be called again after the timeout', () => {
+    const cb = vi.fn()
+    const wrapped = debounce(cb, 10)
+
+    wrapped()
+    vi.runAllTimers()
+    expect(cb).toHaveBeenCalledOnce()
+
+    wrapped()
+    expect(cb).toHaveBeenCalledOnce()
+    vi.runAllTimers()
+    expect(cb).toHaveBeenCalledTimes(2)
   })
 })
