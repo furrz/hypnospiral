@@ -1,22 +1,50 @@
-import { expect, test } from 'vitest'
-import { textIsRoughlySimilar } from './text_similarity'
+import { describe, expect, it } from 'vitest'
+import { normalize, textIsRoughlySimilar } from './text_similarity'
 
-test('textIsRoughlySimilar handles identical text', () => {
-  expect(textIsRoughlySimilar('this is the same', 'this is the same')).toBe(true)
+describe('textIsRoughlySimilar', () => {
+  it('handles identical text', () => {
+    expect(textIsRoughlySimilar('this is the same', 'this is the same')).toBe(true)
+  })
+
+  it('rejects equality if message is too short', () => {
+    expect(textIsRoughlySimilar('this is shor', 'this is short')).toBe(false)
+  })
+
+  it('ignores symbols and case', () => {
+    expect(textIsRoughlySimilar('ThIs i$s same', 'thIS %%is same')).toBe(true)
+  })
+
+  it('accepts simple typos', () => {
+    expect(textIsRoughlySimilar('bybos in this test', 'typos in this text')).toBe(true)
+  })
+
+  it('rejects lots of typos', () => {
+    expect(textIsRoughlySimilar('memes in this texp', 'typos in this text')).toBe(false)
+  })
 })
 
-test('textIsRoughlySimilar rejects equality if message is too short', () => {
-  expect(textIsRoughlySimilar('this is shor', 'this is short')).toBe(false)
-})
+describe('normalize', () => {
+  it('strips whitespace from text', () => {
+    expect(normalize('    test \n\t\n test \n\n\t  ')).toBe('testtest')
+  })
 
-test('textIsRoughlySimilar ignores symbols and case', () => {
-  expect(textIsRoughlySimilar('ThIs i$s same', 'thIS %%is same')).toBe(true)
-})
+  it('converts everything to lowercase', () => {
+    expect(normalize('HellOWORLD')).toBe('helloworld')
+  })
 
-test('textIsRoughlySimilar accepts simple typos', () => {
-  expect(textIsRoughlySimilar('bybos in this test', 'typos in this text')).toBe(true)
-})
+  it('strips non-alphanumeric characters', () => {
+    expect(normalize('%t@e*s@t(//123')).toBe('test')
+  })
 
-test('textIsRoughlySimilar rejects lots of typos', () => {
-  expect(textIsRoughlySimilar('memes in this texp', 'typos in this text')).toBe(false)
+  it('handles a combination of whitespace and non-alphanumeric characters', () => {
+    expect(normalize('    $     $fOo    ')).toBe('foo')
+  })
+
+  it('can handle empty input', () => {
+    expect(normalize('')).toBe('')
+  })
+
+  it('can handle input of entirely characters to be stripped', () => {
+    expect(normalize('\t\t\r\n\r\n\n\r\r   \b %10289379182\b\b  12')).toBe('')
+  })
 })

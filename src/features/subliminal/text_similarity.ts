@@ -8,6 +8,6 @@ export function textIsRoughlySimilar (text: string, goalText: string): boolean {
     levenshtein(normalGoal, normalValue) <= Math.max(Math.ceil(normalGoal.length / 6), 2)
 }
 
-function normalize (text: string): string {
+export function normalize (text: string): string {
   return text.toLowerCase().trim().replace(/[^a-z]/g, '')
 }
