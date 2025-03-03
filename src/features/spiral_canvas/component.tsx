@@ -16,8 +16,8 @@ import {
   useZoom
 } from './state'
 
-import spiralFrag from 'assets/spiral.frag'
-import concentricFrag from 'assets/concentric.frag'
+import spiralFrag from './spiral.frag'
+import concentricFrag from './concentric.frag'
 import { colord } from 'colord'
 
 const shaders = Shaders.create({
