@@ -53,7 +53,7 @@ function parseWaitSyntax (message: string): [cleanedMessage: string[], customDel
     customDelay += parseFloat(match[1])
   }
 
-  const cleanedMessage = message.replace(waitMatch, '').split('\\n')
+  const cleanedMessage = message.replace(waitMatch, '').split('\\n').map(str => str.trim())
 
   return [cleanedMessage, customDelay]
 }
