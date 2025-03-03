@@ -41,6 +41,30 @@ function debounce<Args extends any[]> (func: (...args: Args) => void | Promise<v
   }
 }
 
+export const createHashState = <T> (name: string, defaultValue: T) => {
+  const state = createState(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue)))
+
+  hashStateRefreshers.push(() => {
+    const valueOrDefault = (hashState[name] !== undefined) ? hashState[name] : defaultValue
+    state.setValue(JSON.parse(JSON.stringify(valueOrDefault)))
+  })
+
+  return () => {
+    const [value, setValue] = state.useState()
+
+    return [value as T, (newValue: T) => {
+      setValue(newValue)
+      if (JSON.stringify(newValue) !== JSON.stringify(defaultValue)) {
+        hashState[name] = newValue
+      } else {
+        delete hashState[name]
+      }
+      onHashStateUpdate()
+    }] as [state: T, setState: (newState: T) => void]
+  }
+}
+
+// Initialize hashState values if we're in the browser and have a hash
 if (typeof location !== 'undefined' && location.hash.length > 2) {
   (async () => {
     // If it loads, change all the relevant state values.
@@ -54,22 +78,4 @@ if (typeof location !== 'undefined' && location.hash.length > 2) {
   })().catch(e => {
     console.log(e)
   })
-}
-
-export const createHashState = <T> (name: string, defaultValue: T) => {
-  const state = createState(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue)))
-  hashStateRefreshers.push(() => { state.setValue(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue))) })
-  return () => {
-    const [value, setValue] = state.useState()
-
-    return [value as T, (newValue: T) => {
-      setValue(newValue)
-      if (JSON.stringify(newValue) !== JSON.stringify(defaultValue)) {
-        hashState[name] = newValue
-      } else {
-        delete hashState[name]
-      }
-      onHashStateUpdate()
-    }] as [T, (_: T) => void]
-  }
 }
