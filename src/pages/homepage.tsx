@@ -49,7 +49,7 @@ export default function Homepage () {
         </TextBlock>}
       <FillGap/>
       <TextBlock medium>
-        by <a href="https://twitter.com/PrinceZyntaks">@PrinceZyntaks</a>
+        by <a href="https://bsky.app/profile/zyntaks.ca">@zyntaks.ca</a>
       </TextBlock>
     </Page>
   )
