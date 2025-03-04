@@ -2,6 +2,14 @@
 
 This is the source code of [hypno.zyntaks.ca](https://hypno.zyntaks.ca).
 
+- [Project Structure](#project-structure)
+  - [Directory Structure](#directory-structure)
+  - [Testing](#testing)
+  - [Jank / Gotchas](#jank--gotchas)
+    - [Pre-renderer Jank](#pre-renderer-jank)
+    - [Router Jank](#router-jank)
+- [License](#license)
+
 ## Project Structure
 
 This project is structured as a static website, using webpack to compile the TypeScript source into JS bundles.
