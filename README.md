@@ -38,9 +38,13 @@ As much behaviour as possible should be kept abstracted away from UI and browser
 
 ### Jank / Gotchas
 
+The hypnospiral visualizer uses several bits of tooling in unintended ways, so do keep these potentially flaky bits in
+mind when working with the project:
+
 #### Pre-renderer Jank
 
-In order to optimize SEO and apparent loading times, this project uses webpack to pre-render the landing page.
+In order to optimize SEO and apparent loading times, while still allowing the app to be hosted as a static site,
+this project uses webpack to pre-render the landing page.
 For this reason, two builds are made when building the project: first, a compile-side build, for pre-rendering,
 and then the browser-side build.
 
