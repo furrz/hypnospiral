@@ -11,7 +11,7 @@ import { useDyslexiaState } from 'dyslexia'
 type ClassNamesFromProps<T> = (props: PropsWithChildren<T>) => string
 const returnsEmptyString = () => ''
 
-function basicClassComponent<T> (clsName: string, clsCalc: ClassNamesFromProps<T> = returnsEmptyString) {
+function divWithClassesComponent<T> (clsName: string, clsCalc: ClassNamesFromProps<T> = returnsEmptyString) {
   return function WrappedClassComponent (props: PropsWithChildren<T>) {
     return <div className={clsName + ' ' + clsCalc(props)}>{props.children}</div>
   }
@@ -29,9 +29,9 @@ export const Page = function ({ primary, secondary, children }: PropsWithChildre
   })}>{children}</div>
 }
 
-export const BigHeader = basicClassComponent('big_header')
-export const FillGap = basicClassComponent('fill_gap')
-export const TextBlock = basicClassComponent<{
+export const BigHeader = divWithClassesComponent('big_header')
+export const FillGap = divWithClassesComponent('fill_gap')
+export const TextBlock = divWithClassesComponent<{
   medium?: boolean
 }>('inline_text', p => classNames({ medium_text: p.medium }))
 
@@ -68,7 +68,7 @@ export const Breadcrumb = ({ children, showInBigPrimary = false, secondary = fal
   </Fragment>
 }
 
-export const BreadcrumbSpace = basicClassComponent('breadcrumb_space')
+export const BreadcrumbSpace = divWithClassesComponent('breadcrumb_space')
 
 export const Label = function ({ value, unit, children, htmlFor, flexExpand }: {
   value?: any
