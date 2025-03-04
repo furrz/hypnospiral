@@ -8,10 +8,14 @@ import useOnClickOutside from 'use-onclickoutside'
 import classNames from 'classnames'
 import { useDyslexiaState } from 'dyslexia'
 
-const basicClassComponent = <T, > (clsName: string, clsCalc: (props: PropsWithChildren<T>) => string = (_) => '') =>
-  function WrappedClassComponent (props: PropsWithChildren<T>) {
+type ClassNamesFromProps<T> = (props: PropsWithChildren<T>) => string
+const returnsEmptyString = () => ''
+
+function basicClassComponent<T> (clsName: string, clsCalc: ClassNamesFromProps<T> = returnsEmptyString) {
+  return function WrappedClassComponent (props: PropsWithChildren<T>) {
     return <div className={clsName + ' ' + clsCalc(props)}>{props.children}</div>
   }
+}
 
 export const Page = function ({ primary, secondary, children }: PropsWithChildren<{
   primary?: boolean
