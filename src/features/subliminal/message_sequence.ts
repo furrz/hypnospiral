@@ -39,7 +39,7 @@ function * repeatingSequence<T> (items: T[], randomizeOrder: boolean): Generator
     const scrambledSequence = [...items]
     if (randomizeOrder) shuffle(scrambledSequence)
 
-    for (const item of items) yield item
+    for (const item of scrambledSequence) yield item
   }
 }
 
