@@ -2,7 +2,7 @@ import * as React from 'react'
 import { DiscordLogo, Gear, Info, Money, Play } from '@phosphor-icons/react'
 import { BigHeader, BreadcrumbSpace, FillGap, Page, TextBlock, WideButton } from 'components/building_blocks'
 import { ShareBtn } from 'components/sharebtn'
-import { locStorage } from 'local_storage'
+import { locStorage } from 'util/local_storage'
 
 const win = (typeof window === 'undefined') ? { location: { hostname: 'hypno.zyntaks.ca' } } : window
 
