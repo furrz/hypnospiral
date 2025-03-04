@@ -36,6 +36,25 @@ Tests are defined in `[filename].test.ts`, which should appear alongside the ass
 Testing React and DOM/Browser-related features can be tricky.
 As much behaviour as possible should be kept abstracted away from UI and browser concerns, for easier testing.
 
+### Jank / Gotchas
+
+#### Pre-renderer Jank
+
+In order to optimize SEO and apparent loading times, this project uses webpack to pre-render the landing page.
+For this reason, two builds are made when building the project: first, a compile-side build, for pre-rendering,
+and then the browser-side build.
+
+For this reason, code must be written to consider the possibility that basic browser APIs and objects - such
+as `window` and `localStorage` - may not always exist. When trying to use these APIs, code must first check if
+they even exist, and fall back to a sane default.
+
+#### Router Jank
+
+This project uses react-router, but does not store these paths in the actual URL bar. Instead, it uses a MemoryRouter,
+and uses the browser history API to keep track of React state changes. You must not be careful to confuse the internal
+route paths, which *look* like relative URL paths, with the actual URL - trying to direct a user to, for example,
+`/customize` using a regular `a href` will send them directly to a nonexistent page and a 404 message from the server.
+
 ## License
 
 Source code copyright &copy; 2022-2025 PrinceZyntaks. Licensed under the MIT license, see LICENSE file for more details.
