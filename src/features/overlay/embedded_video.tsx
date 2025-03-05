@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 const ytVideoIDRegex = /^[a-zA-Z0-9-]{11}$/
+const embedAllows = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 
 export function EmbeddedVideo ({ muted, url, style, className }: {
   muted: boolean
@@ -32,7 +33,7 @@ export function EmbeddedVideo ({ muted, url, style, className }: {
                 src={ctlUrl}
                 key={ctlUrl}
                 title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allow={embedAllows}
                 allowFullScreen
                 style={{ pointerEvents: 'none', border: 0, ...style }}></iframe>
       </div>
@@ -46,9 +47,10 @@ export function EmbeddedVideo ({ muted, url, style, className }: {
     const ctlUrl = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false`
 
     return <div>
-      <iframe width="100%" height="166" scrolling="no" frameBorder="no" allow="autoplay"
+      <iframe width="100%" height="166" scrolling="no" frameBorder="no" allow={embedAllows}
               src={ctlUrl}
-              style={{ opacity: 0, position: 'fixed', pointerEvents: 'none' }}></iframe>
+              style={{ opacity: 0, position: 'fixed', pointerEvents: 'none' }}
+      ></iframe>
     </div>
   }
 
