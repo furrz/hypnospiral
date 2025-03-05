@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 const ytVideoIDRegex = /^[a-zA-Z0-9-]{11}$/
-const embedAllows = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+const embedAllows = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
 
 export function EmbeddedVideo ({ muted, url, style, className }: {
   muted: boolean
