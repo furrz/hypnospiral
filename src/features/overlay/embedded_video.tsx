@@ -11,9 +11,6 @@ export function EmbeddedVideo ({ muted, url, style, className }: {
   let ytVideoID: string | null = null
   let isScAudioLink: boolean = false
 
-  // If we have an empty URL, don't bother embedding.
-  if (url.trim() === '') return <></>
-
   try {
     const parsedURL = new URL(url)
 
@@ -41,6 +38,8 @@ export function EmbeddedVideo ({ muted, url, style, className }: {
       </div>
     }
   } catch (e) {
+    // Invalid URL? No need for content.
+    return <></>
   }
 
   if (isScAudioLink) {
