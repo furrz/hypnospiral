@@ -40,9 +40,6 @@ export function parseMediaUrl (url: string): MediaResult {
       }
     }
   } catch (e) {
-    console.log(`While parsing media URL ${url}:`)
-    console.log(e)
-
     return { type: 'none' }
   }
 }
