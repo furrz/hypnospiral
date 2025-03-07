@@ -105,7 +105,7 @@ export default function SpiralSubliminal () {
       color: colord({ a: txtAlpha, ...txtColor }).toRgbString()
     }}>
       {currentText.map((item, i) =>
-        (i === 0) ? <>{item}</> : <><br/>{item}</>)}
+        (i === 0) ? <Fragment key={i}>{item}</Fragment> : <Fragment key={i}><br/>{item}</Fragment>)}
       {writingGoal !== null && <div className="subliminal_input">
         <input type="text" ref={writingInputRef}
                onMouseDown={justStopPropagation}
