@@ -16,8 +16,6 @@ describe('compress and decompress', () => {
   it('decompress undoes compress', { repeats: 10 }, async () => {
     // Generate random bytes
     const input = genRandomBytes()
-    const compressed = await compress(input)
-    const decompressed = await decompress(compressed)
-    expect(decompressed).toStrictEqual(input)
+    expect(await decompress(await compress(input))).toStrictEqual(input)
   })
 })
