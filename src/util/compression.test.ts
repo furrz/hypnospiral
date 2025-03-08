@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { compress, decompress } from './compression'
 import { base64ToBytes } from './base64'
+import { genRandomBytes } from './random_bytes'
 
 describe('compress and decompress', () => {
   it('compresses correctly', async () => {
@@ -14,10 +15,7 @@ describe('compress and decompress', () => {
 
   it('decompress undoes compress', { repeats: 10 }, async () => {
     // Generate random bytes
-    const randByteCount = Math.floor(Math.random() * 128) + 2
-    const genRandomByte = () => Math.floor(Math.random() * 256)
-    const input = new Uint8Array(new Array(randByteCount).fill(0).map(genRandomByte))
-
+    const input = genRandomBytes()
     const compressed = await compress(input)
     const decompressed = await decompress(compressed)
     expect(decompressed).toStrictEqual(input)
