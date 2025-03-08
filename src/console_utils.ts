@@ -1,4 +1,5 @@
 /// Exposes some simple dev / debugging tools in the browser console.
+/// Please don't use these functions from other HSV code. There is always a better way.
 import { compress, decompress } from './util/compression'
 import { base64ToBytes, bytesToBase64 } from './util/base64'
 import { dumpCurrentHashState } from './hash_state'
@@ -14,7 +15,9 @@ Global.hsv = {
       return bytesToBase64(await compress(input))
     }
   },
-  get state (): string {
+
+  /// Do NOT fucking use this in your code.
+  get state (): any {
     return dumpCurrentHashState()
   }
 }

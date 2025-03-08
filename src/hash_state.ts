@@ -7,7 +7,7 @@ let hashState: any = {}
 const hashStateRefreshers: Array<() => void> = []
 
 /// ONLY for debugging purposes. Please please please don't use this to get state.
-export function dumpCurrentHashState (): string {
+export function dumpCurrentHashState (): any {
   return JSON.stringify(hashState, null, 4)
 }
 
