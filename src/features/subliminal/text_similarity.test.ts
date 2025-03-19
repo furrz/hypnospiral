@@ -9,7 +9,7 @@ describe('textIsRoughlySimilar', () => {
   it('rejects equality if message is too short', () => {
     expect(textIsRoughlySimilar('this is shor', 'this is short')).toBe(false)
   })
-  
+
   it('can check typos in other languages', () => {
     expect(textIsRoughlySimilar('этотест', 'этоxест')).toBe(true)
   })
