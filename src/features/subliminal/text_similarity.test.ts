@@ -12,6 +12,7 @@ describe('textIsRoughlySimilar', () => {
 
   it('can check typos in other languages', () => {
     expect(textIsRoughlySimilar('этотест', 'этоxест')).toBe(true)
+    expect(textIsRoughlySimilar(' فهو يتحدّث بلغة يونيكود. تسجّل الآن لحضو', ' فهو يتحدّث بلغة وeنيكود. تسجّل الآن لحضو')).toBe(true)
   })
 
   it('ignores symbols and case', () => {
@@ -34,6 +35,7 @@ describe('normalize', () => {
 
   it('allows letters from other dialects', () => {
     expect(normalize('Это тест!')).toBe('этотест')
+    expect(normalize(' فهو يتحدّث بلغة يونيكود. تسجّل الآن لحضو')).toBe('فهويتحدثبلغةيونيكودتسجلالآنلحضو')
   })
 
   it('converts everything to lowercase', () => {
