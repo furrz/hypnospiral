@@ -9,6 +9,10 @@ describe('textIsRoughlySimilar', () => {
   it('rejects equality if message is too short', () => {
     expect(textIsRoughlySimilar('this is shor', 'this is short')).toBe(false)
   })
+  
+  it('can check typos in other languages', () => {
+    expect(textIsRoughlySimilar('этотест', 'этоxест')).toBe(true)
+  })
 
   it('ignores symbols and case', () => {
     expect(textIsRoughlySimilar('ThIs i$s same', 'thIS %%is same')).toBe(true)
@@ -26,6 +30,10 @@ describe('textIsRoughlySimilar', () => {
 describe('normalize', () => {
   it('strips whitespace from text', () => {
     expect(normalize('    test \n\t\n test \n\n\t  ')).toBe('testtest')
+  })
+
+  it('allows letters from other dialects', () => {
+    expect(normalize('Это тест!')).toBe('этотест')
   })
 
   it('converts everything to lowercase', () => {

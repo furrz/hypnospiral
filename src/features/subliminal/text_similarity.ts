@@ -9,5 +9,5 @@ export function textIsRoughlySimilar (text: string, goalText: string): boolean {
 }
 
 export function normalize (text: string): string {
-  return text.toLowerCase().trim().replace(/[^a-z]/g, '')
+  return text.toLowerCase().trim().replace(/[^\p{Letter}]/gu, '')
 }
