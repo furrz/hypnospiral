@@ -44,7 +44,7 @@ export function parseMediaUrl (url: string): MediaResult {
   }
 }
 
-const ytVideoIdRegex = /^[a-zA-Z0-9-]{11}$/
+const ytVideoIdRegex = /^[a-zA-Z0-9_-]{11}$/
 function ytVideoIdToMediaResult (ytVideoId: string | null): MediaResult {
   if (ytVideoId !== null && ytVideoIdRegex.test(ytVideoId)) {
     return {
