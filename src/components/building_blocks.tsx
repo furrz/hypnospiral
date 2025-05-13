@@ -146,13 +146,12 @@ export const Checkbox = function ({ children, value, onChange, id }: {
   onChange: (_: boolean) => void
   id?: string
 }) {
-  const vid = useId()
   return <Fragment>
-    <label className="check_label" id={vid}>
+    <label className="check_label" role="checkbox" aria-checked={value} tabIndex={0}>
       <span>{children}</span>
       <input type="checkbox" checked={value} id={id}
              onChange={e => { onChange?.(e.target.checked) }}/>
-      <div className="checkbox"><Check weight="bold" role="checkbox" aria-checked={value} aria-labelledby={vid} focusable={true}/></div>
+      <div className="checkbox"><Check weight="bold"/></div>
     </label>
   </Fragment>
 }
