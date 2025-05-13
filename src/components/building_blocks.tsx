@@ -151,7 +151,7 @@ export const Checkbox = function ({ children, value, onChange, id }: {
       <span>{children}</span>
       <input type="checkbox" checked={value} id={id}
              onChange={e => { onChange?.(e.target.checked) }}/>
-      <div className="checkbox"><Check weight="bold"/></div>
+      <div className="checkbox"><Check weight="bold" role="checkbox" aria-checked={value}/></div>
     </label>
   </Fragment>
 }
