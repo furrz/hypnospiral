@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { DiscordLogo, Gear, Info, Money, Play } from '@phosphor-icons/react'
+import { DiscordLogo, Gear, Info, Hand, Play } from '@phosphor-icons/react'
 import { BigHeader, BreadcrumbSpace, FillGap, Page, TextBlock, WideButton } from 'components/building_blocks'
 import { ShareBtn } from 'components/sharebtn'
 import { locStorage } from 'util/local_storage'
@@ -26,16 +26,18 @@ export default function Homepage () {
         about
         <Info weight="bold"/>
       </WideButton>
-      <a href="https://discord.gg/ZbyerBhmAC" className="wide_button patron_button">
-        <div className="patron_button_inner">
-          discord
-          <DiscordLogo weight="bold"/>
-        </div>
-        <div>Share and explore spirals, and more!</div>
+      <a href="https://discord.gg/ZbyerBhmAC" className="wide_button">
+        discord
+        <DiscordLogo weight="bold"/>
       </a>
-      <a href="https://patreon.com/Zyntaks" className="wide_button">
-        patreon
-        <Money weight="bold"/>
+      <a href="https://forms.gle/Uir7Wk1jezxyoSMX8" className="wide_button patron_button">
+        <div className="patron_button_inner">
+          Poll: Improve HSV!
+          <Hand weight="bold"/>
+        </div>
+        <div>
+          Tell me how you use the site, and help make it better for everyone!
+        </div>
       </a>
       {win.location.hostname !== 'hypno.zyntaks.ca' && win.location.hostname !== 'localhost' &&
         <TextBlock>
