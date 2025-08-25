@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outDir": "./web/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "ES2022",
+    "target": "es2017",
+    "allowJs": true,
+    "jsx": "react",
+    "moduleResolution": "bundler",
+    "baseUrl": "./src/",
+    "strictNullChecks": true,
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>CirclesStyle</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="76" height="76" rx="9"></rect>
+        <rect id="path-3" x="0" y="0" width="76" height="76" rx="9"></rect>
+    </defs>
+    <g id="CirclesStyle" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="path789-+-path789-copy-Mask-Copy" transform="translate(2.000000, 2.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Mask" fill="#F5DDFA" xlink:href="#path-1"></use>
+            <path d="M38.5,28 C32.7010101,28 28,32.7010101 28,38.5 C28,44.2989899 32.7010101,49 38.5,49 C44.2989899,49 49,44.2989899 49,38.5 C49,32.7010101 44.2989899,28 38.5,28 Z M38.5,34.1764706 C40.8878194,34.1764706 42.8235294,36.1121806 42.8235294,38.5 C42.8235294,40.8878194 40.8878194,42.8235294 38.5,42.8235294 C36.1121806,42.8235294 34.1764706,40.8878194 34.1764706,38.5 C34.1764706,36.1121806 36.1121806,34.1764706 38.5,34.1764706 Z" id="Oval" stroke="#9939AF" stroke-width="2" fill="#9939AF" fill-rule="nonzero" mask="url(#mask-2)"></path>
+            <path d="M38.5,1 C17.7893219,1 1,17.7893219 1,38.5 C1,59.2106781 17.7893219,76 38.5,76 C59.2106781,76 76,59.2106781 76,38.5 C76,17.7893219 59.2106781,1 38.5,1 Z M38.8024194,17.9354839 C49.9928664,17.9354839 59.0645161,27.0071336 59.0645161,38.1975806 C59.0645161,49.3880277 49.9928664,58.4596774 38.8024194,58.4596774 C27.6119723,58.4596774 18.5403226,49.3880277 18.5403226,38.1975806 C18.5403226,27.0071336 27.6119723,17.9354839 38.8024194,17.9354839 Z" id="Oval-Copy-3" stroke="#9939AF" stroke-width="2" fill="#9939AF" fill-rule="nonzero" mask="url(#mask-2)"></path>
+            <mask id="mask-4" fill="white">
+                <use xlink:href="#path-3"></use>
+            </mask>
+            <use id="Mask-Copy" stroke="#9939AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xlink:href="#path-3"></use>
+        </g>
+    </g>
+</svg>
