@@ -1,6 +1,7 @@
 # hypnospiral visualizer
 
 This is the source code of [hypno.zyntaks.ca](https://hypno.zyntaks.ca).
+<<<<<<< HEAD
 - [Key Features](#key-features)
 - [Project Structure](#project-structure)
   - [Directory Structure](#directory-structure)
@@ -22,6 +23,17 @@ This is the source code of [hypno.zyntaks.ca](https://hypno.zyntaks.ca).
 
 - Safety first: Includes important safety information and considerations for users.
 
+=======
+
+- [Project Structure](#project-structure)
+  - [Directory Structure](#directory-structure)
+  - [Testing](#testing)
+  - [Jank / Gotchas](#jank--gotchas)
+    - [Pre-renderer Jank](#pre-renderer-jank)
+    - [Router Jank](#router-jank)
+- [License](#license)
+
+>>>>>>> 24fd8d8b9b7b715cb58c02cb22a319887b5a44cb
 ## Project Structure
 
 This project is structured as a static website, using webpack to compile the TypeScript source into JS bundles.
@@ -56,6 +68,32 @@ Tests are defined in `[filename].test.ts`, which should appear alongside the ass
 Testing React and DOM/Browser-related features can be tricky.
 As much behaviour as possible should be kept abstracted away from UI and browser concerns, for easier testing.
 
+<<<<<<< HEAD
+=======
+### Jank / Gotchas
+
+The hypnospiral visualizer uses several bits of tooling in unintended ways, so do keep these potentially flaky bits in
+mind when working with the project:
+
+#### Pre-renderer Jank
+
+In order to optimize SEO and apparent loading times, while still allowing the app to be hosted as a static site,
+this project uses webpack to pre-render the landing page.
+For this reason, two builds are made when building the project: first, a compile-side build, for pre-rendering,
+and then the browser-side build.
+
+For this reason, code must be written to consider the possibility that basic browser APIs and objects - such
+as `window` and `localStorage` - may not always exist. When trying to use these APIs, code must first check if
+they even exist, and fall back to a sane default.
+
+#### Router Jank
+
+This project uses react-router, but does not store these paths in the actual URL bar. Instead, it uses a MemoryRouter,
+and uses the browser history API to keep track of React state changes. You must not be careful to confuse the internal
+route paths, which *look* like relative URL paths, with the actual URL - trying to direct a user to, for example,
+`/customize` using a regular `a href` will send them directly to a nonexistent page and a 404 message from the server.
+
+>>>>>>> 24fd8d8b9b7b715cb58c02cb22a319887b5a44cb
 ## License
 
 Source code copyright &copy; 2022-2025 PrinceZyntaks. Licensed under the MIT license, see LICENSE file for more details.
