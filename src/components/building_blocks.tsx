@@ -6,7 +6,7 @@ import { type RgbColor, RgbColorPicker } from 'react-colorful'
 import { colord } from 'colord'
 import useOnClickOutside from 'use-onclickoutside'
 import classNames from 'classnames'
-import { useDyslexiaState } from 'dyslexia'
+import { useLocalStorage } from 'hooks/useLocalStorage'
 
 type ClassNamesFromProps<T> = (props: PropsWithChildren<T>) => string
 const returnsEmptyString = () => ''
@@ -21,7 +21,7 @@ export const Page = function ({ primary, secondary, children }: PropsWithChildre
   primary?: boolean
   secondary?: boolean
 }>) {
-  const [dyslexia] = useDyslexiaState()
+  const [dyslexia] = useLocalStorage('dyslexic', false)
   return <div className={classNames('page', {
     primary,
     secondary,
@@ -42,10 +42,10 @@ export const WideButton = ({ to, primary, children, onSecondaryPage = false }: P
 }>) => {
   const navigate = useNavigate()
   return <NavLink to={to}
-                  onClick={onSecondaryPage
-                    ? () => { navigate(-1) }
-                    : undefined}
-                  className={({ isActive }) => classNames('wide_button', { primary, active: isActive })}>
+                 onClick={onSecondaryPage
+                   ? () => { navigate(-1) }
+                   : undefined}
+                 className={({ isActive }) => classNames('wide_button', { primary, active: isActive })}>
     {children}
   </NavLink>
 }
@@ -96,7 +96,7 @@ export const Label = function ({ value, unit, children, htmlFor, flexExpand }: {
       <span>
                 {(value !== undefined) ? ((typeof value === 'number') ? value.toFixed(2) : value) : ''}
         <span className="label_unit">{unit ?? ''}</span>
-            </span>
+              </span>
     </div>
     <div className={classNames('input_row', { flex_expand: flexExpand })}>
       {...extras}
@@ -137,7 +137,7 @@ export const TextArea = function ({ placeholder, value, onChange, id }: {
   id?: string
 }) {
   return <textarea placeholder={placeholder} value={value} id={id}
-                   onChange={e => { onChange?.(e.target.value) }}></textarea>
+                     onChange={e => { onChange?.(e.target.value) }}></textarea>
 }
 
 export const Checkbox = function ({ children, value, onChange, id }: {

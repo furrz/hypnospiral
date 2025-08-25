@@ -82,11 +82,14 @@ const clientConfig = {
                 ]
             }),
             new HtmlWebpackPlugin({
+                publicPath: '/',
                 templateParameters: async () => {
+                    if (isDevelopment) {
+                        return { injectCode: '' };
+                    }
                     const { App } = (require('./tmp/bundle.server.js'));
-                    // evil
                     React.useLayoutEffect = React.useEffect
-                    return {injectCode: ReactDOM.renderToStaticMarkup(React.createElement(App.default, null, null))}
+                    return { injectCode: ReactDOM.renderToStaticMarkup(React.createElement(App.default, null, null)) }
                 }
             }),
             isDevelopment && new ReactRefreshWebpackPlugin()
@@ -94,7 +97,8 @@ const clientConfig = {
         output: {
             filename: 'bundle.js',
             path: path.resolve(__dirname, 'dist'),
-            clean: true
+            clean: true,
+            publicPath: '/'
         },
         devServer: {
             static: {
@@ -103,6 +107,7 @@ const clientConfig = {
             compress: true,
             port: 9000,
             hot: true,
+            historyApiFallback: true,
         },
     }
 };
