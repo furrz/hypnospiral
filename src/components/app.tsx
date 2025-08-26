@@ -23,6 +23,7 @@ import CustomizeSubliminalFontPage from 'features/subliminal/customize/font'
 import CustomizeOverlayPage from 'features/overlay/customize'
 import AboutPage from 'pages/about'
 import AboutSafetyPage from 'pages/safety'
+import { Toaster } from 'react-hot-toast'
 
 function HistoryManager () {
   // Special short-circuit for the server-side renderer
@@ -119,5 +120,15 @@ const router = createMemoryRouter(routes, {
   initialIndex: 1
 })
 
-const App = () => (<RouterProvider router={router}/>)
+const App = () => <>
+  <RouterProvider router={router}/>
+  <Toaster toastOptions={{
+    className: 'toast',
+    style: {
+      color: 'var(--bg-color)',
+      background: 'var(--accent-color)'
+    }
+  }}/>
+</>
+
 export default App

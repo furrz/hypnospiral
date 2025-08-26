@@ -17,17 +17,8 @@ export const ShareBtn = function () {
     e.preventDefault()
   }
 
-  return <>
-    <a href="#" onClick={handleShare} className="wide_button">
+  return <a href="#" onClick={handleShare} className="wide_button">
       share spiral
       <Share weight="bold"/>
     </a>
-    <Toaster toastOptions={{
-      className: 'toast',
-      style: {
-        color: 'var(--bg-color)',
-        background: 'var(--accent-color)'
-      }
-    }}/>
-  </>
 }
