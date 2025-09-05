@@ -43,7 +43,7 @@ function * repeatingSequence<T> (items: T[], randomizeOrder: boolean): Generator
   }
 }
 
-const waitMatch = /{wait:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
+const waitMatch = /\{wait:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
 
 function parseWaitSyntax (message: string): [cleanedMessage: string[], customDelay: number] {
   const waitMatches = message.matchAll(waitMatch)
