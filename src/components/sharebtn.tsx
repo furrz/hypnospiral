@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Clipboard, Share, Warning } from '@phosphor-icons/react'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 
 export const ShareBtn = function () {
   const handleShare = (e: React.MouseEvent) => {
