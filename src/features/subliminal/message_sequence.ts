@@ -1,4 +1,4 @@
-import {pickRandom, repeat, shuffle} from 'util/array'
+import { pickRandom, repeat, shuffle } from 'util/array'
 
 interface TextSequenceItem {
   word: string[]
@@ -10,7 +10,7 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
   for (const line of repeatingSequence(messages, randomizeOrder)) {
     for (const word of line) {
       const [wordWithoutWait, customDelay] = parseWaitSyntax(word)
-      const [cleanedWord, overrideColor]  = parseColorSyntax(wordWithoutWait[0])
+      const [cleanedWord, overrideColor] = parseColorSyntax(wordWithoutWait[0])
       yield {
         word: cleanedWord,
         waitTime: (customDelay > 0) ? customDelay : wordDuration,
@@ -22,7 +22,8 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
       // Leave a gap between lines
       yield {
         word: [''],
-        waitTime: lineGapTime
+        waitTime: lineGapTime,
+        wordColor: undefined
       }
     }
   }
@@ -63,11 +64,15 @@ function parseWaitSyntax (message: string): [cleanedMessage: string[], customDel
 
 const colorMatch = /\{color:[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}}/gi
 
-function parseColorSyntax(message: string): [cleanedMessage: string[], overrideColor: { r: number, g: number, b: number } | undefined] {
+function parseColorSyntax (message: string): [cleanedMessage: string[], overrideColor: {
+  r: number
+  g: number
+  b: number
+} | undefined] {
   const colorMatches = [...message.matchAll(colorMatch)]
 
-  function clampToByte(n: number) {
-    return Math.max(0, Math.min(255, n));
+  function clampToByte (n: number) {
+    return Math.max(0, Math.min(255, n))
   }
 
   const cleanedMessage = message.replace(colorMatch, '').split('\\n').map(str => str.trim())
@@ -75,10 +80,8 @@ function parseColorSyntax(message: string): [cleanedMessage: string[], overrideC
   if (colorMatches.length > 0) {
     const colorStr = colorMatches[0][0].replace('{color:', '').replace('}', '')
     const [r, g, b] = colorStr.split(',').map(n => clampToByte(parseInt(n, 10)))
-    return [cleanedMessage, {r, g, b}]
+    return [cleanedMessage, { r, g, b }]
   } else {
     return [cleanedMessage, undefined]
   }
-
-
 }

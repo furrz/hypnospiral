@@ -13,7 +13,8 @@ describe('messageSequence', () => {
       expect(seq.next()).toStrictEqual({
         value: {
           word: ['Sequence'],
-          waitTime: wordDuration
+          waitTime: wordDuration,
+          wordColor: undefined
         },
         done: false
       })
@@ -21,7 +22,8 @@ describe('messageSequence', () => {
       expect(seq.next()).toStrictEqual({
         value: {
           word: ['One'],
-          waitTime: wordDuration
+          waitTime: wordDuration,
+          wordColor: undefined
         },
         done: false
       })
@@ -29,7 +31,8 @@ describe('messageSequence', () => {
       expect(seq.next()).toStrictEqual({
         value: {
           word: [''],
-          waitTime: lineGapTime
+          waitTime: lineGapTime,
+          wordColor: undefined
         },
         done: false
       })
@@ -37,7 +40,8 @@ describe('messageSequence', () => {
       expect(seq.next()).toStrictEqual({
         value: {
           word: ['Sequence'],
-          waitTime: wordDuration
+          waitTime: wordDuration,
+          wordColor: undefined
         },
         done: false
       })
@@ -45,7 +49,8 @@ describe('messageSequence', () => {
       expect(seq.next()).toStrictEqual({
         value: {
           word: ['Two'],
-          waitTime: wordDuration
+          waitTime: wordDuration,
+          wordColor: undefined
         },
         done: false
       })
@@ -53,7 +58,8 @@ describe('messageSequence', () => {
       expect(seq.next()).toStrictEqual({
         value: {
           word: [''],
-          waitTime: lineGapTime
+          waitTime: lineGapTime,
+          wordColor: undefined
         },
         done: false
       })
@@ -69,7 +75,8 @@ describe('messageSequence', () => {
     expect(seq.next()).toStrictEqual({
       value: {
         word: ['Normal Delay'],
-        waitTime: wordDuration
+        waitTime: wordDuration,
+        wordColor: undefined
       },
       done: false
     })
@@ -77,7 +84,8 @@ describe('messageSequence', () => {
     expect(seq.next()).toStrictEqual({
       value: {
         word: [''],
-        waitTime: lineGapTime
+        waitTime: lineGapTime,
+        wordColor: undefined
       },
       done: false
     })
@@ -85,7 +93,8 @@ describe('messageSequence', () => {
     expect(seq.next()).toStrictEqual({
       value: {
         word: ['5sec Delay'],
-        waitTime: 5
+        waitTime: 5,
+        wordColor: undefined
       },
       done: false
     })
@@ -93,7 +102,8 @@ describe('messageSequence', () => {
     expect(seq.next()).toStrictEqual({
       value: {
         word: [''],
-        waitTime: lineGapTime
+        waitTime: lineGapTime,
+        wordColor: undefined
       },
       done: false
     })
