@@ -1,17 +1,20 @@
-import { pickRandom, repeat, shuffle } from 'util/array'
+import {pickRandom, repeat, shuffle} from 'util/array'
 
 interface TextSequenceItem {
   word: string[]
   waitTime: number
+  wordColor?: { r: number, g: number, b: number }
 }
 
 export function * messageSequence (messages: string[][], wordDuration: number, lineGapTime: number, randomizeOrder: boolean): Generator<TextSequenceItem> {
   for (const line of repeatingSequence(messages, randomizeOrder)) {
     for (const word of line) {
-      const [cleanedWord, customDelay] = parseWaitSyntax(word)
+      const [wordWithoutWait, customDelay] = parseWaitSyntax(word)
+      const [cleanedWord, overrideColor]  = parseColorSyntax(wordWithoutWait[0])
       yield {
         word: cleanedWord,
-        waitTime: (customDelay > 0) ? customDelay : wordDuration
+        waitTime: (customDelay > 0) ? customDelay : wordDuration,
+        wordColor: overrideColor
       }
     }
 
@@ -56,4 +59,26 @@ function parseWaitSyntax (message: string): [cleanedMessage: string[], customDel
   const cleanedMessage = message.replace(waitMatch, '').split('\\n').map(str => str.trim())
 
   return [cleanedMessage, customDelay]
+}
+
+const colorMatch = /\{color:[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}}/gi
+
+function parseColorSyntax(message: string): [cleanedMessage: string[], overrideColor: { r: number, g: number, b: number } | undefined] {
+  const colorMatches = [...message.matchAll(colorMatch)]
+
+  function clampToByte(n: number) {
+    return Math.max(0, Math.min(255, n));
+  }
+
+  const cleanedMessage = message.replace(colorMatch, '').split('\\n').map(str => str.trim())
+
+  if (colorMatches.length > 0) {
+    const colorStr = colorMatches[0][0].replace('{color:', '').replace('}', '')
+    const [r, g, b] = colorStr.split(',').map(n => clampToByte(parseInt(n, 10)))
+    return [cleanedMessage, {r, g, b}]
+  } else {
+    return [cleanedMessage, undefined]
+  }
+
+
 }
