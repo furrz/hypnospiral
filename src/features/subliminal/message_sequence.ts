@@ -62,7 +62,7 @@ function parseWaitSyntax (message: string): [cleanedMessage: string[], customDel
   return [cleanedMessage, customDelay]
 }
 
-const colorMatch = /\{color:[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}}/gi
+const colorMatch = /\{colou?r:[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}}/gi
 
 function parseColorSyntax (message: string): [cleanedMessage: string[], overrideColor: {
   r: number
