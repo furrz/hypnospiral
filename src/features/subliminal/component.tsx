@@ -22,7 +22,7 @@ export default function SpiralSubliminal () {
   const [googleFont] = useCustomGoogleFont()
   const [txtColor] = useTxtColor()
   const [txtAlpha] = useMessageAlpha()
-  const [currentText, setCurrentText] = useState([] as string[])
+  const [currentText, setCurrentText] = useState([] as {word: string[], color: { r: number, g: number, b: number }}[])
   const [writingGoal, setWritingGoal] = useState(null as (null | { text: string, callback: () => void }))
 
   const [messages] = useMessages()
@@ -63,7 +63,10 @@ export default function SpiralSubliminal () {
       let nextInSequence = sequence.next()
       if (nextInSequence.done !== false) return
 
-      setCurrentText(nextInSequence.value.word)
+      setCurrentText([{
+        word: nextInSequence.value.word,
+        color: nextInSequence.value.wordColor || txtColor
+      }])
 
       if (writingMode) {
         // Writing mode doesn't like blank lines.
@@ -74,7 +77,10 @@ export default function SpiralSubliminal () {
           infiniteLoopEscapeCountdown--
           if (infiniteLoopEscapeCountdown <= 0) break
         }
-        setCurrentText(nextInSequence.value.word)
+        setCurrentText([{
+          word: nextInSequence.value.word,
+          color: nextInSequence.value.wordColor || txtColor
+        }])
 
         setWritingGoal({
           text: nextInSequence.value.word.join(' '),
@@ -105,7 +111,11 @@ export default function SpiralSubliminal () {
       color: colord({ a: txtAlpha, ...txtColor }).toRgbString()
     }}>
       {currentText.map((item, i) =>
-        (i === 0) ? <Fragment key={i}>{item}</Fragment> : <Fragment key={i}><br/>{item}</Fragment>)}
+        <Fragment key={i}>{i !== 0 && <br/>}
+          <span style={{color: item.color ? colord({r: item.color.r, g: item.color.g, b: item.color.b, a: txtAlpha}).toRgbString() : undefined}}>
+            {item.word.join('\n')}
+          </span>
+        </Fragment>)}
       {writingGoal !== null && <div className="subliminal_input">
         <input type="text" ref={writingInputRef}
                onMouseDown={justStopPropagation}
