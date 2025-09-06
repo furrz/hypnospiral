@@ -106,10 +106,7 @@ export default function SpiralSubliminal () {
             nextStepInSequence()
           }
         })
-
-        writingInputRef.current?.focus()
       } else {
-        setWritingGoal(null)
         timer.schedule(nextStepInSequence, nextInSequence.value.waitTime)
       }
     }
@@ -149,6 +146,7 @@ export default function SpiralSubliminal () {
                onKeyDown={justStopPropagation}
                onClick={justStopPropagation}
                placeholder="Type Here"
+               autoFocus={true}
                onChange={e => { writingInputUpdated(e.target.value) }}/>
       </div>}
     </div>
