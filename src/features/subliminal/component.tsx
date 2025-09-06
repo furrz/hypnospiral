@@ -1,5 +1,12 @@
 import * as React from 'react'
-import { Fragment, type UIEvent, useCallback, useEffect, useRef, useState } from 'react'
+import {
+  Fragment,
+  type UIEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import { colord } from 'colord'
 import {
   useCustomGoogleFont,
@@ -22,8 +29,14 @@ export default function SpiralSubliminal () {
   const [googleFont] = useCustomGoogleFont()
   const [txtColor] = useTxtColor()
   const [txtAlpha] = useMessageAlpha()
-  const [currentText, setCurrentText] = useState([] as {word: string[], color: { r: number, g: number, b: number }}[])
-  const [writingGoal, setWritingGoal] = useState(null as (null | { text: string, callback: () => void }))
+  const [currentText, setCurrentText] = useState([] as Array<{
+    word: string[]
+    color?: { r: number, g: number, b: number }
+  }>)
+  const [writingGoal, setWritingGoal] = useState(null as (null | {
+    text: string
+    callback: () => void
+  }))
 
   const [messages] = useMessages()
   const [randomOrder] = useRandomOrder()
@@ -65,7 +78,7 @@ export default function SpiralSubliminal () {
 
       setCurrentText([{
         word: nextInSequence.value.word,
-        color: nextInSequence.value.wordColor ?? txtColor
+        color: nextInSequence.value.wordColor ?? undefined
       }])
 
       if (writingMode) {
@@ -79,7 +92,7 @@ export default function SpiralSubliminal () {
         }
         setCurrentText([{
           word: nextInSequence.value.word,
-          color: nextInSequence.value.wordColor || txtColor
+          color: nextInSequence.value.wordColor
         }])
 
         setWritingGoal({
@@ -103,7 +116,8 @@ export default function SpiralSubliminal () {
   }, [messages, messageGap, messageDuration, randomOrder, textWall, oneWord, writingMode])
 
   return <Fragment>
-    <link rel="stylesheet" href={'https://fonts.googleapis.com/css?family=' + googleFont}/>
+    <link rel="stylesheet"
+          href={'https://fonts.googleapis.com/css?family=' + googleFont}/>
     <div className={'subliminal_text' + (textWall ? ' wall' : '')} style={{
       fontFamily,
       fontWeight,
@@ -112,7 +126,12 @@ export default function SpiralSubliminal () {
     }}>
       {currentText.map((item, i) =>
         <Fragment key={i}>{i !== 0 && <br/>}
-          <span style={{color: item.color ? colord({r: item.color.r, g: item.color.g, b: item.color.b, a: txtAlpha}).toRgbString() : undefined}}>
+          <span style={{
+            color: colord({
+              a: txtAlpha,
+              ...(item.color ?? txtColor)
+            }).toRgbString()
+          }}>
             {item.word.join('\n')}
           </span>
         </Fragment>)}
