@@ -3,6 +3,7 @@ import { pickRandom, repeat, shuffle } from 'util/array'
 interface TextSequenceItem {
   word: string[]
   waitTime: number
+  fontScale: number
   wordColor?: { r: number, g: number, b: number }
 }
 
@@ -10,11 +11,17 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
   for (const line of repeatingSequence(messages, randomizeOrder)) {
     for (const word of line) {
       const [wordWithoutWait, customDelay] = parseWaitSyntax(word)
-      const [cleanedWord, overrideColor] = parseColorSyntax(wordWithoutWait[0])
+      const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutWait)
+      const [wordWithoutScale, fontScale] = parseFontScaleSyntax(wordWithoutColor)
+
+      const cleanedWord =
+        wordWithoutScale.split('\\n').map(str => str.trim())
+
       yield {
         word: cleanedWord,
         waitTime: (customDelay > 0) ? customDelay : wordDuration,
-        wordColor: overrideColor
+        wordColor: overrideColor,
+        fontScale
       }
     }
 
@@ -23,7 +30,8 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
       yield {
         word: [''],
         waitTime: lineGapTime,
-        wordColor: undefined
+        wordColor: undefined,
+        fontScale: 1
       }
     }
   }
@@ -33,7 +41,8 @@ export function * wallTextSequence (messages: string[], waitTime: number): Gener
   while (true) {
     yield {
       word: [repeat(800, () => pickRandom(messages)).join(' ')],
-      waitTime
+      waitTime,
+      fontScale: 1
     }
   }
 }
@@ -49,7 +58,7 @@ function * repeatingSequence<T> (items: T[], randomizeOrder: boolean): Generator
 
 const waitMatch = /\{wait:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
 
-function parseWaitSyntax (message: string): [cleanedMessage: string[], customDelay: number] {
+function parseWaitSyntax (message: string): [cleanedMessage: string, customDelay: number] {
   const waitMatches = message.matchAll(waitMatch)
 
   let customDelay = 0
@@ -57,14 +66,14 @@ function parseWaitSyntax (message: string): [cleanedMessage: string[], customDel
     customDelay += parseFloat(match[1])
   }
 
-  const cleanedMessage = message.replace(waitMatch, '').split('\\n').map(str => str.trim())
+  const cleanedMessage = message.replace(waitMatch, '')
 
   return [cleanedMessage, customDelay]
 }
 
 const colorMatch = /\{colou?r:[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}}/gi
 
-function parseColorSyntax (message: string): [cleanedMessage: string[], overrideColor: {
+function parseColorSyntax (message: string): [cleanedMessage: string, overrideColor: {
   r: number
   g: number
   b: number
@@ -75,7 +84,7 @@ function parseColorSyntax (message: string): [cleanedMessage: string[], override
     return Math.max(0, Math.min(255, n))
   }
 
-  const cleanedMessage = message.replace(colorMatch, '').split('\\n').map(str => str.trim())
+  const cleanedMessage = message.replace(colorMatch, '')
 
   if (colorMatches.length > 0) {
     const colorStr = colorMatches[0][0].replace('{color:', '').replace('}', '')
@@ -84,4 +93,19 @@ function parseColorSyntax (message: string): [cleanedMessage: string[], override
   } else {
     return [cleanedMessage, undefined]
   }
+}
+
+const fontScaleMatch = /\{fontScale:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
+
+function parseFontScaleSyntax (message: string): [cleanedMessage: string, customScale: number] {
+  const waitMatches = message.matchAll(fontScaleMatch)
+
+  let scale = 1.0
+
+  for (const match of waitMatches) {
+    scale = parseFloat(match[1])
+  }
+
+  const cleanedMessage = message.replace(fontScaleMatch, '')
+  return [cleanedMessage, scale]
 }

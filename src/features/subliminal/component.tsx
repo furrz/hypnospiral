@@ -33,8 +33,8 @@ export default function SpiralSubliminal () {
   const [txtScale] = useTxtScale()
   const [currentText, setCurrentText] = useState([] as Array<{
     word: string[]
+    txtScale: number
     color?: { r: number, g: number, b: number }
-    txtScale?: number
   }>)
   const [writingGoal, setWritingGoal] = useState(null as (null | {
     text: string
@@ -81,7 +81,8 @@ export default function SpiralSubliminal () {
 
       setCurrentText([{
         word: nextInSequence.value.word,
-        color: nextInSequence.value.wordColor ?? undefined
+        color: nextInSequence.value.wordColor ?? undefined,
+        txtScale: nextInSequence.value.fontScale ?? 1
       }])
 
       if (writingMode) {
@@ -95,7 +96,8 @@ export default function SpiralSubliminal () {
         }
         setCurrentText([{
           word: nextInSequence.value.word,
-          color: nextInSequence.value.wordColor
+          color: nextInSequence.value.wordColor,
+          txtScale: nextInSequence.value.fontScale ?? 1
         }])
 
         setWritingGoal({
@@ -134,7 +136,7 @@ export default function SpiralSubliminal () {
               a: txtAlpha,
               ...(item.color ?? txtColor)
             }).toRgbString(),
-            fontSize: ((item.txtScale ?? txtScale) * 100.0).toFixed(2) + '%'
+            fontSize: ((item.txtScale * txtScale) * 100.0).toFixed(2) + '%'
           }}>
             {item.word.join('\n')}
           </span>
