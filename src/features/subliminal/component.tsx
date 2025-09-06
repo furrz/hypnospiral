@@ -65,7 +65,7 @@ export default function SpiralSubliminal () {
 
       setCurrentText([{
         word: nextInSequence.value.word,
-        color: nextInSequence.value.wordColor || txtColor
+        color: nextInSequence.value.wordColor ?? txtColor
       }])
 
       if (writingMode) {
