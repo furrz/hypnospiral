@@ -18,6 +18,7 @@ import {
   useRandomOrder,
   useTextWall,
   useTxtColor,
+  useTxtScale,
   useWritingMode
 } from './state'
 import { CancellableTimeout } from 'util/timer'
@@ -29,9 +30,11 @@ export default function SpiralSubliminal () {
   const [googleFont] = useCustomGoogleFont()
   const [txtColor] = useTxtColor()
   const [txtAlpha] = useMessageAlpha()
+  const [txtScale] = useTxtScale()
   const [currentText, setCurrentText] = useState([] as Array<{
     word: string[]
     color?: { r: number, g: number, b: number }
+    txtScale?: number
   }>)
   const [writingGoal, setWritingGoal] = useState(null as (null | {
     text: string
@@ -130,7 +133,8 @@ export default function SpiralSubliminal () {
             color: colord({
               a: txtAlpha,
               ...(item.color ?? txtColor)
-            }).toRgbString()
+            }).toRgbString(),
+            fontSize: ((item.txtScale ?? txtScale) * 100.0).toFixed(2) + '%'
           }}>
             {item.word.join('\n')}
           </span>

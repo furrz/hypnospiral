@@ -7,17 +7,23 @@ import {
   Label,
   Page,
   TextBlock,
-  TextBox
+  TextBox,
+  Slider
 } from 'components/building_blocks'
 import Previewer from 'components/previewer'
-import { useCustomGoogleFont } from '../state'
+import { useCustomGoogleFont, useTxtScale } from '../state'
 
 export default function CustomizeSubliminalFontPage () {
   const [font, setFont] = useCustomGoogleFont()
+  const [txtScale, setTxtScale] = useTxtScale()
   return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
             <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
+            <Label>
+                font size
+                <Slider value={txtScale} onChange={setTxtScale} min={0.1} max={4} step={0.01}/>
+            </Label>
             <Label>
                 custom font name
                 <TextBox value={font} onChange={setFont}
