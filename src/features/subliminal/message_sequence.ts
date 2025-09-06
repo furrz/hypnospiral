@@ -5,6 +5,7 @@ interface TextSequenceItem {
   waitTime: number
   fontScale: number
   wordColor?: { r: number, g: number, b: number }
+  askUserToWrite?: boolean
 }
 
 export function * messageSequence (messages: string[][], wordDuration: number, lineGapTime: number, randomizeOrder: boolean): Generator<TextSequenceItem> {
@@ -13,15 +14,17 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
       const [wordWithoutWait, customDelay] = parseWaitSyntax(word)
       const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutWait)
       const [wordWithoutScale, fontScale] = parseFontScaleSyntax(wordWithoutColor)
+      const [wordWithoutWrite, askUserToWrite] = parseWriteSyntax(wordWithoutScale)
 
       const cleanedWord =
-        wordWithoutScale.split('\\n').map(str => str.trim())
+          wordWithoutWrite.split('\\n').map(str => str.trim())
 
       yield {
         word: cleanedWord,
         waitTime: (customDelay > 0) ? customDelay : wordDuration,
+        fontScale: fontScale,
         wordColor: overrideColor,
-        fontScale
+        askUserToWrite: askUserToWrite
       }
     }
 
@@ -30,8 +33,9 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
       yield {
         word: [''],
         waitTime: lineGapTime,
+        fontScale: 1,
         wordColor: undefined,
-        fontScale: 1
+        askUserToWrite: undefined
       }
     }
   }
@@ -108,4 +112,12 @@ function parseFontScaleSyntax (message: string): [cleanedMessage: string, custom
 
   const cleanedMessage = message.replace(fontScaleMatch, '')
   return [cleanedMessage, scale]
+}
+
+const writeMatch = /\{write}/gi
+
+function parseWriteSyntax (message: string): [cleanedMessage: string, userIsAskedToWriteLine: boolean] {
+    const interactionMatches = [...message.matchAll(writeMatch)]
+    const cleanedMessage = message.replace(writeMatch, '')
+    return [cleanedMessage, interactionMatches.length > 0]
 }

@@ -55,7 +55,6 @@ export default function SpiralSubliminal () {
   if (fontItalic) fontWeight = fontWeight.substring(1)
 
   const writingInputUpdated = useCallback((writingValue: string) => {
-    if (!writingMode) return
     if (writingGoal === null) return
     if (textIsRoughlySimilar(writingValue, writingGoal.text)) {
       setWritingGoal(null)
@@ -85,7 +84,7 @@ export default function SpiralSubliminal () {
         txtScale: nextInSequence.value.fontScale ?? 1
       }])
 
-      if (writingMode) {
+      if (writingMode || nextInSequence.value.askUserToWrite) {
         // Writing mode doesn't like blank lines.
         let infiniteLoopEscapeCountdown = 32
         while (nextInSequence.value.word.length === 0 || nextInSequence.value.word.every((s: string) => s.trim() === '')) {
