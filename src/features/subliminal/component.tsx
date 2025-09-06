@@ -84,7 +84,7 @@ export default function SpiralSubliminal () {
         txtScale: nextInSequence.value.fontScale ?? 1
       }])
 
-      if (writingMode || nextInSequence.value.askUserToWrite) {
+      if (writingMode || nextInSequence.value.askUserToWrite !== undefined) {
         // Writing mode doesn't like blank lines.
         let infiniteLoopEscapeCountdown = 32
         while (nextInSequence.value.word.length === 0 || nextInSequence.value.word.every((s: string) => s.trim() === '')) {
