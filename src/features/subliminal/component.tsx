@@ -25,17 +25,23 @@ import { CancellableTimeout } from 'util/timer'
 import { messageSequence, wallTextSequence } from './message_sequence'
 import { textIsRoughlySimilar } from './text_similarity'
 
+interface TextState {
+  word: string[]
+  txtScale: number
+  color?: { r: number, g: number, b: number }
+}
+
 export default function SpiralSubliminal () {
   const [textWall] = useTextWall()
   const [googleFont] = useCustomGoogleFont()
   const [txtColor] = useTxtColor()
   const [txtAlpha] = useMessageAlpha()
   const [txtScale] = useTxtScale()
-  const [currentText, setCurrentText] = useState([] as Array<{
-    word: string[]
-    txtScale: number
-    color?: { r: number, g: number, b: number }
-  }>)
+  const [currentText, setCurrentText] = useState<TextState>({
+    word: [],
+    txtScale: 1,
+    color: undefined
+  })
   const [writingGoal, setWritingGoal] = useState(null as (null | {
     text: string
     callback: () => void
@@ -78,11 +84,13 @@ export default function SpiralSubliminal () {
       let nextInSequence = sequence.next()
       if (nextInSequence.done !== false) return
 
-      setCurrentText([{
+      console.log(nextInSequence.value.word)
+
+      setCurrentText({
         word: nextInSequence.value.word,
         color: nextInSequence.value.wordColor ?? undefined,
         txtScale: nextInSequence.value.fontScale ?? 1
-      }])
+      })
 
       if (writingMode || (nextInSequence.value.askUserToWrite ?? false)) {
         // Writing mode doesn't like blank lines.
@@ -93,11 +101,11 @@ export default function SpiralSubliminal () {
           infiniteLoopEscapeCountdown--
           if (infiniteLoopEscapeCountdown <= 0) break
         }
-        setCurrentText([{
+        setCurrentText({
           word: nextInSequence.value.word,
           color: nextInSequence.value.wordColor,
           txtScale: nextInSequence.value.fontScale ?? 1
-        }])
+        })
 
         setWritingGoal({
           text: nextInSequence.value.word.join(' '),
@@ -128,18 +136,20 @@ export default function SpiralSubliminal () {
       fontStyle: fontItalic ? 'italic' : 'normal',
       color: colord({ a: txtAlpha, ...txtColor }).toRgbString()
     }}>
-      {currentText.map((item, i) =>
+      <span>
+      {currentText.word.map((item, i) =>
         <Fragment key={i}>{i !== 0 && <br/>}
           <span style={{
             color: colord({
               a: txtAlpha,
-              ...(item.color ?? txtColor)
+              ...(currentText.color ?? txtColor)
             }).toRgbString(),
-            fontSize: ((item.txtScale * txtScale) * 100.0).toFixed(2) + '%'
+            fontSize: ((currentText.txtScale * txtScale) * 100.0).toFixed(2) + '%'
           }}>
-            {item.word.join('\n')}
+            {item}
           </span>
         </Fragment>)}
+        </span>
       {writingGoal !== null && <div className="subliminal_input">
         <input type="text" ref={writingInputRef}
                onMouseDown={justStopPropagation}
