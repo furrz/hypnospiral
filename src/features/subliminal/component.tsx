@@ -84,8 +84,6 @@ export default function SpiralSubliminal () {
       let nextInSequence = sequence.next()
       if (nextInSequence.done !== false) return
 
-      console.log(nextInSequence.value.word)
-
       setCurrentText({
         word: nextInSequence.value.word,
         color: nextInSequence.value.wordColor ?? undefined,
