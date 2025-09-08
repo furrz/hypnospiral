@@ -29,7 +29,7 @@ export default function Timing () {
       </Label>
       <Label value={zoom}>
         zoom
-        <Slider value={zoom} onChange={setZoom} max={4}/>
+        <Slider value={zoom} onChange={setZoom} min={-4} max={4}/>
       </Label>
       <FillGap/>
       <Previewer/>
