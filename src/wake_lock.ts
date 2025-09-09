@@ -1,7 +1,7 @@
 let wakeLock: WakeLockSentinel | null = null
 
 function getWakeLock () {
-  navigator.wakeLock.request('screen')
+  navigator.wakeLock?.request('screen')
     .then(result => {
       wakeLock = result
     })
