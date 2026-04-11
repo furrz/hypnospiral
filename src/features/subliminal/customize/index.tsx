@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Fragment, useCallback, useId } from 'react'
 import { Pencil, TextT, Timer } from '@phosphor-icons/react'
-import { useMessageAlpha, useTextWall, useTxtColor, useWritingMode } from '../state'
+import { useMessageAlpha, useRsvp, useTextWall, useTxtColor, useWritingMode, useHighlightColour } from '../state'
 import {
   Breadcrumb,
   ColourBox,
@@ -19,18 +19,22 @@ import CustomizePage from 'pages/customize'
 import IconLines from 'assets/LinesText.svg'
 import IconWall from 'assets/WallText.svg'
 import IconWriteLines from 'assets/WriteLines.svg'
+import IconRsvp from 'assets/RsvpText.svg'
 
 export default function CustomizeSubliminalPage () {
   const opacitySliderId = useId()
   const [useWall, setUseWall] = useTextWall()
+  const [rsvp, setRsvp] = useRsvp()
   const [opacity, setOpacity] = useMessageAlpha()
   const [colour, setColour] = useTxtColor()
+  const [highlight, setHighlight] = useHighlightColour()
   const [writingMode, setWritingMode] = useWritingMode()
 
-  const currentMode = useWall ? 'wall' : (writingMode ? 'writing' : 'lines')
+  const currentMode = useWall ? 'wall' : (writingMode ? 'writing' : (rsvp ? 'rsvp' : 'lines'))
   const setMode = useCallback((value: string) => {
     setUseWall(value === 'wall')
     setWritingMode(value === 'writing')
+    setRsvp(value === 'rsvp')
   }, [])
 
   return <Fragment>
@@ -43,6 +47,7 @@ export default function CustomizeSubliminalPage () {
           <RadioOption value="wall" label="Wall of Text Mode"><IconWall/></RadioOption>
           <RadioOption value="lines" label="Lines Mode"><IconLines/></RadioOption>
           <RadioOption value="writing" label="Line-Writing Mode"><IconWriteLines/></RadioOption>
+          <RadioOption value="rsvp" label="RSVP Mode"><IconRsvp/></RadioOption>
         </Radio>
       </Label>
       <Label value={opacity} htmlFor={opacitySliderId}>
@@ -52,6 +57,13 @@ export default function CustomizeSubliminalPage () {
         <ColourBox value={colour} onChange={setColour}/>
         <Slider value={opacity} onChange={setOpacity} id={opacitySliderId}/>
       </div>
+      {rsvp && <><Label>
+        highlight colour
+      </Label>
+      <div className="input_row standalone_input">
+        <ColourBox value={highlight} onChange={setHighlight}/>
+      </div></>
+      }
       <WideButton to="/customize/subliminal/messages">
         edit messages
         <Pencil weight="bold"/>

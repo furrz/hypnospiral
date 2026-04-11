@@ -1,11 +1,12 @@
 import { pickRandom, repeat, shuffle } from 'util/array'
 
-interface TextSequenceItem {
+export interface TextSequenceItem {
   word: string[]
   waitTime: number
   fontScale: number
   wordColor?: { r: number, g: number, b: number }
   askUserToWrite?: boolean
+  rsvpHighlightPosition?: number
 }
 
 export function * messageSequence (messages: string[][], wordDuration: number, lineGapTime: number, randomizeOrder: boolean): Generator<TextSequenceItem> {
@@ -47,6 +48,30 @@ export function * wallTextSequence (messages: string[], waitTime: number): Gener
       word: [repeat(800, () => pickRandom(messages)).join(' ')],
       waitTime,
       fontScale: 1
+    }
+  }
+}
+
+export function * rsvpSequence (messages: string[], wordDuration: number): Generator<TextSequenceItem> {
+  // Flatten all messages and split by whitespace, collapsing line breaks
+  const allWords: string[] = []
+  for (const message of messages) {
+    const words = message.split(/\s+/).filter(w => w.length > 0)
+    allWords.push(...words)
+  }
+
+  // Infinitely repeat the word list
+  while (true) {
+    for (const word of allWords) {
+      // Calculate the focal point: 40% through the word, rounded down
+      const focalIndex = Math.floor(word.length * 0.4)
+      
+      yield {
+        word: [word],
+        waitTime: wordDuration,
+        fontScale: 1,
+        rsvpHighlightPosition: focalIndex
+      }
     }
   }
 }

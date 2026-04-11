@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="80"
+   height="80"
+   viewBox="0 0 80 80"
+   version="1.1"
+   id="svg21"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <title
+     id="title1">WallText</title>
+  <defs
+     id="defs1">
+    <rect
+       x="4.944294"
+       y="9.7916412"
+       width="70.383484"
+       height="59.040691"
+       id="rect21" />
+    <rect
+       id="path-1"
+       x="0"
+       y="0"
+       width="76"
+       height="76"
+       rx="9" />
+    <rect
+       id="path-3"
+       x="0"
+       y="0"
+       width="76"
+       height="76"
+       rx="9" />
+  </defs>
+  <g
+     id="WallText"
+     stroke="none"
+     stroke-width="1"
+     fill="none"
+     fill-rule="evenodd"
+     transform="translate(0.54841469,0.13710372)">
+    <use
+       id="Mask"
+       fill="#f5ddfa"
+       xlink:href="#path-1"
+       transform="matrix(1.0523003,0,0,1.0523003,-0.54901572,-0.08780421)" />
+    <use
+       id="Mask-Copy"
+       stroke="#9939af"
+       stroke-width="2"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       xlink:href="#path-3"
+       transform="matrix(1.0236018,0,0,1.0248732,0.63847791,1.002898)" />
+    <text
+       xml:space="preserve"
+       transform="translate(-0.54841469,-0.13710372)"
+       id="text21"
+       style="text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect21);display:inline;fill:#9939af;fill-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:24px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#9939af;fill-opacity:1"
+       x="5.0745082"
+       y="46.00964"
+       id="text22"><tspan
+         id="tspan22"
+         x="5.0745082"
+         y="46.00964"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#9939af;fill-opacity:1">R</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#e0b4e9;fill-opacity:1"
+       x="22.912746"
+       y="46.106586"
+       id="text23"><tspan
+         id="tspan23"
+         x="22.912746"
+         y="46.106586"
+         style="font-size:24px">SVP</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#e0b4e9;fill-opacity:1"
+       x="23.979162"
+       y="42.131763"
+       id="text24"><tspan
+         id="tspan24"
+         x="23.979162"
+         y="42.131763"></tspan></text>
+  </g>
+</svg>

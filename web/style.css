@@ -589,6 +589,10 @@ input[type=checkbox]:checked {
     font-weight: bolder;
 }
 
+.subliminal_text.rsvp {
+    font-variant-numeric: tabular-nums;
+}
+
 @container spiralzone (max-width: 700px) {
     .subliminal_text {
         font-size: 3em;
