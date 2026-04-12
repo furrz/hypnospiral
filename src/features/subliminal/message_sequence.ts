@@ -55,20 +55,74 @@ export function * wallTextSequence (messages: string[], waitTime: number): Gener
 export function * rsvpSequence (messages: string[], wordDuration: number): Generator<TextSequenceItem> {
   // Flatten all messages and split by whitespace, collapsing line breaks
   const allWords: string[] = []
+  const speedMarkers: Map<number, number> = new Map() // word index -> speed override
+
   for (const message of messages) {
     const words = message.split(/\s+/).filter(w => w.length > 0)
-    allWords.push(...words)
+    for (const word of words) {
+      const [cleanedWord, speedOverride] = parseSpeedSyntax(word)
+      allWords.push(cleanedWord)
+      if (speedOverride !== undefined) {
+        speedMarkers.set(allWords.length - 1, speedOverride)
+        console.log('found speedmarker')
+      }
+    }
+  }
+
+  console.log(speedMarkers)
+
+  // Function to get interpolated speed at a word index
+  function getSpeedAtIndex (index: number): number {
+    const markerIndices = Array.from(speedMarkers.keys()).sort((a, b) => a - b)
+
+    // Find the markers before and after this index
+    let markerBefore = -1
+    let markerAfter = -1
+
+    for (const markerIndex of markerIndices) {
+      if (markerIndex <= index) {
+        markerBefore = markerIndex
+      } else if (markerAfter === -1) {
+        markerAfter = markerIndex
+      }
+    }
+
+    // If no markers, use default wordDuration
+    if (markerBefore === -1 && markerAfter === -1) {
+      return wordDuration
+    }
+
+    // If only marker after, linearly interpolate from wordDuration to speedAfter
+    if (markerBefore === -1 && markerAfter !== -1) {
+      const speedAfter = speedMarkers.get(markerAfter)!
+      const progress = index / markerAfter
+      return wordDuration + (speedAfter - wordDuration) * progress
+    }
+
+    // If only marker before, use its speed until the end
+    if (markerBefore !== -1 && markerAfter === -1) {
+      return speedMarkers.get(markerBefore)!
+    }
+
+    // Linearly interpolate between markerBefore and markerAfter
+    const speedBefore = speedMarkers.get(markerBefore)!
+    const speedAfter = speedMarkers.get(markerAfter)!
+    const progress = (index - markerBefore) / (markerAfter - markerBefore)
+    return speedBefore + (speedAfter - speedBefore) * progress
   }
 
   // Infinitely repeat the word list
   while (true) {
-    for (const word of allWords) {
+    for (let i = 0; i < allWords.length; i++) {
+      const word = allWords[i]
+      const speed = getSpeedAtIndex(i)
+
       // Calculate the focal point: 40% through the word, rounded down
       const focalIndex = Math.floor(word.length * 0.4)
-      
+
       yield {
         word: [word],
-        waitTime: wordDuration,
+        waitTime: speed,
         fontScale: 1,
         rsvpHighlightPosition: focalIndex
       }
@@ -142,7 +196,27 @@ function parseFontScaleSyntax (message: string): [cleanedMessage: string, custom
 const writeMatch = /\{write}/gi
 
 function parseWriteSyntax (message: string): [cleanedMessage: string, userIsAskedToWriteLine: boolean] {
-    const interactionMatches = [...message.matchAll(writeMatch)]
-    const cleanedMessage = message.replace(writeMatch, '')
-    return [cleanedMessage, interactionMatches.length > 0]
+  const interactionMatches = [...message.matchAll(writeMatch)]
+  const cleanedMessage = message.replace(writeMatch, '')
+  return [cleanedMessage, interactionMatches.length > 0]
+}
+
+const speedMatch = /\{speed:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
+
+function parseSpeedSyntax (message: string): [cleanedMessage: string, speedOverride: number | undefined] {
+  const speedMatches = [...message.matchAll(speedMatch)]
+
+  function clampSpeed (n: number) {
+    return Math.max(0.01, Math.min(1, n))
+  }
+
+  const cleanedMessage = message.replace(speedMatch, '')
+
+  if (speedMatches.length > 0) {
+    const speedStr = speedMatches[0][0].replace('{speed:', '').replace('}', '')
+    const speed = clampSpeed(parseFloat(speedStr))
+    return [cleanedMessage, speed]
+  } else {
+    return [cleanedMessage, undefined]
+  }
 }

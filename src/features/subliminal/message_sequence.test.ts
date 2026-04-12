@@ -1,5 +1,5 @@
 import { expect, describe, it } from 'vitest'
-import { messageSequence } from './message_sequence'
+import { messageSequence, rsvpSequence } from './message_sequence'
 
 describe('messageSequence', () => {
   it('creates simple sequences correctly', () => {
@@ -14,7 +14,9 @@ describe('messageSequence', () => {
         value: {
           word: ['Sequence'],
           waitTime: wordDuration,
-          wordColor: undefined
+          fontScale: 1,
+          wordColor: undefined,
+          askUserToWrite: false
         },
         done: false
       })
@@ -23,7 +25,9 @@ describe('messageSequence', () => {
         value: {
           word: ['One'],
           waitTime: wordDuration,
-          wordColor: undefined
+          fontScale: 1,
+          wordColor: undefined,
+          askUserToWrite: false
         },
         done: false
       })
@@ -32,7 +36,9 @@ describe('messageSequence', () => {
         value: {
           word: [''],
           waitTime: lineGapTime,
-          wordColor: undefined
+          fontScale: 1,
+          wordColor: undefined,
+          askUserToWrite: undefined
         },
         done: false
       })
@@ -41,7 +47,9 @@ describe('messageSequence', () => {
         value: {
           word: ['Sequence'],
           waitTime: wordDuration,
-          wordColor: undefined
+          fontScale: 1,
+          wordColor: undefined,
+          askUserToWrite: false
         },
         done: false
       })
@@ -50,7 +58,9 @@ describe('messageSequence', () => {
         value: {
           word: ['Two'],
           waitTime: wordDuration,
-          wordColor: undefined
+          fontScale: 1,
+          wordColor: undefined,
+          askUserToWrite: false
         },
         done: false
       })
@@ -59,7 +69,9 @@ describe('messageSequence', () => {
         value: {
           word: [''],
           waitTime: lineGapTime,
-          wordColor: undefined
+          fontScale: 1,
+          wordColor: undefined,
+          askUserToWrite: undefined
         },
         done: false
       })
@@ -76,7 +88,9 @@ describe('messageSequence', () => {
       value: {
         word: ['Normal Delay'],
         waitTime: wordDuration,
-        wordColor: undefined
+        fontScale: 1,
+        wordColor: undefined,
+        askUserToWrite: false
       },
       done: false
     })
@@ -85,7 +99,9 @@ describe('messageSequence', () => {
       value: {
         word: [''],
         waitTime: lineGapTime,
-        wordColor: undefined
+        fontScale: 1,
+        wordColor: undefined,
+        askUserToWrite: undefined
       },
       done: false
     })
@@ -94,7 +110,9 @@ describe('messageSequence', () => {
       value: {
         word: ['5sec Delay'],
         waitTime: 5,
-        wordColor: undefined
+        fontScale: 1,
+        wordColor: undefined,
+        askUserToWrite: false
       },
       done: false
     })
@@ -103,9 +121,254 @@ describe('messageSequence', () => {
       value: {
         word: [''],
         waitTime: lineGapTime,
-        wordColor: undefined
+        fontScale: 1,
+        wordColor: undefined,
+        askUserToWrite: undefined
       },
       done: false
     })
+  })
+})
+
+describe('rsvpSequence', () => {
+  it('generates correct word sequence from single message', () => {
+    const messages = ['hello world']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const result1 = seq.next().value
+    expect(result1.word).toStrictEqual(['hello'])
+    expect(result1.waitTime).toBe(wordDuration)
+    expect(result1.fontScale).toBe(1)
+    expect(result1.rsvpHighlightPosition).toBe(2) // 40% of 5 chars = 2
+
+    const result2 = seq.next().value
+    expect(result2.word).toStrictEqual(['world'])
+    expect(result2.waitTime).toBe(wordDuration)
+    expect(result2.fontScale).toBe(1)
+    expect(result2.rsvpHighlightPosition).toBe(2) // 40% of 5 chars = 2
+  })
+
+  it('flattens multiple messages correctly', () => {
+    const messages = ['hello world', 'foo bar']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const words = []
+    for (let i = 0; i < 4; i++) {
+      words.push(seq.next().value.word[0])
+    }
+
+    expect(words).toStrictEqual(['hello', 'world', 'foo', 'bar'])
+  })
+
+  it('calculates focal position as 40% through word', () => {
+    const messages = ['hello']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const result = seq.next().value
+    expect(result.word).toStrictEqual(['hello'])
+    // 40% of 5 = 2
+    expect(result.rsvpHighlightPosition).toBe(2)
+  })
+
+  it('calculates focal position correctly for different word lengths', () => {
+    const messages = ['a ab abc abcd abcde abcdef']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const focalPositions = []
+    for (let i = 0; i < 6; i++) {
+      focalPositions.push(seq.next().value.rsvpHighlightPosition)
+    }
+
+    expect(focalPositions).toStrictEqual([
+      Math.floor(1 * 0.4), // a
+      Math.floor(2 * 0.4), // ab
+      Math.floor(3 * 0.4), // abc
+      Math.floor(4 * 0.4), // abcd
+      Math.floor(5 * 0.4), // abcde
+      Math.floor(6 * 0.4)  // abcdef
+    ])
+  })
+
+  it('applies speed markers inline with words', () => {
+    const messages = ['hello{speed:0.5} world']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const helloResult = seq.next().value
+    expect(helloResult.word).toStrictEqual(['hello'])
+    expect(helloResult.waitTime).toBe(0.5) // speed marker applies to this word
+
+    const worldResult = seq.next().value
+    expect(worldResult.word).toStrictEqual(['world'])
+    expect(worldResult.waitTime).toBe(0.5) // continues at marker speed after
+  })
+
+  it('clamps speed values to valid range (0.01 to 1)', () => {
+    const messages = ['too_slow{speed:2.0} too_fast{speed:0.005}']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const tooSlowResult = seq.next().value
+    expect(tooSlowResult.word).toStrictEqual(['too_slow'])
+    expect(tooSlowResult.waitTime).toBe(1.0) // clamped to 1
+
+    const tooFastResult = seq.next().value
+    expect(tooFastResult.word).toStrictEqual(['too_fast'])
+    expect(tooFastResult.waitTime).toBe(0.01) // clamped to 0.01
+  })
+
+  it('interpolates speed linearly to speed marker', () => {
+    const messages = ['one two three four five{speed:0.5}']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const speeds = []
+    for (let i = 0; i < 5; i++) {
+      speeds.push(seq.next().value.waitTime)
+    }
+
+    // Speed should interpolate from 1.0 to 0.5
+    expect(speeds[0]).toBe(wordDuration)
+    expect(speeds[4]).toBe(0.5)
+    // Middle values should be between start and end
+    expect(speeds[1]).toBeLessThan(wordDuration)
+    expect(speeds[1]).toBeGreaterThan(0.5)
+  })
+
+  it('interpolates speed between two speed markers', () => {
+    const messages = ['one two three four five{speed:0.2} six seven eight nine ten{speed:0.8}']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const speeds = []
+    for (let i = 0; i < 10; i++) {
+      speeds.push(seq.next().value.waitTime)
+    }
+
+    // First marker at index 4 with speed 0.2
+    expect(speeds[4]).toBe(0.2)
+    // Second marker at index 9 with speed 0.8
+    expect(speeds[9]).toBe(0.8)
+    // Speed should increase from 0.2 to 0.8 between markers
+    expect(speeds[5]).toBeGreaterThan(0.2)
+    expect(speeds[5]).toBeLessThan(0.8)
+  })
+
+  it('uses speed marker speed for words after marker with no subsequent marker', () => {
+    const messages = ['one{speed:0.3} two three']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    seq.next() // one
+    const twoResult = seq.next().value
+    const threeResult = seq.next().value
+
+    expect(twoResult.waitTime).toBe(0.3)
+    expect(threeResult.waitTime).toBe(0.3)
+  })
+
+  it('handles interpolation from default speed to first marker', () => {
+    const messages = ['one two three{speed:0.4} four']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const speeds = []
+    for (let i = 0; i < 4; i++) {
+      speeds.push(seq.next().value.waitTime)
+    }
+
+    // Should interpolate from wordDuration to 0.4
+    expect(speeds[0]).toBe(wordDuration)
+    expect(speeds[2]).toBe(0.4)
+    // Middle values should be between
+    expect(speeds[1]).toBeLessThan(wordDuration)
+    expect(speeds[1]).toBeGreaterThan(0.4)
+  })
+
+  it('repeats sequence infinitely', () => {
+    const messages = ['hello world']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const firstRound = []
+    for (let i = 0; i < 2; i++) {
+      firstRound.push(seq.next().value.word[0])
+    }
+
+    const secondRound = []
+    for (let i = 0; i < 2; i++) {
+      secondRound.push(seq.next().value.word[0])
+    }
+
+    expect(firstRound).toStrictEqual(secondRound)
+  })
+
+  it('cleans up multiple spaces in message', () => {
+    const messages = ['hello   world    foo']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const words = []
+    for (let i = 0; i < 3; i++) {
+      words.push(seq.next().value.word[0])
+    }
+
+    expect(words).toStrictEqual(['hello', 'world', 'foo'])
+  })
+
+  it('cleans speed syntax from words before yielding', () => {
+    const messages = ['hello{speed:0.5} world']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    seq.next() // hello
+    const worldResult = seq.next().value
+
+    expect(worldResult.word).toStrictEqual(['world'])
+    expect(worldResult.word[0]).not.toContain('speed')
+  })
+
+  it('handles empty string and whitespace-only messages', () => {
+    const messages = ['   hello    ', '   ', 'world   ']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const words = []
+    for (let i = 0; i < 2; i++) {
+      words.push(seq.next().value.word[0])
+    }
+
+    expect(words).toStrictEqual(['hello', 'world'])
+  })
+
+  it('handles multiple consecutive speed markers', () => {
+    const messages = ['first{speed:0.3} second{speed:0.7}']
+    const wordDuration = 1.0
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const firstResult = seq.next().value
+    expect(firstResult.word).toStrictEqual(['first'])
+    expect(firstResult.waitTime).toBe(0.3)
+
+    const secondResult = seq.next().value
+    expect(secondResult.word).toStrictEqual(['second'])
+    expect(secondResult.waitTime).toBe(0.7)
+  })
+
+  it('yields correct object structure', () => {
+    const messages = ['test']
+    const wordDuration = 0.5
+    const seq = rsvpSequence(messages, wordDuration)
+
+    const result = seq.next().value
+    expect(result).toHaveProperty('word')
+    expect(result).toHaveProperty('waitTime')
+    expect(result).toHaveProperty('fontScale')
+    expect(result).toHaveProperty('rsvpHighlightPosition')
+    expect(Array.isArray(result.word)).toBe(true)
   })
 })
