@@ -13,7 +13,9 @@ import {
   useSpiralMode,
   useThrobSpeed,
   useThrobStrength,
-  useZoom
+  useZoom,
+  useThickness,
+  useBlur
 } from './state'
 
 import spiralFrag from './spiral.frag'
@@ -40,6 +42,8 @@ export default function SpiralCanvas () {
   const [throbSpeed] = useThrobSpeed()
   const [throbStrength] = useThrobStrength()
   const [zoom] = useZoom()
+  const [thickness] = useThickness()
+  const [blur] = useBlur()
   const [fgColor] = useFgColor()
   const [bgColor] = useBgColor()
   const [spiralMode] = useSpiralMode()
@@ -85,6 +89,8 @@ export default function SpiralCanvas () {
               throbSpeed,
               throbStrength,
               zoom,
+              thickness,
+              blur,
               spiralColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255],
               bgColor: [bgc.r / 255, bgc.g / 255, bgc.b / 255]
             }}/>
