@@ -25,7 +25,8 @@ void main() {
 
     float s = sin(dist * 40. * zoom - iTime * 5. * spinSpeed) + 1.0;
     float threshold = 2.0 - thickness;
-    s = smoothstep(threshold / blur, threshold, s);
+    float safeBlur = min(blur, threshold);
+    s = smoothstep(threshold - safeBlur, threshold, s);
     float spiFactor = s;
 
     vec3 color = mix(spiralColor, bgColor, spiFactor);
