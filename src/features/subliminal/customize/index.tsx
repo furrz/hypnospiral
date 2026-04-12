@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Fragment, useCallback, useId } from 'react'
 import { Pencil, TextT, Timer } from '@phosphor-icons/react'
-import { useMessageAlpha, useRsvp, useTextWall, useTxtColor, useWritingMode, useHighlightColour } from '../state'
+import { useMessageAlpha, useRsvp, useTextWall, useTxtColor, useWritingMode, useHighlightColour, useMessageDuration } from '../state'
 import {
   Breadcrumb,
   ColourBox,
@@ -29,9 +29,14 @@ export default function CustomizeSubliminalPage () {
   const [colour, setColour] = useTxtColor()
   const [highlight, setHighlight] = useHighlightColour()
   const [writingMode, setWritingMode] = useWritingMode()
+  const [messageDuration, setMessageDuration] = useMessageDuration()
 
   const currentMode = useWall ? 'wall' : (writingMode ? 'writing' : (rsvp ? 'rsvp' : 'lines'))
   const setMode = useCallback((value: string) => {
+    // Switch message duration between delay and wpm when changing to and from rsvp mode
+    if ((currentMode === 'rsvp' && value !== 'rsvp') || (currentMode !== 'rsvp' && value === 'rsvp')) {
+      setMessageDuration(60 / messageDuration)
+    }
     setUseWall(value === 'wall')
     setWritingMode(value === 'writing')
     setRsvp(value === 'rsvp')

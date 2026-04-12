@@ -194,8 +194,8 @@ describe('rsvpSequence', () => {
   })
 
   it('applies speed markers inline with words', () => {
-    const messages = ['hello{speed:0.5} world']
-    const wordDuration = 1.0
+    const messages = ['hello{speed:120} world']
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     const helloResult = seq.next().value
@@ -208,8 +208,8 @@ describe('rsvpSequence', () => {
   })
 
   it('clamps speed values to valid range (0.01 to 1)', () => {
-    const messages = ['too_slow{speed:2.0} too_fast{speed:0.005}']
-    const wordDuration = 1.0
+    const messages = ['too_slow{speed:0} too_fast{speed:10000}']
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     const tooSlowResult = seq.next().value
@@ -222,8 +222,8 @@ describe('rsvpSequence', () => {
   })
 
   it('interpolates speed linearly to speed marker', () => {
-    const messages = ['one two three four five{speed:0.5}']
-    const wordDuration = 1.0
+    const messages = ['one two three four five{speed:120}']
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     const speeds = []
@@ -240,8 +240,8 @@ describe('rsvpSequence', () => {
   })
 
   it('interpolates speed between two speed markers', () => {
-    const messages = ['one two three four five{speed:0.2} six seven eight nine ten{speed:0.8}']
-    const wordDuration = 1.0
+    const messages = ['one two three four five{speed:300} six seven eight nine ten{speed:75}']
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     const speeds = []
@@ -259,8 +259,8 @@ describe('rsvpSequence', () => {
   })
 
   it('uses speed marker speed for words after marker with no subsequent marker', () => {
-    const messages = ['one{speed:0.3} two three']
-    const wordDuration = 1.0
+    const messages = ['one{speed:200} two three']
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     seq.next() // one
@@ -272,8 +272,8 @@ describe('rsvpSequence', () => {
   })
 
   it('handles interpolation from default speed to first marker', () => {
-    const messages = ['one two three{speed:0.4} four']
-    const wordDuration = 1.0
+    const messages = ['one two three{speed:150} four']
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     const speeds = []
@@ -291,7 +291,7 @@ describe('rsvpSequence', () => {
 
   it('repeats sequence infinitely', () => {
     const messages = ['hello world']
-    const wordDuration = 1.0
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     const firstRound = []
@@ -309,7 +309,7 @@ describe('rsvpSequence', () => {
 
   it('cleans up multiple spaces in message', () => {
     const messages = ['hello   world    foo']
-    const wordDuration = 1.0
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     const words = []
@@ -321,8 +321,8 @@ describe('rsvpSequence', () => {
   })
 
   it('cleans speed syntax from words before yielding', () => {
-    const messages = ['hello{speed:0.5} world']
-    const wordDuration = 1.0
+    const messages = ['hello{speed:120} world']
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     seq.next() // hello
@@ -346,7 +346,7 @@ describe('rsvpSequence', () => {
   })
 
   it('handles multiple consecutive speed markers', () => {
-    const messages = ['first{speed:0.3} second{speed:0.7}']
+    const messages = ['first{speed:200} second{speed:75}']
     const wordDuration = 1.0
     const seq = rsvpSequence(messages, wordDuration)
 
@@ -356,12 +356,12 @@ describe('rsvpSequence', () => {
 
     const secondResult = seq.next().value
     expect(secondResult.word).toStrictEqual(['second'])
-    expect(secondResult.waitTime).toBe(0.7)
+    expect(secondResult.waitTime).toBe(0.8)
   })
 
   it('yields correct object structure', () => {
     const messages = ['test']
-    const wordDuration = 0.5
+    const wordDuration = 60
     const seq = rsvpSequence(messages, wordDuration)
 
     const result = seq.next().value

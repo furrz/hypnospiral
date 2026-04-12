@@ -159,7 +159,7 @@ export default function SpiralSubliminal () {
       <span style={{ width: '100%' }}>
       {currentText.word.map((item, i) => {
         if (rsvp && currentText.rsvpHighlightPosition !== undefined && item.length > 0) {
-          // RSVP mode: render with focal character highlighted in red
+          // RSVP mode: render with focal character highlighted
           // The focal character stays perfectly centered on screen
           const focusPos = currentText.rsvpHighlightPosition
           const before = item.substring(0, focusPos)

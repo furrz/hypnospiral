@@ -22,9 +22,9 @@ export default function CustomizeSubliminalTimingPage () {
         message duration
         <Slider value={messageDuration} onChange={setMessageDuration} min={0.01}/>
       </Label>}
-      {rsvp && !writingMode && <Label value={messageDuration} unit="s">
-        word duration
-        <Slider value={messageDuration} onChange={setMessageDuration} min={0.01} max={1}/>
+      {rsvp && !writingMode && <Label value={messageDuration} unit="wpm">
+        words per minute
+        <Slider value={messageDuration} onChange={setMessageDuration} min={1} max={600} step={1}/>
       </Label>}
       {!textWall && !writingMode && !rsvp && <Fragment>
         <Label value={blankDuration} unit="s">
