@@ -199,19 +199,44 @@ export const ColourBox = function ({ value, onChange }: {
   onChange?: (_: RgbColor) => void
 }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [ypos, setYpos] = useState(0)
+  const [isAbove, setIsAbove] = useState(false)
 
+  const boxRef = React.useRef(null)
   const ref = React.useRef(null)
   useOnClickOutside(ref, () => {
     setIsOpen(false)
   })
 
+  const handleClick = () => {
+    if (boxRef.current) {
+      const rect = boxRef.current.getBoundingClientRect()
+      const popoverHeight = 30 * window.innerHeight / 100 // 30vh in pixels
+      const gap = 10
+
+      // Check if popover would overflow the bottom
+      const wouldOverflow = rect.bottom + gap + popoverHeight > window.innerHeight
+
+      if (wouldOverflow) {
+        setYpos(rect.top - gap - popoverHeight)
+      } else {
+        setYpos(rect.bottom + gap)
+      }
+      setIsAbove(wouldOverflow)
+    }
+    setIsOpen(true)
+  }
+
   return <Fragment>
     <div className={classNames('colour_box', { active: isOpen })}
          style={{ backgroundColor: colord(value).toRgbString() }}
-         onClick={() => { setIsOpen(true) }}></div>
+         onClick={handleClick}
+         ref={boxRef}></div>
     <div className={classNames('popover_darken', { active: isOpen })}></div>
     {isOpen && (
-      <div className="colour_popover" ref={ref}>
+      <div className="colour_popover" ref={ref} style={{
+        top: ypos
+      }}>
         <RgbColorPicker color={value} onChange={onChange}/>
       </div>
     )}
