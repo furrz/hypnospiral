@@ -1,6 +1,20 @@
 import * as React from 'react'
 import { Fragment } from 'react'
-import { useSpinSpeed, useThrobSpeed, useThrobStrength, useZoom, useThickness, useBlur } from '../state'
+import {
+  useSpinSpeed,
+  useThrobSpeed,
+  useThrobStrength,
+  useZoom,
+  useThickness,
+  useBlur,
+  useSpinSpeed2,
+  useThrobSpeed2,
+  useThrobStrength2,
+  useZoom2,
+  useThickness2,
+  useBlur2,
+  useSecondary
+} from '../state'
 import { Breadcrumb, FillGap, Label, Page, Slider } from 'components/building_blocks'
 import Previewer from 'components/previewer'
 import CustomizePage from 'pages/customize'
@@ -12,7 +26,13 @@ export default function Timing () {
   const [zoom, setZoom] = useZoom()
   const [thickness, setThickness] = useThickness()
   const [blur, setBlur] = useBlur()
-
+  const [spinSpeed2, setSpinSpeed2] = useSpinSpeed2()
+  const [throbSpeed2, setThrobSpeed2] = useThrobSpeed2()
+  const [throbStrength2, setThrobStrength2] = useThrobStrength2()
+  const [zoom2, setZoom2] = useZoom2()
+  const [thickness2, setThickness2] = useThickness2()
+  const [blur2, setBlur2] = useBlur2()
+  const [secondarySpiral] = useSecondary()
   return <Fragment>
     <CustomizePage secondary/>
     <Page primary>
@@ -41,6 +61,33 @@ export default function Timing () {
         blur factor
         <Slider value={blur} onChange={setBlur} min={0} max={1.99} step={0.01}/>
       </Label>
+      {secondarySpiral && <>
+        <label>secondary</label>
+        <Label value={spinSpeed2}>
+          spin speed
+          <Slider value={spinSpeed2} onChange={setSpinSpeed2} min={-4} max={4}/>
+        </Label>
+        <Label value={throbSpeed2}>
+          throb speed
+          <Slider value={throbSpeed2} onChange={setThrobSpeed2} max={4}/>
+        </Label>
+        <Label value={throbStrength2}>
+          throb strength
+          <Slider value={throbStrength2} onChange={setThrobStrength2} max={4}/>
+        </Label>
+        <Label value={zoom2}>
+          zoom
+          <Slider value={zoom2} onChange={setZoom2} min={-4} max={4}/>
+        </Label>
+        <Label value={thickness2}>
+          thickness
+          <Slider value={thickness2} onChange={setThickness2} min={0.01} max={1.99} step={0.01}/>
+        </Label>
+        <Label value={blur2}>
+          blur factor
+          <Slider value={blur2} onChange={setBlur2} min={0} max={1.99} step={0.01}/>
+        </Label>
+      </>}
       <FillGap/>
       <Previewer/>
     </Page>

@@ -8,7 +8,6 @@ uniform vec2 iRes;
 uniform float iTime;
 
 uniform vec3 spiralColor;
-uniform vec3 bgColor;
 
 uniform float spinSpeed;
 uniform float throbSpeed;
@@ -29,6 +28,5 @@ void main() {
     s = smoothstep(threshold - safeBlur, threshold, s);
     float spiFactor = s;
 
-    vec3 color = mix(spiralColor, bgColor, spiFactor);
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(spiralColor, spiFactor);
 }

@@ -21,7 +21,14 @@ import {
   useRainbowHueSpeed,
   useRainbowLightness,
   useRainbowSaturation,
-  useSpiralMode
+  useSpiralMode,
+  useBgColor2,
+  useRainbowColors2,
+  useRainbowHueSpeed2,
+  useRainbowLightness2,
+  useRainbowSaturation2,
+  useSpiralMode2,
+  useSecondary
 } from '../state'
 
 import IconSpiral from 'assets/SpiralStyle.svg'
@@ -35,38 +42,79 @@ export default function CustomizeSpiralPage () {
   const [rainbowSaturation, setRainbowSaturation] = useRainbowSaturation()
   const [rainbowLightness, setRainbowLightness] = useRainbowLightness()
   const [rainbowHueSpeed, setRainbowHueSpeed] = useRainbowHueSpeed()
+  const [spiralMode2, setSpiralMode2] = useSpiralMode2()
+  const [bgColor2, setBgColor2] = useBgColor2()
+  const [rainbowColors2, setRainbowColors2] = useRainbowColors2()
+  const [rainbowSaturation2, setRainbowSaturation2] = useRainbowSaturation2()
+  const [rainbowLightness2, setRainbowLightness2] = useRainbowLightness2()
+  const [rainbowHueSpeed2, setRainbowHueSpeed2] = useRainbowHueSpeed2()
+  const [secondarySpiral, setSecondarySpiral] = useSecondary()
 
   return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
             <Breadcrumb>Customizer</Breadcrumb>
             <Label>
-                spiral type
-                <Radio value={spiralMode} onChange={setSpiralMode}>
-                    <RadioOption value="spiral" label="Spiral Style"><IconSpiral/></RadioOption>
-                    <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
-                </Radio>
-            </Label>
-            <Label>
-                colours
-                <>{!rainbowColors && <ColourBox value={bgColor} onChange={setBgColor}/>}</>
+                background colour
                 <ColourBox value={fgColor} onChange={setFgColor}/>
             </Label>
-            <Checkbox value={rainbowColors} onChange={setRainbowColors}>rainbow mode</Checkbox>
-            {rainbowColors && <>
+            <div>
                 <Label>
-                    rainbow saturation
-                    <Slider value={rainbowSaturation} onChange={setRainbowSaturation} min={0} max={100}/>
+                    spiral type
+                    <Radio value={spiralMode} onChange={setSpiralMode}>
+                        <RadioOption value="spiral" label="Spiral Style"><IconSpiral/></RadioOption>
+                        <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
+                    </Radio>
                 </Label>
                 <Label>
-                    rainbow lightness
-                    <Slider value={rainbowLightness} onChange={setRainbowLightness} min={0} max={100}/>
+                    colour
+                    <>{!rainbowColors && <ColourBox value={bgColor} onChange={setBgColor}/>}</>
+                </Label>
+                <Checkbox value={rainbowColors} onChange={setRainbowColors}>rainbow mode</Checkbox>
+                {rainbowColors && <>
+                    <Label>
+                        rainbow saturation
+                        <Slider value={rainbowSaturation} onChange={setRainbowSaturation} min={0} max={100}/>
+                    </Label>
+                    <Label>
+                        rainbow lightness
+                        <Slider value={rainbowLightness} onChange={setRainbowLightness} min={0} max={100}/>
+                    </Label>
+                    <Label>
+                        rainbow hue shift speed
+                        <Slider value={rainbowHueSpeed} onChange={setRainbowHueSpeed} min={0} max={20}/>
+                    </Label>
+                </>}
+            </div>
+            <Checkbox value={secondarySpiral} onChange={setSecondarySpiral}>secondary spiral</Checkbox>
+            { secondarySpiral && <div>
+                <Label>
+                    spiral type
+                    <Radio value={spiralMode2} onChange={setSpiralMode2}>
+                        <RadioOption value="spiral" label="Spiral Style"><IconSpiral/></RadioOption>
+                        <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
+                    </Radio>
                 </Label>
                 <Label>
-                    rainbow hue shift speed
-                    <Slider value={rainbowHueSpeed} onChange={setRainbowHueSpeed} min={0} max={20}/>
+                    colour
+                    <>{!rainbowColors2 && <ColourBox value={bgColor2} onChange={setBgColor2}/>}</>
                 </Label>
-            </>}
+                <Checkbox value={rainbowColors2} onChange={setRainbowColors2}>rainbow mode</Checkbox>
+                {rainbowColors2 && <>
+                    <Label>
+                        rainbow saturation
+                        <Slider value={rainbowSaturation2} onChange={setRainbowSaturation2} min={0} max={100}/>
+                    </Label>
+                    <Label>
+                        rainbow lightness
+                        <Slider value={rainbowLightness2} onChange={setRainbowLightness2} min={0} max={100}/>
+                    </Label>
+                    <Label>
+                        rainbow hue shift speed
+                        <Slider value={rainbowHueSpeed2} onChange={setRainbowHueSpeed2} min={0} max={20}/>
+                    </Label>
+                </>}
+            </div>}
             <WideButton to="/customize/spiral/timing">
                 motion + timing
                 <Timer weight="bold"/>
