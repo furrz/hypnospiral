@@ -70,9 +70,10 @@ export const Breadcrumb = ({ children, showInBigPrimary = false, secondary = fal
 
 export const BreadcrumbSpace = divWithClassesComponent('breadcrumb_space')
 
-export const Label = function ({ value, unit, children, htmlFor, flexExpand }: {
+export const Label = function ({ value, unit, unitPrecision, children, htmlFor, flexExpand }: {
   value?: any
   unit?: string
+  unitPrecision?: number
   children: [string, ...ReactElement[]] | string
   htmlFor?: string
   flexExpand?: boolean
@@ -94,7 +95,7 @@ export const Label = function ({ value, unit, children, htmlFor, flexExpand }: {
     <div className="label_row">
       <span>{text}</span>
       <span>
-                {(value !== undefined) ? ((typeof value === 'number') ? value.toFixed(2) : value) : ''}
+                {(value !== undefined) ? ((typeof value === 'number') ? value.toFixed(unitPrecision ?? 2) : value) : ''}
         <span className="label_unit">{unit ?? ''}</span>
             </span>
     </div>
