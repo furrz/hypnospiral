@@ -200,16 +200,15 @@ export const ColourBox = function ({ value, onChange }: {
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const [ypos, setYpos] = useState(0)
-  const [isAbove, setIsAbove] = useState(false)
 
-  const boxRef = React.useRef(null)
-  const ref = React.useRef(null)
+  const boxRef = React.useRef<HTMLDivElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null)
   useOnClickOutside(ref, () => {
     setIsOpen(false)
   })
 
   const handleClick = () => {
-    if (boxRef.current) {
+    if (boxRef.current !== null) {
       const rect = boxRef.current.getBoundingClientRect()
       const popoverHeight = 30 * window.innerHeight / 100 // 30vh in pixels
       const gap = 10
@@ -222,7 +221,6 @@ export const ColourBox = function ({ value, onChange }: {
       } else {
         setYpos(rect.bottom + gap)
       }
-      setIsAbove(wouldOverflow)
     }
     setIsOpen(true)
   }
