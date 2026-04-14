@@ -14,6 +14,7 @@ import {
   useMessageAlpha,
   useMessageDuration,
   useMessageGap,
+  useWpm,
   useMessages,
   useOneWord,
   useRandomOrder,
@@ -57,6 +58,7 @@ export default function SpiralSubliminal () {
   const [randomOrder] = useRandomOrder()
   const [messageGap] = useMessageGap()
   const [messageDuration] = useMessageDuration()
+  const [wpm] = useWpm()
   const [oneWord] = useOneWord()
   const [writingMode] = useWritingMode()
   const writingInputRef = useRef<HTMLInputElement>(null)
@@ -83,7 +85,7 @@ export default function SpiralSubliminal () {
 
     if (rsvp && !writingMode) {
       // RSVP mode: show one word at a time with focal point highlighted
-      sequence = rsvpSequence(messages, messageDuration)
+      sequence = rsvpSequence(messages, wpm)
     } else if (textWall) {
       sequence = wallTextSequence(messages, messageDuration)
     } else {

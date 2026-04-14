@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import CustomizePage from 'pages/customize'
 import { Breadcrumb, Checkbox, FillGap, Label, Page, Slider } from 'components/building_blocks'
 import Previewer from 'components/previewer'
-import { useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useRsvp, useTextWall, useWritingMode } from '../state'
+import { useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useRsvp, useTextWall, useWritingMode, useWpm } from '../state'
 
 export default function CustomizeSubliminalTimingPage () {
   const [textWall] = useTextWall()
@@ -11,6 +11,7 @@ export default function CustomizeSubliminalTimingPage () {
   const [rsvp] = useRsvp()
   const [messageDuration, setMessageDuration] = useMessageDuration()
   const [blankDuration, setBlankDuration] = useMessageGap()
+  const [wpm, setWpm] = useWpm()
   const [oneWord, setOneWord] = useOneWord()
   const [randomOrder, setRandomOrder] = useRandomOrder()
 
@@ -22,9 +23,9 @@ export default function CustomizeSubliminalTimingPage () {
         message duration
         <Slider value={messageDuration} onChange={setMessageDuration} min={0.01}/>
       </Label>}
-      {rsvp && !writingMode && <Label value={messageDuration} unit="wpm">
+      {rsvp && !writingMode && <Label value={wpm}>
         words per minute
-        <Slider value={messageDuration} onChange={setMessageDuration} min={1} max={600} step={1}/>
+        <Slider value={wpm} onChange={setWpm} min={60} max={600} step={1}/>
       </Label>}
       {!textWall && !writingMode && !rsvp && <Fragment>
         <Label value={blankDuration} unit="s">
