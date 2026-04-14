@@ -71,8 +71,6 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
     }
   }
 
-  console.log(speedMarkers)
-
   // Function to get interpolated speed at a word index
   function getSpeedAtIndex (index: number): number {
     const markerIndices = Array.from(speedMarkers.keys()).sort((a, b) => a - b)
@@ -89,26 +87,26 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
       }
     }
 
-    // If no markers, use default wordDuration
+    const speedAfter = speedMarkers.get(markerAfter) ?? wordDuration
+    const speedBefore = speedMarkers.get(markerBefore) ?? wordDuration
+
+    // No markers
     if (markerBefore === -1 && markerAfter === -1) {
       return wordDuration
     }
 
-    // If only marker after, linearly interpolate from wordDuration to speedAfter
-    if (markerBefore === -1 && markerAfter !== -1) {
-      const speedAfter = speedMarkers.get(markerAfter)!
+    // Only marker after
+    if (markerBefore === -1) {
       const progress = index / markerAfter
       return wordDuration + (speedAfter - wordDuration) * progress
     }
 
-    // If only marker before, use its speed until the end
-    if (markerBefore !== -1 && markerAfter === -1) {
-      return speedMarkers.get(markerBefore)!
+    // Only marker before
+    if (markerAfter === -1) {
+      return speedBefore
     }
 
-    // Linearly interpolate between markerBefore and markerAfter
-    const speedBefore = speedMarkers.get(markerBefore)!
-    const speedAfter = speedMarkers.get(markerAfter)!
+    // Both markers exist
     const progress = (index - markerBefore) / (markerAfter - markerBefore)
     return speedBefore + (speedAfter - speedBefore) * progress
   }
