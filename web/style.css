@@ -177,6 +177,7 @@ label.separate_input {
 .input_row {
     position: relative;
     display: flex;
+    flex-flow: wrap;
     flex-direction: row;
     align-items: center;
     gap: 2vh;
