@@ -17,12 +17,14 @@ import CustomizePage from 'pages/customize'
 import {
   useBgColor,
   useFgColor,
+  useOpacity,
   useRainbowColors,
   useRainbowHueSpeed,
   useRainbowLightness,
   useRainbowSaturation,
   useSpiralMode,
   useBgColor2,
+  useOpacity2,
   useRainbowColors2,
   useRainbowHueSpeed2,
   useRainbowLightness2,
@@ -38,12 +40,14 @@ export default function CustomizeSpiralPage () {
   const [spiralMode, setSpiralMode] = useSpiralMode()
   const [bgColor, setBgColor] = useBgColor()
   const [fgColor, setFgColor] = useFgColor()
+  const [opacity, setOpacity] = useOpacity()
   const [rainbowColors, setRainbowColors] = useRainbowColors()
   const [rainbowSaturation, setRainbowSaturation] = useRainbowSaturation()
   const [rainbowLightness, setRainbowLightness] = useRainbowLightness()
   const [rainbowHueSpeed, setRainbowHueSpeed] = useRainbowHueSpeed()
   const [spiralMode2, setSpiralMode2] = useSpiralMode2()
   const [bgColor2, setBgColor2] = useBgColor2()
+  const [opacity2, setOpacity2] = useOpacity2()
   const [rainbowColors2, setRainbowColors2] = useRainbowColors2()
   const [rainbowSaturation2, setRainbowSaturation2] = useRainbowSaturation2()
   const [rainbowLightness2, setRainbowLightness2] = useRainbowLightness2()
@@ -66,10 +70,13 @@ export default function CustomizeSpiralPage () {
                         <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
                     </Radio>
                 </Label>
-                <Label>
-                    colour
-                    <>{!rainbowColors && <ColourBox value={bgColor} onChange={setBgColor}/>}</>
+                <Label value={opacity}>
+                    colour and opacity
                 </Label>
+                <div className="input_row standalone_input">
+                    <>{!rainbowColors && <ColourBox value={bgColor} onChange={setBgColor}/>}</>
+                    <Slider value={opacity} onChange={setOpacity} min={0} max={1}/>
+                </div>
                 <Checkbox value={rainbowColors} onChange={setRainbowColors}>rainbow mode</Checkbox>
                 {rainbowColors && <>
                     <Label>
@@ -95,10 +102,13 @@ export default function CustomizeSpiralPage () {
                         <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
                     </Radio>
                 </Label>
-                <Label>
-                    colour
-                    <>{!rainbowColors2 && <ColourBox value={bgColor2} onChange={setBgColor2}/>}</>
+                <Label value={opacity2}>
+                    colour and opacity
                 </Label>
+                <div className="input_row standalone_input">
+                    <>{!rainbowColors2 && <ColourBox value={bgColor2} onChange={setBgColor2}/>}</>
+                    <Slider value={opacity2} onChange={setOpacity2} min={0} max={1}/>
+                </div>
                 <Checkbox value={rainbowColors2} onChange={setRainbowColors2}>rainbow mode</Checkbox>
                 {rainbowColors2 && <>
                     <Label>

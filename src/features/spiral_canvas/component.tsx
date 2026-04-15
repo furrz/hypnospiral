@@ -16,6 +16,7 @@ import {
   useZoom,
   useThickness,
   useBlur,
+  useOpacity,
   useBgColor2,
   useRainbowColors2,
   useRainbowHueSpeed2,
@@ -28,6 +29,7 @@ import {
   useZoom2,
   useThickness2,
   useBlur2,
+  useOpacity2,
   useSecondary
 } from './state'
 
@@ -80,6 +82,7 @@ export default function SpiralCanvas () {
   const [zoom] = useZoom()
   const [thickness] = useThickness()
   const [blur] = useBlur()
+  const [opacity] = useOpacity()
   const [fgColor] = useFgColor()
   const [bgColor] = useBgColor()
   const [spiralMode] = useSpiralMode()
@@ -93,6 +96,7 @@ export default function SpiralCanvas () {
   const [zoom2] = useZoom2()
   const [thickness2] = useThickness2()
   const [blur2] = useBlur2()
+  const [opacity2] = useOpacity2()
   const [spiralMode2] = useSpiralMode2()
   const [bgColor2] = useBgColor2()
   const [rainbowColors2] = useRainbowColors2()
@@ -153,6 +157,7 @@ export default function SpiralCanvas () {
                     zoom,
                     thickness,
                     blur,
+                    opacity,
                     spiralColor: [bgc.r / 255, bgc.g / 255, bgc.b / 255]
                   }}/>
     }}/>
@@ -174,6 +179,7 @@ export default function SpiralCanvas () {
                     zoom: zoom2,
                     thickness: thickness2,
                     blur: blur2,
+                    opacity: opacity2,
                     spiralColor: [bgc2.r / 255, bgc2.g / 255, bgc2.b / 255]
                   }}/>
           }}/>)
