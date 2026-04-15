@@ -1,7 +1,15 @@
 import * as React from 'react'
 import { Fragment, useCallback, useId } from 'react'
 import { Pencil, TextT, Timer } from '@phosphor-icons/react'
-import { useMessageAlpha, useRsvp, useTextWall, useTxtColor, useWritingMode, useHighlightColour, useMessageDuration } from '../state'
+import {
+  useMessageAlpha,
+  useRsvp,
+  useTextWall,
+  useTxtColor,
+  useWritingMode,
+  useHighlightColour,
+  useHighlightPos
+} from '../state'
 import {
   Breadcrumb,
   ColourBox,
@@ -28,15 +36,11 @@ export default function CustomizeSubliminalPage () {
   const [opacity, setOpacity] = useMessageAlpha()
   const [colour, setColour] = useTxtColor()
   const [highlight, setHighlight] = useHighlightColour()
+  const [highlightPos, setHighlightPos] = useHighlightPos()
   const [writingMode, setWritingMode] = useWritingMode()
-  const [messageDuration, setMessageDuration] = useMessageDuration()
 
   const currentMode = useWall ? 'wall' : (writingMode ? 'writing' : (rsvp ? 'rsvp' : 'lines'))
   const setMode = useCallback((value: string) => {
-    // Switch message duration between delay and wpm when changing to and from rsvp mode
-    if ((currentMode === 'rsvp' && value !== 'rsvp') || (currentMode !== 'rsvp' && value === 'rsvp')) {
-      setMessageDuration(60 / messageDuration)
-    }
     setUseWall(value === 'wall')
     setWritingMode(value === 'writing')
     setRsvp(value === 'rsvp')
@@ -62,12 +66,16 @@ export default function CustomizeSubliminalPage () {
         <ColourBox value={colour} onChange={setColour}/>
         <Slider value={opacity} onChange={setOpacity} id={opacitySliderId}/>
       </div>
-      {rsvp && <><Label>
-        highlight colour
-      </Label>
-      <div className="input_row standalone_input">
-        <ColourBox value={highlight} onChange={setHighlight}/>
-      </div></>
+      {rsvp && <>
+        <Label value={highlightPos}>
+          highlight colour + position
+        </Label>
+        <div className="input_row standalone_input">
+          <ColourBox value={highlight} onChange={setHighlight}/>
+          <Slider value={highlightPos} onChange={setHighlightPos} max={1} min={0}/>
+        </div>
+      </>
+
       }
       <WideButton to="/customize/subliminal/messages">
         edit messages

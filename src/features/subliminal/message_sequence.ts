@@ -117,14 +117,10 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
       const word = allWords[i]
       const speed = getSpeedAtIndex(i)
 
-      // Calculate the focal point: 40% through the word, rounded down
-      const focalIndex = Math.floor(word.length * 0.4)
-
       yield {
         word: [word],
         waitTime: speed,
-        fontScale: 1,
-        rsvpHighlightPosition: focalIndex
+        fontScale: 1
       }
     }
   }

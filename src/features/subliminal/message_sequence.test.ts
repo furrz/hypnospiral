@@ -162,37 +162,6 @@ describe('rsvpSequence', () => {
     expect(words).toStrictEqual(['hello', 'world', 'foo', 'bar'])
   })
 
-  it('calculates focal position as 40% through word', () => {
-    const messages = ['hello']
-    const wordDuration = 1.0
-    const seq = rsvpSequence(messages, wordDuration)
-
-    const result = seq.next().value
-    expect(result.word).toStrictEqual(['hello'])
-    // 40% of 5 = 2
-    expect(result.rsvpHighlightPosition).toBe(2)
-  })
-
-  it('calculates focal position correctly for different word lengths', () => {
-    const messages = ['a ab abc abcd abcde abcdef']
-    const wordDuration = 1.0
-    const seq = rsvpSequence(messages, wordDuration)
-
-    const focalPositions = []
-    for (let i = 0; i < 6; i++) {
-      focalPositions.push(seq.next().value.rsvpHighlightPosition)
-    }
-
-    expect(focalPositions).toStrictEqual([
-      Math.floor(1 * 0.4), // a
-      Math.floor(2 * 0.4), // ab
-      Math.floor(3 * 0.4), // abc
-      Math.floor(4 * 0.4), // abcd
-      Math.floor(5 * 0.4), // abcde
-      Math.floor(6 * 0.4)  // abcdef
-    ])
-  })
-
   it('applies speed markers inline with words', () => {
     const messages = ['hello{speed:120} world']
     const wordDuration = 60

@@ -11,6 +11,7 @@ import { colord } from 'colord'
 import {
   useCustomGoogleFont,
   useHighlightColour,
+  useHighlightPos,
   useMessageAlpha,
   useMessageDuration,
   useMessageGap,
@@ -41,6 +42,7 @@ export default function SpiralSubliminal () {
   const [googleFont] = useCustomGoogleFont()
   const [txtColor] = useTxtColor()
   const [txtHighlight] = useHighlightColour()
+  const [highlightPos] = useHighlightPos()
   const [txtAlpha] = useMessageAlpha()
   const [txtScale] = useTxtScale()
   const [currentText, setCurrentText] = useState<TextState>({
@@ -160,13 +162,13 @@ export default function SpiralSubliminal () {
     }}>
       <span style={{ width: '100%' }}>
       {currentText.word.map((item, i) => {
-        if (rsvp && currentText.rsvpHighlightPosition !== undefined && item.length > 0) {
+        if (rsvp && item.length > 0) {
           // RSVP mode: render with focal character highlighted
-          // The focal character stays perfectly centered on screen
-          const focusPos = currentText.rsvpHighlightPosition
-          const before = item.substring(0, focusPos)
-          const focal = item[focusPos]
-          const after = item.substring(focusPos + 1)
+          // The highlighted character stays perfectly centered on screen
+          const highlightIdx = Math.floor(item.length * highlightPos)
+          const before = item.substring(0, highlightIdx)
+          const focal = item[highlightIdx]
+          const after = item.substring(highlightIdx + 1)
 
           return <Fragment key={i}>{i !== 0 && <br/>}
             <span style={{
