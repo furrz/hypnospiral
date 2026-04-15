@@ -75,6 +75,11 @@ a.breadcrumb {
     width: auto;
     font-weight: bold;
     display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    background-color: var(--bg-color);
+    order: -2
 }
 
 a.breadcrumb svg {
@@ -87,6 +92,10 @@ a.breadcrumb svg {
     height: 100%;
     display: flex;
     flex-direction: column;
+}
+
+.page.primary {
+    overflow-y: scroll;
 }
 
 .page.secondary {
@@ -269,6 +278,13 @@ input[type=range]::-moz-range-progress {
     position: relative;
 }
 
+.primary .preview_box.hide_when_big_primary{
+    position: sticky;
+    top: 8.5vh;
+    z-index: 99;
+    order: -2;
+}
+
 .preview_inactive_text {
     color: var(--accent-color);
     text-align: center;
@@ -364,7 +380,7 @@ input[type=checkbox]:checked {
         display: flex;
     }
     .page.primary {
-        overflow-y: scroll;
+        
     }
 
     .page.primary .hide_when_big_primary {
