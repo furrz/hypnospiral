@@ -9,6 +9,7 @@ import {
   useRainbowHueSpeed,
   useRainbowLightness,
   useRainbowSaturation,
+  useArms,
   useSpinSpeed,
   useSpiralMode,
   useThrobSpeed,
@@ -22,6 +23,7 @@ import {
   useRainbowHueSpeed2,
   useRainbowLightness2,
   useRainbowSaturation2,
+  useArms2,
   useSpinSpeed2,
   useSpiralMode2,
   useThrobSpeed2,
@@ -35,6 +37,8 @@ import {
 
 import spiralFrag from './spiral.frag'
 import concentricFrag from './concentric.frag'
+import logspiral from './logspiral.frag'
+import square from './square.frag'
 import { colord } from 'colord'
 
 const shaders = Shaders.create({
@@ -43,6 +47,12 @@ const shaders = Shaders.create({
   },
   circle: {
     frag: concentricFrag
+  },
+  logspiral: {
+    frag: logspiral
+  },
+  square: {
+    frag: square
   },
   composite: {
     frag: GLSL`
@@ -76,6 +86,7 @@ export default function SpiralCanvas () {
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
+  const [arms] = useArms()
   const [spinSpeed] = useSpinSpeed()
   const [throbSpeed] = useThrobSpeed()
   const [throbStrength] = useThrobStrength()
@@ -90,6 +101,7 @@ export default function SpiralCanvas () {
   const [rainbowSaturation] = useRainbowSaturation()
   const [rainbowLightness] = useRainbowLightness()
   const [rainbowHueSpeed] = useRainbowHueSpeed()
+  const [arms2] = useArms2()
   const [spinSpeed2] = useSpinSpeed2()
   const [throbSpeed2] = useThrobSpeed2()
   const [throbStrength2] = useThrobStrength2()
@@ -151,6 +163,7 @@ export default function SpiralCanvas () {
                   uniforms={{
                     iTime,
                     iRes: [dimensions.width, dimensions.height],
+                    arms,
                     spinSpeed,
                     throbSpeed,
                     throbStrength,
@@ -173,6 +186,7 @@ export default function SpiralCanvas () {
                   uniforms={{
                     iTime,
                     iRes: [dimensions.width, dimensions.height],
+                    arms: arms2,
                     spinSpeed: spinSpeed2,
                     throbSpeed: throbSpeed2,
                     throbStrength: throbStrength2,

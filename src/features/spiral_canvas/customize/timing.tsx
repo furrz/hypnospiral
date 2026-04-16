@@ -1,12 +1,14 @@
 import * as React from 'react'
 import { Fragment } from 'react'
 import {
+  useArms,
   useSpinSpeed,
   useThrobSpeed,
   useThrobStrength,
   useZoom,
   useThickness,
   useBlur,
+  useArms2,
   useSpinSpeed2,
   useThrobSpeed2,
   useThrobStrength2,
@@ -20,12 +22,14 @@ import Previewer from 'components/previewer'
 import CustomizePage from 'pages/customize'
 
 export default function Timing () {
+  const [arms, setArms] = useArms()
   const [spinSpeed, setSpinSpeed] = useSpinSpeed()
   const [throbSpeed, setThrobSpeed] = useThrobSpeed()
   const [throbStrength, setThrobStrength] = useThrobStrength()
   const [zoom, setZoom] = useZoom()
   const [thickness, setThickness] = useThickness()
   const [blur, setBlur] = useBlur()
+  const [arms2, setArms2] = useArms2()
   const [spinSpeed2, setSpinSpeed2] = useSpinSpeed2()
   const [throbSpeed2, setThrobSpeed2] = useThrobSpeed2()
   const [throbStrength2, setThrobStrength2] = useThrobStrength2()
@@ -37,6 +41,10 @@ export default function Timing () {
     <CustomizePage secondary/>
     <Page primary>
       <Breadcrumb showInBigPrimary>Spiral Style</Breadcrumb>
+      <Label value={arms}>
+        arms
+        <Slider value={arms} onChange={setArms} min={1} max={12} step={1}/>
+      </Label>
       <Label value={spinSpeed}>
         spin speed
         <Slider value={spinSpeed} onChange={setSpinSpeed} min={-4} max={4}/>
@@ -63,6 +71,10 @@ export default function Timing () {
       </Label>
       {secondarySpiral && <>
         <label>secondary</label>
+        <Label value={arms2}>
+          arms
+          <Slider value={arms2} onChange={setArms2} min={1} max={12} step={1}/>
+        </Label>
         <Label value={spinSpeed2}>
           spin speed
           <Slider value={spinSpeed2} onChange={setSpinSpeed2} min={-4} max={4}/>
