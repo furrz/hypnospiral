@@ -8,14 +8,19 @@ import {
   Page,
   TextBlock,
   TextBox,
-  Slider
+  Slider, Checkbox
 } from 'components/building_blocks'
 import Previewer from 'components/previewer'
-import { useCustomGoogleFont, useTxtScale } from '../state'
+import {
+  useCustomGoogleFont,
+  useForcePerfectCenterText,
+  useTxtScale
+} from '../state'
 
 export default function CustomizeSubliminalFontPage () {
   const [font, setFont] = useCustomGoogleFont()
   const [txtScale, setTxtScale] = useTxtScale()
+  const [forcePerfectCenterText, setForcePerfectCenterText] = useForcePerfectCenterText()
   return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
@@ -40,6 +45,9 @@ export default function CustomizeSubliminalFontPage () {
                 Adding an <code>i</code> before the font weight, such as <code>Open Sans:i900</code>,
                 can make the text italic.
             </TextBlock>
+            <Checkbox value={forcePerfectCenterText} onChange={setForcePerfectCenterText}>
+              nudge text downward
+            </Checkbox>
             <FillGap/>
             <Previewer/>
         </Page>

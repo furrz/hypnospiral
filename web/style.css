@@ -568,6 +568,10 @@ input[type=checkbox]:checked {
     font-size: var(--subliminal-font-size);
 }
 
+.subliminal_text.force_perfect_center {
+    margin-bottom: 0 !important;
+}
+
 .subliminal_input {
     display: flex;
     justify-content: center;
