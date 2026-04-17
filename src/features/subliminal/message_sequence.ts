@@ -1,11 +1,13 @@
+import { Float } from 'type-fest'
 import { pickRandom, repeat, shuffle } from 'util/array'
 
-interface TextSequenceItem {
+export interface TextSequenceItem {
   word: string[]
   waitTime: number
   fontScale: number
   wordColor?: { r: number, g: number, b: number }
   askUserToWrite?: boolean
+  rsvpHighlightPosition?: number
 }
 
 export function * messageSequence (messages: string[][], wordDuration: number, lineGapTime: number, randomizeOrder: boolean): Generator<TextSequenceItem> {
@@ -47,6 +49,79 @@ export function * wallTextSequence (messages: string[], waitTime: number): Gener
       word: [repeat(800, () => pickRandom(messages)).join(' ')],
       waitTime,
       fontScale: 1
+    }
+  }
+}
+
+export function * rsvpSequence (messages: string[], wpm: number): Generator<TextSequenceItem> {
+  // Flatten all messages and split by whitespace, collapsing line breaks
+  const allWords: string[] = []
+  const speedMarkers = new Map<number, number>() // word index -> speed override
+  const wordDuration = 60 / wpm // convert from wpm to delay
+
+  for (const message of messages) {
+    const words = message.split(/\s+/).filter(w => w.length > 0)
+    for (const word of words) {
+      const [cleanedWord, speedOverride] = parseSpeedSyntax(word)
+      allWords.push(cleanedWord)
+      if (speedOverride !== undefined) {
+        speedMarkers.set(allWords.length - 1, speedOverride)
+        console.log('found speedmarker')
+      }
+    }
+  }
+
+  // Function to get interpolated speed at a word index
+  function getSpeedAtIndex (index: number): number {
+    const markerIndices = Array.from(speedMarkers.keys()).sort((a, b) => a - b)
+
+    // Find the markers before and after this index
+    let markerBefore = -1
+    let markerAfter = -1
+
+    for (const markerIndex of markerIndices) {
+      if (markerIndex <= index) {
+        markerBefore = markerIndex
+      } else if (markerAfter === -1) {
+        markerAfter = markerIndex
+      }
+    }
+
+    const speedAfter = speedMarkers.get(markerAfter) ?? wordDuration
+    const speedBefore = speedMarkers.get(markerBefore) ?? wordDuration
+
+    // No markers
+    if (markerBefore === -1 && markerAfter === -1) {
+      return wordDuration
+    }
+
+    // Only marker after
+    if (markerBefore === -1) {
+      const progress = index / markerAfter
+      return wordDuration + (speedAfter - wordDuration) * progress
+    }
+
+    // Only marker before
+    if (markerAfter === -1) {
+      return speedBefore
+    }
+
+    // Both markers exist
+    const progress = (index - markerBefore) / (markerAfter - markerBefore)
+    return speedBefore + (speedAfter - speedBefore) * progress
+  }
+
+  // Infinitely repeat the word list
+  while (true) {
+    for (let i = 0; i < allWords.length; i++) {
+      const word = allWords[i]
+      const speed = getSpeedAtIndex(i)
+
+      yield {
+        word: [word],
+        waitTime: speed,
+        fontScale: 1
+      }
     }
   }
 }
@@ -117,7 +192,31 @@ function parseFontScaleSyntax (message: string): [cleanedMessage: string, custom
 const writeMatch = /\{write}/gi
 
 function parseWriteSyntax (message: string): [cleanedMessage: string, userIsAskedToWriteLine: boolean] {
-    const interactionMatches = [...message.matchAll(writeMatch)]
-    const cleanedMessage = message.replace(writeMatch, '')
-    return [cleanedMessage, interactionMatches.length > 0]
+  const interactionMatches = [...message.matchAll(writeMatch)]
+  const cleanedMessage = message.replace(writeMatch, '')
+  return [cleanedMessage, interactionMatches.length > 0]
+}
+
+const speedMatch = /\{speed:([1-9][0-9]*)}/gi
+
+function parseSpeedSyntax (message: string): [cleanedMessage: string, speedOverride: number | undefined] {
+  const speedMatches = [...message.matchAll(speedMatch)]
+
+  function clampSpeed (n: number) {
+    return Math.max(1, Math.min(999, n))
+  }
+
+  function wpmToDelay (n: number) {
+    return 60 / n
+  }
+
+  const cleanedMessage = message.replace(speedMatch, '')
+
+  if (speedMatches.length > 0) {
+    const speedStr = speedMatches[0][0].replace('{speed:', '').replace('}', '')
+    const speed = wpmToDelay(clampSpeed(parseInt(speedStr)))
+    return [cleanedMessage, speed]
+  } else {
+    return [cleanedMessage, undefined]
+  }
 }

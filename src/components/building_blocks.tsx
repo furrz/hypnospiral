@@ -70,9 +70,10 @@ export const Breadcrumb = ({ children, showInBigPrimary = false, secondary = fal
 
 export const BreadcrumbSpace = divWithClassesComponent('breadcrumb_space')
 
-export const Label = function ({ value, unit, children, htmlFor, flexExpand }: {
+export const Label = function ({ value, unit, unitPrecision, children, htmlFor, flexExpand }: {
   value?: any
   unit?: string
+  unitPrecision?: number
   children: [string, ...ReactElement[]] | string
   htmlFor?: string
   flexExpand?: boolean
@@ -94,7 +95,7 @@ export const Label = function ({ value, unit, children, htmlFor, flexExpand }: {
     <div className="label_row">
       <span>{text}</span>
       <span>
-                {(value !== undefined) ? ((typeof value === 'number') ? value.toFixed(2) : value) : ''}
+                {(value !== undefined) ? ((typeof value === 'number') ? value.toFixed(unitPrecision ?? 2) : value) : ''}
         <span className="label_unit">{unit ?? ''}</span>
             </span>
     </div>
@@ -199,19 +200,42 @@ export const ColourBox = function ({ value, onChange }: {
   onChange?: (_: RgbColor) => void
 }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [ypos, setYpos] = useState(0)
 
-  const ref = React.useRef(null)
+  const boxRef = React.useRef<HTMLDivElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null)
   useOnClickOutside(ref, () => {
     setIsOpen(false)
   })
 
+  const handleClick = () => {
+    if (boxRef.current !== null) {
+      const rect = boxRef.current.getBoundingClientRect()
+      const popoverHeight = 30 * window.innerHeight / 100 // 30vh in pixels
+      const gap = 10
+
+      // Check if popover would overflow the bottom
+      const wouldOverflow = rect.bottom + gap + popoverHeight > window.innerHeight
+
+      if (wouldOverflow) {
+        setYpos(rect.top - gap - popoverHeight)
+      } else {
+        setYpos(rect.bottom + gap)
+      }
+    }
+    setIsOpen(true)
+  }
+
   return <Fragment>
     <div className={classNames('colour_box', { active: isOpen })}
          style={{ backgroundColor: colord(value).toRgbString() }}
-         onClick={() => { setIsOpen(true) }}></div>
+         onClick={handleClick}
+         ref={boxRef}></div>
     <div className={classNames('popover_darken', { active: isOpen })}></div>
     {isOpen && (
-      <div className="colour_popover" ref={ref}>
+      <div className="colour_popover" ref={ref} style={{
+        top: ypos
+      }}>
         <RgbColorPicker color={value} onChange={onChange}/>
       </div>
     )}

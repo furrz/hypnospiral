@@ -3,13 +3,15 @@ import { Fragment } from 'react'
 import CustomizePage from 'pages/customize'
 import { Breadcrumb, Checkbox, FillGap, Label, Page, Slider } from 'components/building_blocks'
 import Previewer from 'components/previewer'
-import { useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useTextWall, useWritingMode } from '../state'
+import { useMessageDuration, useMessageGap, useOneWord, useRandomOrder, useRsvp, useTextWall, useWritingMode, useWpm } from '../state'
 
 export default function CustomizeSubliminalTimingPage () {
   const [textWall] = useTextWall()
   const [writingMode] = useWritingMode()
+  const [rsvp] = useRsvp()
   const [messageDuration, setMessageDuration] = useMessageDuration()
   const [blankDuration, setBlankDuration] = useMessageGap()
+  const [wpm, setWpm] = useWpm()
   const [oneWord, setOneWord] = useOneWord()
   const [randomOrder, setRandomOrder] = useRandomOrder()
 
@@ -17,18 +19,22 @@ export default function CustomizeSubliminalTimingPage () {
     <CustomizePage secondary/>
     <Page primary>
       <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
-      {!writingMode && <Label value={messageDuration} unit="s">
+      {!rsvp && !writingMode && <Label value={messageDuration} unit="s">
         message duration
         <Slider value={messageDuration} onChange={setMessageDuration} min={0.01}/>
       </Label>}
-      {!textWall && !writingMode && <Fragment>
+      {rsvp && !writingMode && <Label value={wpm} unitPrecision={0}>
+        words per minute
+        <Slider value={wpm} onChange={setWpm} min={60} max={600} step={1}/>
+      </Label>}
+      {!textWall && !writingMode && !rsvp && <Fragment>
         <Label value={blankDuration} unit="s">
           blank duration
           <Slider value={blankDuration} onChange={setBlankDuration} max={10}/>
         </Label>
         <Checkbox value={oneWord} onChange={setOneWord}>one word at a time</Checkbox>
       </Fragment>}
-      {!textWall && <Fragment>
+      {!textWall && !rsvp && <Fragment>
         <Checkbox value={randomOrder} onChange={setRandomOrder}>random order</Checkbox>
       </Fragment>}
       <FillGap/>

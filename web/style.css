@@ -75,6 +75,11 @@ a.breadcrumb {
     width: auto;
     font-weight: bold;
     display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    background-color: var(--bg-color);
+    order: -2
 }
 
 a.breadcrumb svg {
@@ -87,6 +92,10 @@ a.breadcrumb svg {
     height: 100%;
     display: flex;
     flex-direction: column;
+}
+
+.page.primary {
+    overflow-y: scroll;
 }
 
 .page.secondary {
@@ -135,7 +144,6 @@ label.separate_input {
 .colour_popover {
     border-radius: 8px;
     position: fixed;
-    margin-top: 40vh;
     box-shadow: 0 0 100px rgba(0,0,0,0.5);
     z-index: 25;
 }
@@ -176,7 +184,9 @@ label.separate_input {
 }
 
 .input_row {
+    position: relative;
     display: flex;
+    flex-flow: wrap;
     flex-direction: row;
     align-items: center;
     gap: 2vh;
@@ -266,6 +276,13 @@ input[type=range]::-moz-range-progress {
     align-items: center;
     cursor: pointer;
     position: relative;
+}
+
+.primary .preview_box.hide_when_big_primary{
+    position: sticky;
+    top: 8.5vh;
+    z-index: 99;
+    order: -2;
 }
 
 .preview_inactive_text {
@@ -363,7 +380,7 @@ input[type=checkbox]:checked {
         display: flex;
     }
     .page.primary {
-
+        
     }
 
     .page.primary .hide_when_big_primary {
@@ -387,6 +404,7 @@ input[type=checkbox]:checked {
 }
 
 .colour_box {
+    position: relative;
     width: 5vh;
     height: 5vh;
     border-radius: 1vh;
@@ -587,6 +605,10 @@ input[type=checkbox]:checked {
     top: -50%;
     line-height: 0.9;
     font-weight: bolder;
+}
+
+.subliminal_text.rsvp {
+    font-variant-numeric: tabular-nums;
 }
 
 @container spiralzone (max-width: 700px) {
