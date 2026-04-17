@@ -9,6 +9,7 @@ uniform float iTime;
 
 uniform vec3 spiralColor;
 
+uniform float arms;
 uniform float spinSpeed;
 uniform float throbSpeed;
 uniform float throbStrength;
@@ -23,7 +24,7 @@ void main() {
     float angle = atan(truPos.y, truPos.x);
     float dist = pow(length(truPos), .4 + sin((iTime + cos(iTime * .05) * 0.1) * throbSpeed) * 0.2 * throbStrength);
 
-    float spiFactor = sin(angle + dist * 40. * zoom - iTime * 5. * spinSpeed) + 1.0;
+    float spiFactor = sin(arms * angle + dist * 40. * zoom - iTime * 5. * spinSpeed) + 1.0;
     float threshold = 2.0 - thickness;
     float safeBlur = min(blur, threshold);
     spiFactor = smoothstep(threshold - safeBlur, threshold, spiFactor);
