@@ -12,6 +12,11 @@ export default function AboutPage () {
       hypnospiral<br/><b>visualizer</b>.
     </BigHeader>
     <TextBlock medium>by <a href="https://bsky.app/profile/zyntaks.ca">@zyntaks.ca</a></TextBlock>
+    <TextBlock medium>
+      big contributions by
+      {' '}<a href="https://www.youtube.com/@blenderbenderthethird544">BB3</a>
+      {' '}and <a href="https://https://github.com/valuta1995">Valuta</a>!
+    </TextBlock>
     <TextBlock medium>source code <a href="https://github.com/furrz/hypnospiral">furrz/hypnospiral</a></TextBlock>
     <TextBlock medium><Link to="/about/safety">important safety information</Link></TextBlock>
     <Checkbox value={dyslexia} onChange={v => {
