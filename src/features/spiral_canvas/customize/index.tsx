@@ -71,7 +71,7 @@ export default function CustomizeSpiralPage () {
                     </Radio>
                 </Label>
                 <Label value={opacity}>
-                    colour and opacity
+                    colour + opacity
                 </Label>
                 <div className="input_row standalone_input">
                     <>{!rainbowColors && <ColourBox value={bgColor} onChange={setBgColor}/>}</>
@@ -103,7 +103,7 @@ export default function CustomizeSpiralPage () {
                     </Radio>
                 </Label>
                 <Label value={opacity2}>
-                    colour and opacity
+                    colour + opacity
                 </Label>
                 <div className="input_row standalone_input">
                     <>{!rainbowColors2 && <ColourBox value={bgColor2} onChange={setBgColor2}/>}</>
