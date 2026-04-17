@@ -50,6 +50,7 @@ const commonConfig = (isNodeSide) => ({
 })
 
 const serverConfig = {
+    name: 'server',
     ...commonConfig(true), ...{
         entry: './src/components/app.tsx',
         target: 'node',
@@ -72,6 +73,8 @@ const serverConfig = {
 };
 
 const clientConfig = {
+    name: 'client',
+    dependencies: ['server'],
     ...commonConfig(false), ...{
         entry: './src/index.tsx',
         devtool: isDevelopment && 'source-map',
@@ -82,11 +85,17 @@ const clientConfig = {
                 ]
             }),
             new HtmlWebpackPlugin({
+                template: './src/index.ejs',
                 templateParameters: async () => {
-                    const { App } = (require('./tmp/bundle.server.js'));
-                    // evil
-                    React.useLayoutEffect = React.useEffect
-                    return {injectCode: ReactDOM.renderToStaticMarkup(React.createElement(App.default, null, null))}
+                    try {
+                        delete require.cache[require.resolve('./tmp/bundle.server.js')];
+                        const { App } = require('./tmp/bundle.server.js');
+                        React.useLayoutEffect = React.useEffect;
+                        return {injectCode: ReactDOM.renderToStaticMarkup(React.createElement(App.default, null, null))};
+                    } catch (e) {
+                        console.warn('Failed to render server-side app:', e.message);
+                        return {injectCode: ''};
+                    }
                 }
             }),
             isDevelopment && new ReactRefreshWebpackPlugin()
