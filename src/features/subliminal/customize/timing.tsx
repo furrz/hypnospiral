@@ -21,7 +21,7 @@ export default function CustomizeSubliminalTimingPage () {
       <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
       {!rsvp && !writingMode && <Label value={messageDuration} unit="s">
         message duration
-        <Slider value={messageDuration} onChange={setMessageDuration} min={0.01}/>
+        <Slider value={messageDuration} onChange={setMessageDuration} min={0.01} max={10}/>
       </Label>}
       {rsvp && !writingMode && <Label value={wpm} unitPrecision={0}>
         words per minute
@@ -30,7 +30,7 @@ export default function CustomizeSubliminalTimingPage () {
       {!textWall && !writingMode && !rsvp && <Fragment>
         <Label value={blankDuration} unit="s">
           blank duration
-          <Slider value={blankDuration} onChange={setBlankDuration} max={10}/>
+          <Slider value={blankDuration} onChange={setBlankDuration} max={20}/>
         </Label>
         <Checkbox value={oneWord} onChange={setOneWord}>one word at a time</Checkbox>
       </Fragment>}
