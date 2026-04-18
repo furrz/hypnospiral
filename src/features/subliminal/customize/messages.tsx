@@ -13,7 +13,8 @@ export default function CustomizeSubliminalMessagesPage () {
             <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
             <Label flexExpand>
                 subliminal messages
-                <TextArea value={messages.join('\n')} onChange={l => { setMessages(l.split('\n')) }}
+                <TextArea value={messages.join('\n')}
+                          onChange={l => { setMessages(l.split('\n')) }}
                           placeholder={'Write as many subliminal messages as you desire.\n\nOne per line.'}/>
             </Label>
             <FillGap/>

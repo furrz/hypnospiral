@@ -25,7 +25,7 @@ export default function CustomizeSubliminalFontPage () {
         <CustomizePage secondary/>
         <Page primary>
             <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
-            <Label>
+            <Label value={txtScale} setValue={setTxtScale}>
                 font size
                 <Slider value={txtScale} onChange={setTxtScale} min={0.1} max={4} step={0.01}/>
             </Label>

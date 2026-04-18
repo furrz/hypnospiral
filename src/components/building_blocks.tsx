@@ -1,5 +1,13 @@
 import * as React from 'react'
-import { createContext, Fragment, type PropsWithChildren, type ReactElement, useContext, useId, useState } from 'react'
+import {
+  createContext,
+  Fragment,
+  type PropsWithChildren,
+  type ReactElement,
+  useContext,
+  useId,
+  useState
+} from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { CaretLeft, Check } from '@phosphor-icons/react'
 import { type RgbColor, RgbColorPicker } from 'react-colorful'
@@ -13,11 +21,16 @@ const returnsEmptyString = () => ''
 
 function divWithClassesComponent<T> (clsName: string, clsCalc: ClassNamesFromProps<T> = returnsEmptyString) {
   return function WrappedClassComponent (props: PropsWithChildren<T>) {
-    return <div className={clsName + ' ' + clsCalc(props)}>{props.children}</div>
+    return <div
+      className={clsName + ' ' + clsCalc(props)}>{props.children}</div>
   }
 }
 
-export const Page = function ({ primary, secondary, children }: PropsWithChildren<{
+export const Page = function ({
+  primary,
+  secondary,
+  children
+}: PropsWithChildren<{
   primary?: boolean
   secondary?: boolean
 }>) {
@@ -35,7 +48,12 @@ export const TextBlock = divWithClassesComponent<{
   medium?: boolean
 }>('inline_text', p => classNames({ medium_text: p.medium }))
 
-export const WideButton = ({ to, primary, children, onSecondaryPage = false }: PropsWithChildren<{
+export const WideButton = ({
+  to,
+  primary,
+  children,
+  onSecondaryPage = false
+}: PropsWithChildren<{
   to: string
   primary?: boolean
   onSecondaryPage?: boolean
@@ -45,12 +63,19 @@ export const WideButton = ({ to, primary, children, onSecondaryPage = false }: P
                   onClick={onSecondaryPage
                     ? () => { navigate(-1) }
                     : undefined}
-                  className={({ isActive }) => classNames('wide_button', { primary, active: isActive })}>
+                  className={({ isActive }) => classNames('wide_button', {
+                    primary,
+                    active: isActive
+                  })}>
     {children}
   </NavLink>
 }
 
-export const Breadcrumb = ({ children, showInBigPrimary = false, secondary = false }: {
+export const Breadcrumb = ({
+  children,
+  showInBigPrimary = false,
+  secondary = false
+}: {
   children: string
   showInBigPrimary?: boolean
   secondary?: boolean
@@ -58,11 +83,13 @@ export const Breadcrumb = ({ children, showInBigPrimary = false, secondary = fal
   const navigate = useNavigate()
 
   return <Fragment>
-    {showInBigPrimary || <div className="breadcrumb_space hide_when_not_big_primary"></div>}
+    {showInBigPrimary ||
+      <div className="breadcrumb_space hide_when_not_big_primary"></div>}
     <a href="#" onClick={e => {
       navigate(secondary ? -2 : -1)
       e.preventDefault()
-    }} className={classNames('breadcrumb', { hide_when_big_primary: !showInBigPrimary })}>
+    }}
+       className={classNames('breadcrumb', { hide_when_big_primary: !showInBigPrimary })}>
       <CaretLeft weight="fill"/> {children}
     </a>
   </Fragment>
@@ -70,8 +97,17 @@ export const Breadcrumb = ({ children, showInBigPrimary = false, secondary = fal
 
 export const BreadcrumbSpace = divWithClassesComponent('breadcrumb_space')
 
-export const Label = function ({ value, unit, unitPrecision, children, htmlFor, flexExpand }: {
+export const Label = function ({
+  value,
+  unit,
+  setValue,
+  unitPrecision,
+  children,
+  htmlFor,
+  flexExpand
+}: {
   value?: any
+  setValue?: (value: number) => void
   unit?: string
   unitPrecision?: number
   children: [string, ...ReactElement[]] | string
@@ -81,6 +117,37 @@ export const Label = function ({ value, unit, unitPrecision, children, htmlFor, 
   let text: string
   let extras: ReactElement[] = []
   const isLabelOnly = typeof children === 'string'
+
+  const useNumberField = typeof value === 'number' && typeof setValue === 'function'
+  const useField = typeof value !== 'undefined'
+
+  let fieldContents: React.JSX.Element | string = ''
+  if (useNumberField) {
+    const [text, setText] = useState('you should never see this')
+    const [focused, setFocused] = useState(false)
+
+    fieldContents = <input
+      type="text" step="any"
+      className="value_input"
+      value={focused ? text : value.toFixed(unitPrecision ?? 2)}
+      onChange={e => {
+        setText(e.target.value)
+        const parsed = parseFloat(e.target.value)
+        if (!isNaN(parsed)) setValue(parsed)
+      }}
+      onFocus={() => {
+        setFocused(true)
+        console.log('Focus gain')
+        setText(value.toFixed(unitPrecision ?? 2))
+      }}
+      onBlur={() => {
+        setFocused(false)
+        console.log('focus loss')
+      }}
+    />
+  } else if (useField) {
+    fieldContents = value.toString()
+  }
 
   if (isLabelOnly) {
     text = children
@@ -95,9 +162,9 @@ export const Label = function ({ value, unit, unitPrecision, children, htmlFor, 
     <div className="label_row">
       <span>{text}</span>
       <span>
-                {(value !== undefined) ? ((typeof value === 'number') ? value.toFixed(unitPrecision ?? 2) : value) : ''}
+        {fieldContents}
         <span className="label_unit">{unit ?? ''}</span>
-            </span>
+      </span>
     </div>
     <div className={classNames('input_row', { flex_expand: flexExpand })}>
       {...extras}
@@ -105,7 +172,14 @@ export const Label = function ({ value, unit, unitPrecision, children, htmlFor, 
   </label>
 }
 
-export const Slider = function ({ min = 0, max = 1, step = 0.01, value, onChange, id }: {
+export const Slider = function ({
+  min = 0,
+  max = 1,
+  step = 0.01,
+  value,
+  onChange,
+  id
+}: {
   min?: number
   max?: number
   step?: number
@@ -114,7 +188,8 @@ export const Slider = function ({ min = 0, max = 1, step = 0.01, value, onChange
   id?: string
 }) {
   const percent = (value - min) / (max - min) * 100
-  return <input type="range" min={min} max={max} step={step} value={value} id={id}
+  return <input type="range" min={min} max={max} step={step} value={value}
+                id={id}
                 style={{
                   background: `linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) ${percent}%, var(--input-color) ${percent}%, var(--input-color) 100%)`
                 }}
@@ -148,7 +223,8 @@ export const Checkbox = function ({ children, value, onChange, id }: {
   id?: string
 }) {
   return <Fragment>
-    <label className="check_label" role="checkbox" aria-checked={value} tabIndex={0} htmlFor={id}>
+    <label className="check_label" role="checkbox" aria-checked={value}
+           tabIndex={0} htmlFor={id}>
       <span>{children}</span>
       <input type="checkbox" checked={value} id={id}
              onChange={e => { onChange?.(e.target.checked) }}/>
@@ -164,7 +240,11 @@ const RadioParamsContext = createContext({
   }
 })
 
-export const Radio = function ({ children, value, onChange }: PropsWithChildren<{
+export const Radio = function ({
+  children,
+  value,
+  onChange
+}: PropsWithChildren<{
   value: string
   onChange: (_: string) => void
 }>) {
@@ -177,7 +257,11 @@ export const Radio = function ({ children, value, onChange }: PropsWithChildren<
   </RadioParamsContext.Provider>
 }
 
-export const RadioOption = function ({ value, label, children }: PropsWithChildren<{
+export const RadioOption = function ({
+  value,
+  label,
+  children
+}: PropsWithChildren<{
   value: string
   label: string
 }>) {

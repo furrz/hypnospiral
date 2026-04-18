@@ -19,16 +19,16 @@ export default function CustomizeSubliminalTimingPage () {
     <CustomizePage secondary/>
     <Page primary>
       <Breadcrumb showInBigPrimary>Subliminal Text</Breadcrumb>
-      {!rsvp && !writingMode && <Label value={messageDuration} unit="s">
+      {!rsvp && !writingMode && <Label value={messageDuration} setValue={setMessageDuration} unit="s">
         message duration
         <Slider value={messageDuration} onChange={setMessageDuration} min={0.01} max={10}/>
       </Label>}
-      {rsvp && !writingMode && <Label value={wpm} unitPrecision={0}>
+      {rsvp && !writingMode && <Label value={wpm} setValue={setWpm} unitPrecision={0}>
         words per minute
         <Slider value={wpm} onChange={setWpm} min={60} max={600} step={1}/>
       </Label>}
       {!textWall && !writingMode && !rsvp && <Fragment>
-        <Label value={blankDuration} unit="s">
+        <Label value={blankDuration} setValue={setBlankDuration} unit="s">
           blank duration
           <Slider value={blankDuration} onChange={setBlankDuration} max={20}/>
         </Label>

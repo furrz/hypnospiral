@@ -59,7 +59,7 @@ export default function CustomizeSubliminalPage () {
           <RadioOption value="rsvp" label="RSVP Mode"><IconRsvp/></RadioOption>
         </Radio>
       </Label>
-      <Label value={opacity} htmlFor={opacitySliderId}>
+      <Label value={opacity} setValue={setOpacity} htmlFor={opacitySliderId}>
         colour + opacity
       </Label>
       <div className="input_row standalone_input">
