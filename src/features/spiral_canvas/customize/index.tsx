@@ -35,6 +35,7 @@ import {
 
 import IconSpiral from 'assets/SpiralStyle.svg'
 import IconCircle from 'assets/CirclesStyle.svg'
+import IconSquare from 'assets/SquareStyle.svg'
 
 export default function CustomizeSpiralPage () {
   const [spiralMode, setSpiralMode] = useSpiralMode()
@@ -68,6 +69,7 @@ export default function CustomizeSpiralPage () {
                     <Radio value={spiralMode} onChange={setSpiralMode}>
                         <RadioOption value="spiral" label="Spiral Style"><IconSpiral/></RadioOption>
                         <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
+                        <RadioOption value="square" label="Square Style"><IconSquare/></RadioOption>
                     </Radio>
                 </Label>
                 <Label value={opacity}>

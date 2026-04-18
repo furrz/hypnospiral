@@ -37,6 +37,7 @@ import {
 
 import spiralFrag from './spiral.frag'
 import concentricFrag from './concentric.frag'
+import squareFrag from './square.frag'
 import { colord } from 'colord'
 
 const shaders = Shaders.create({
@@ -45,6 +46,9 @@ const shaders = Shaders.create({
   },
   circle: {
     frag: concentricFrag
+  },
+  square: {
+    frag: squareFrag
   },
   composite: {
     frag: GLSL`
@@ -111,6 +115,9 @@ export default function SpiralCanvas () {
   const bgc = { ...bgColor }
   const bgc2 = { ...bgColor2 }
 
+  const primaryShader = shaders[spiralMode] ?? shaders.spiral // Fallback value
+  const secondaryShader = shaders[spiralMode2] ?? shaders.spiral
+
   if (rainbowColors) {
     const newColor = colord({
       h: (iTime * 10.0 * rainbowHueSpeed) % 360,
@@ -151,7 +158,7 @@ export default function SpiralCanvas () {
   const baseLayer = () => (
     <Node shader={shaders.composite} uniforms={{
       layer1: <Node shader={shaders.background} uniforms={{ bgColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255] }} />,
-      layer2: <Node shader={spiralMode === 'circle' ? shaders.circle : shaders.spiral}
+      layer2: <Node shader={primaryShader}
                   uniforms={{
                     iTime,
                     iRes: [dimensions.width, dimensions.height],
@@ -174,7 +181,7 @@ export default function SpiralCanvas () {
         ? (<Node shader={shaders.composite}
           uniforms={{
             layer1: baseLayer,
-            layer2: () => <Node shader={spiralMode2 === 'circle' ? shaders.circle : shaders.spiral}
+            layer2: () => <Node shader={secondaryShader}
                   uniforms={{
                     iTime,
                     iRes: [dimensions.width, dimensions.height],
