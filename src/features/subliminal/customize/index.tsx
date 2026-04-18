@@ -67,7 +67,7 @@ export default function CustomizeSubliminalPage () {
         <Slider value={opacity} onChange={setOpacity} id={opacitySliderId}/>
       </div>
       {rsvp && <>
-        <Label value={highlightPos}>
+        <Label value={highlightPos} setValue={setHighlightPos}>
           highlight colour + position
         </Label>
         <div className="input_row standalone_input">
