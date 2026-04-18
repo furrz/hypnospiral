@@ -166,7 +166,7 @@ function parseColorSyntax (message: string): [cleanedMessage: string, overrideCo
   const cleanedMessage = message.replace(colorMatch, '')
 
   if (colorMatches.length > 0) {
-    const colorStr = colorMatches[0][0].replace('{color:', '').replace('}', '')
+    const colorStr = colorMatches[0][0].replace(/{colou?r:|}/, '')
     const [r, g, b] = colorStr.split(',').map(n => clampToByte(parseInt(n, 10)))
     return [cleanedMessage, { r, g, b }]
   } else {
