@@ -111,8 +111,8 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
     return speedBefore + (speedAfter - speedBefore) * progress
   }
 
-  // Infinitely repeat the word list
-  while (true) {
+  // Infinitely repeat the word list (except when there are no words at all)
+  while (allWords.length > 0) {
     for (let i = 0; i < allWords.length; i++) {
       const word = allWords[i]
       const speed = getSpeedAtIndex(i)
