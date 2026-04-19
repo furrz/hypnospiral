@@ -47,7 +47,7 @@ const shaders = Shaders.create({
   heart: {
     frag: heartFrag
   },
-  archemedian: {
+  spiral: {
     frag: spiralFrag
   },
   circle: {
