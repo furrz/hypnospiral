@@ -33,9 +33,11 @@ import {
   useSecondary
 } from '../state'
 
-import IconSpiral from 'assets/SpiralStyle.svg'
+import IconArchemedian from 'assets/ArchemedianStyle.svg'
+import IconLogarithmic from 'assets/LogarithmicStyle.svg'
 import IconCircle from 'assets/CirclesStyle.svg'
 import IconSquare from 'assets/SquareStyle.svg'
+import IconSquareConc from 'assets/SquareConcStyle.svg'
 
 export default function CustomizeSpiralPage () {
   const [spiralMode, setSpiralMode] = useSpiralMode()
@@ -67,9 +69,11 @@ export default function CustomizeSpiralPage () {
                 <Label>
                     spiral type
                     <Radio value={spiralMode} onChange={setSpiralMode}>
-                        <RadioOption value="spiral" label="Spiral Style"><IconSpiral/></RadioOption>
+                        <RadioOption value="archemedian" label="Spiral Style"><IconArchemedian/></RadioOption>
+                        <RadioOption value="logarithmic" label="Logarithmic Style"><IconLogarithmic/></RadioOption>
                         <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
-                        <RadioOption value="square" label="Square Style"><IconSquare/></RadioOption>
+                        <RadioOption value="square" label="Square Spiral Style"><IconSquare/></RadioOption>
+                        <RadioOption value="concentricSquare" label="Square Style"><IconSquareConc/></RadioOption>
                     </Radio>
                 </Label>
                 <Label value={opacity}>

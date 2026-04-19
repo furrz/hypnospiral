@@ -38,10 +38,12 @@ import {
 import spiralFrag from './spiral.frag'
 import concentricFrag from './concentric.frag'
 import squareFrag from './square.frag'
+import logFrag from './logspiral.frag'
+import concentricSquare from './concentricSquare.frag'
 import { colord } from 'colord'
 
 const shaders = Shaders.create({
-  spiral: {
+  archemedian: {
     frag: spiralFrag
   },
   circle: {
@@ -49,6 +51,12 @@ const shaders = Shaders.create({
   },
   square: {
     frag: squareFrag
+  },
+  logarithmic: {
+    frag: logFrag
+  },
+  concentricSquare: {
+    frag: concentricSquare
   },
   composite: {
     frag: GLSL`
