@@ -195,6 +195,25 @@ export const RadioOption = function ({ value, label, children }: PropsWithChildr
   </Fragment>
 }
 
+export const Dropdown = function ({ children, value, defaultValue, onChange, id }: PropsWithChildren<{
+  value: string
+  defaultValue: string
+  onChange: (_: string) => void
+  id?: string
+}>) {
+  return <Fragment>
+    <select value={value} id={id} onChange={e => { onChange(e.target.value) }}>
+      {children}
+    </select>
+  </Fragment>
+}
+
+export const DrodownOption = function ({ value, children }: PropsWithChildren<{
+  value: string
+}>) {
+  return <option value={value}>{children}</option>
+}
+
 export const ColourBox = function ({ value, onChange }: {
   value: RgbColor
   onChange?: (_: RgbColor) => void

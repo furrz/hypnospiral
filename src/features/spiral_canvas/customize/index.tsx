@@ -5,6 +5,7 @@ import {
   Breadcrumb,
   Checkbox,
   ColourBox,
+  Dropdown,
   FillGap,
   Label,
   Page,
@@ -30,7 +31,8 @@ import {
   useRainbowLightness2,
   useRainbowSaturation2,
   useSpiralMode2,
-  useSecondary
+  useSecondary,
+  useComposition
 } from '../state'
 
 import IconArchemedian from 'assets/ArchemedianStyle.svg'
@@ -57,6 +59,7 @@ export default function CustomizeSpiralPage () {
   const [rainbowLightness2, setRainbowLightness2] = useRainbowLightness2()
   const [rainbowHueSpeed2, setRainbowHueSpeed2] = useRainbowHueSpeed2()
   const [secondarySpiral, setSecondarySpiral] = useSecondary()
+  const [composition, setComposition] = useComposition()
 
   return <Fragment>
         <CustomizePage secondary/>
@@ -103,6 +106,14 @@ export default function CustomizeSpiralPage () {
             </div>
             <Checkbox value={secondarySpiral} onChange={setSecondarySpiral}>secondary spiral</Checkbox>
             { secondarySpiral && <div>
+                <Label>
+                    composition
+                    <Dropdown value={composition} defaultValue="alpha" onChange={setComposition}>
+                        <option value="alpha">alpha</option>
+                        <option value="add">add</option>
+                        <option value="multiply">multiply</option>
+                    </Dropdown>
+                </Label>
                 <Label>
                     spiral type
                     <Radio value={spiralMode2} onChange={setSpiralMode2}>
