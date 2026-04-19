@@ -40,9 +40,13 @@ import concentricFrag from './concentric.frag'
 import squareFrag from './square.frag'
 import logFrag from './logspiral.frag'
 import concentricSquare from './concentricSquare.frag'
+import heartFrag from './heart.frag'
 import { colord } from 'colord'
 
 const shaders = Shaders.create({
+  heart: {
+    frag: heartFrag
+  },
   archemedian: {
     frag: spiralFrag
   },
@@ -123,8 +127,8 @@ export default function SpiralCanvas () {
   const bgc = { ...bgColor }
   const bgc2 = { ...bgColor2 }
 
-  const primaryShader = shaders[spiralMode] ?? shaders.spiral // Fallback value
-  const secondaryShader = shaders[spiralMode2] ?? shaders.spiral
+  const primaryShader = shaders[spiralMode] ?? shaders.archemedian // Fallback value
+  const secondaryShader = shaders[spiralMode2] ?? shaders.archemedian
 
   if (rainbowColors) {
     const newColor = colord({

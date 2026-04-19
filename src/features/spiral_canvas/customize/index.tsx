@@ -38,6 +38,7 @@ import IconLogarithmic from 'assets/LogarithmicStyle.svg'
 import IconCircle from 'assets/CirclesStyle.svg'
 import IconSquare from 'assets/SquareStyle.svg'
 import IconSquareConc from 'assets/SquareConcStyle.svg'
+import IconHeart from 'assets/HeartStyle.svg'
 
 export default function CustomizeSpiralPage () {
   const [spiralMode, setSpiralMode] = useSpiralMode()
@@ -74,6 +75,7 @@ export default function CustomizeSpiralPage () {
                         <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
                         <RadioOption value="square" label="Square Spiral Style"><IconSquare/></RadioOption>
                         <RadioOption value="concentricSquare" label="Square Style"><IconSquareConc/></RadioOption>
+                        <RadioOption value="heart" label="Heart Style"><IconHeart/></RadioOption>
                     </Radio>
                 </Label>
                 <Label value={opacity}>
@@ -109,6 +111,7 @@ export default function CustomizeSpiralPage () {
                         <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
                         <RadioOption value="square" label="Square Spiral Style"><IconSquare/></RadioOption>
                         <RadioOption value="concentricSquare" label="Square Style"><IconSquareConc/></RadioOption>
+                        <RadioOption value="heart" label="Heart Style"><IconHeart/></RadioOption>
                     </Radio>
                 </Label>
                 <Label value={opacity2}>
