@@ -104,8 +104,11 @@ export default function CustomizeSpiralPage () {
                 <Label>
                     spiral type
                     <Radio value={spiralMode2} onChange={setSpiralMode2}>
-                        <RadioOption value="spiral" label="Spiral Style"><IconSpiral/></RadioOption>
+                        <RadioOption value="archemedian" label="Spiral Style"><IconArchemedian/></RadioOption>
+                        <RadioOption value="logarithmic" label="Logarithmic Style"><IconLogarithmic/></RadioOption>
                         <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
+                        <RadioOption value="square" label="Square Spiral Style"><IconSquare/></RadioOption>
+                        <RadioOption value="concentricSquare" label="Square Style"><IconSquareConc/></RadioOption>
                     </Radio>
                 </Label>
                 <Label value={opacity2}>
