@@ -260,3 +260,33 @@ export const ColourBox = function ({ value, onChange }: {
     )}
   </Fragment>
 }
+
+export const CollapsibleSection = function ({ title, children }: PropsWithChildren<{
+  title: string
+}>) {
+  const [isOpen, setIsOpen] = useState(false)
+  return <div className={classNames('collapsible_section', isOpen ? 'open' : 'closed')}>
+    <div className="collapsible_header" onClick={() => { setIsOpen(!isOpen) }}>
+      <span>{title}</span>
+      <CaretLeft size={'1em'} />
+    </div>
+    <div className={classNames('collapsible_content')}>
+      {children}
+    </div>
+  </div>
+}
+
+export const Tag = function ({ tag, min, max, description }: {
+  tag: string
+  min?: number | string
+  max?: number | string
+  description: string
+}) {
+  return <div className="tag">
+    <div className="tag_header">
+      <span className="tag_name">{tag}</span>
+      {(min !== undefined && max !== undefined) && <span className="tag_range">min: {min} max: {max}</span>}
+    </div>
+    <div className="tag_description">{description}</div>
+  </div>
+}
