@@ -132,6 +132,15 @@ input[type=radio]:checked + label {
     filter: none;
 }
 
+select{
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 2px solid var(--accent-color);
+    border-radius: 1vh;
+    font-size: 3vh;
+    padding: 5px;
+}
+
 label.separate_input {
     padding-bottom: 0;
 }
