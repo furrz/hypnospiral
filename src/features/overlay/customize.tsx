@@ -19,7 +19,7 @@ export default function CustomizeOverlayPage () {
         overlay url
         <TextBox placeholder="https://example.com/image.png" value={url} onChange={setUrl}/>
       </Label>
-      <Label value={opacity}>
+      <Label value={opacity} setValue={setOpacity}>
         overlay opacity
         <Slider value={opacity} onChange={setOpacity}/>
       </Label>

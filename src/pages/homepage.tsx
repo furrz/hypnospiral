@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { DiscordLogo, Gear, Info, Hand, Play } from '@phosphor-icons/react'
+import { DiscordLogo, Gear, Info, Confetti, Play } from '@phosphor-icons/react'
 import { BigHeader, BreadcrumbSpace, FillGap, Page, TextBlock, WideButton } from 'components/building_blocks'
 import { ShareBtn } from 'components/sharebtn'
 import { locStorage } from 'util/local_storage'
@@ -30,13 +30,15 @@ export default function Homepage () {
         discord
         <DiscordLogo weight="bold"/>
       </a>
-      <a href="https://forms.gle/Uir7Wk1jezxyoSMX8" className="wide_button patron_button">
+      <a href="https://www.youtube.com/@blenderbenderthethird544"
+         target="_blank" rel="noreferrer"
+         className="wide_button patron_button">
         <div className="patron_button_inner">
-          Poll: Improve HSV!
-          <Hand weight="bold"/>
+          big update!
+          <Confetti weight="bold"/>
         </div>
         <div>
-          Tell me how you use the site, and help make it better for everyone!
+          Thank you to BB3 for fixing build issues and adding new features!
         </div>
       </a>
       {win.location.hostname !== 'hypno.zyntaks.ca' && win.location.hostname !== 'localhost' &&

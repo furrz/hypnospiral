@@ -81,7 +81,7 @@ export default function CustomizeSpiralPage () {
                         <RadioOption value="heart" label="Heart Style"><IconHeart/></RadioOption>
                     </Radio>
                 </Label>
-                <Label value={opacity}>
+                <Label value={opacity} setValue={setOpacity}>
                     colour + opacity
                 </Label>
                 <div className="input_row standalone_input">
@@ -90,15 +90,15 @@ export default function CustomizeSpiralPage () {
                 </div>
                 <Checkbox value={rainbowColors} onChange={setRainbowColors}>rainbow mode</Checkbox>
                 {rainbowColors && <>
-                    <Label>
+                    <Label value={rainbowSaturation} setValue={setRainbowSaturation}>
                         rainbow saturation
                         <Slider value={rainbowSaturation} onChange={setRainbowSaturation} min={0} max={100}/>
                     </Label>
-                    <Label>
+                    <Label value={rainbowLightness} setValue={setRainbowLightness}>
                         rainbow lightness
                         <Slider value={rainbowLightness} onChange={setRainbowLightness} min={0} max={100}/>
                     </Label>
-                    <Label>
+                    <Label value={rainbowHueSpeed} setValue={setRainbowHueSpeed}>
                         rainbow hue shift speed
                         <Slider value={rainbowHueSpeed} onChange={setRainbowHueSpeed} min={0} max={20}/>
                     </Label>
@@ -125,7 +125,7 @@ export default function CustomizeSpiralPage () {
                         <RadioOption value="heart" label="Heart Style"><IconHeart/></RadioOption>
                     </Radio>
                 </Label>
-                <Label value={opacity2}>
+                <Label value={opacity2} setValue={setOpacity2}>
                     colour + opacity
                 </Label>
                 <div className="input_row standalone_input">
@@ -134,15 +134,15 @@ export default function CustomizeSpiralPage () {
                 </div>
                 <Checkbox value={rainbowColors2} onChange={setRainbowColors2}>rainbow mode</Checkbox>
                 {rainbowColors2 && <>
-                    <Label>
+                    <Label value={rainbowSaturation2} setValue={setRainbowSaturation2}>
                         rainbow saturation
                         <Slider value={rainbowSaturation2} onChange={setRainbowSaturation2} min={0} max={100}/>
                     </Label>
-                    <Label>
+                    <Label value={rainbowLightness2} setValue={setRainbowLightness2}>
                         rainbow lightness
                         <Slider value={rainbowLightness2} onChange={setRainbowLightness2} min={0} max={100}/>
                     </Label>
-                    <Label>
+                    <Label value={rainbowHueSpeed2} setValue={setRainbowHueSpeed2}>
                         rainbow hue shift speed
                         <Slider value={rainbowHueSpeed2} onChange={setRainbowHueSpeed2} min={0} max={20}/>
                     </Label>
