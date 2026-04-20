@@ -152,6 +152,15 @@ input[type=radio]:checked + label {
     filter: none;
 }
 
+select{
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 2px solid var(--accent-color);
+    border-radius: 1vh;
+    font-size: 3vh;
+    padding: 5px;
+}
+
 label.separate_input {
     padding-bottom: 0;
 }
@@ -216,6 +225,58 @@ label.separate_input {
     flex: 100;
 }
 
+.collapsible_section{
+    padding: var(--side-pad);
+    padding-bottom: 0;
+}
+
+.collapsible_header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.collapsible_section.open .collapsible_content {
+    max-height: 100vh;
+    opacity: 1;
+    transition: all 0.5s;
+}
+
+.collapsible_section.closed .collapsible_content {
+    max-height: 0vh;
+    opacity: 0;
+    transition: all 0.5s;
+}
+
+.collapsible_section.open svg {
+    transform: rotate(-90deg);
+    transition: transform 0.5s;
+}
+
+.collapsible_section.closed svg {
+    transform: rotate(0deg);
+    transition: transform 0.5s;
+}
+
+ul{
+    list-style: none;
+}
+
+li:not(:last-child){
+    padding-bottom: 2vh;
+}
+
+.tag_header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.tag_name{
+    font-weight: bold;
+}
+
 input[type=text], textarea {
     color: var(--text-color);
     background: var(--input-color);
@@ -232,6 +293,7 @@ input[type=text], textarea {
 
 textarea {
     height: 100%;
+    min-height: 300px;
     text-align: left;
 }
 

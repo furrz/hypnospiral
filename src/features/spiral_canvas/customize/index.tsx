@@ -5,6 +5,7 @@ import {
   Breadcrumb,
   Checkbox,
   ColourBox,
+  Dropdown,
   FillGap,
   Label,
   Page,
@@ -30,11 +31,16 @@ import {
   useRainbowLightness2,
   useRainbowSaturation2,
   useSpiralMode2,
-  useSecondary
+  useSecondary,
+  useComposition
 } from '../state'
 
-import IconSpiral from 'assets/SpiralStyle.svg'
+import IconArchemedian from 'assets/ArchemedianStyle.svg'
+import IconLogarithmic from 'assets/LogarithmicStyle.svg'
 import IconCircle from 'assets/CirclesStyle.svg'
+import IconSquare from 'assets/SquareStyle.svg'
+import IconSquareConc from 'assets/SquareConcStyle.svg'
+import IconHeart from 'assets/HeartStyle.svg'
 
 export default function CustomizeSpiralPage () {
   const [spiralMode, setSpiralMode] = useSpiralMode()
@@ -53,6 +59,7 @@ export default function CustomizeSpiralPage () {
   const [rainbowLightness2, setRainbowLightness2] = useRainbowLightness2()
   const [rainbowHueSpeed2, setRainbowHueSpeed2] = useRainbowHueSpeed2()
   const [secondarySpiral, setSecondarySpiral] = useSecondary()
+  const [composition, setComposition] = useComposition()
 
   return <Fragment>
         <CustomizePage secondary/>
@@ -66,8 +73,12 @@ export default function CustomizeSpiralPage () {
                 <Label>
                     spiral type
                     <Radio value={spiralMode} onChange={setSpiralMode}>
-                        <RadioOption value="spiral" label="Spiral Style"><IconSpiral/></RadioOption>
+                        <RadioOption value="spiral" label="Spiral Style"><IconArchemedian/></RadioOption>
+                        <RadioOption value="logarithmic" label="Logarithmic Style"><IconLogarithmic/></RadioOption>
                         <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
+                        <RadioOption value="square" label="Square Spiral Style"><IconSquare/></RadioOption>
+                        <RadioOption value="concentricSquare" label="Square Style"><IconSquareConc/></RadioOption>
+                        <RadioOption value="heart" label="Heart Style"><IconHeart/></RadioOption>
                     </Radio>
                 </Label>
                 <Label value={opacity} setValue={setOpacity}>
@@ -96,10 +107,22 @@ export default function CustomizeSpiralPage () {
             <Checkbox value={secondarySpiral} onChange={setSecondarySpiral}>secondary spiral</Checkbox>
             { secondarySpiral && <div>
                 <Label>
+                    composition
+                    <Dropdown value={composition} defaultValue="alpha" onChange={setComposition}>
+                        <option value="alpha">alpha</option>
+                        <option value="add">add</option>
+                        <option value="multiply">multiply</option>
+                    </Dropdown>
+                </Label>
+                <Label>
                     spiral type
                     <Radio value={spiralMode2} onChange={setSpiralMode2}>
-                        <RadioOption value="spiral" label="Spiral Style"><IconSpiral/></RadioOption>
+                        <RadioOption value="spiral" label="Spiral Style"><IconArchemedian/></RadioOption>
+                        <RadioOption value="logarithmic" label="Logarithmic Style"><IconLogarithmic/></RadioOption>
                         <RadioOption value="circle" label="Circular Style"><IconCircle/></RadioOption>
+                        <RadioOption value="square" label="Square Spiral Style"><IconSquare/></RadioOption>
+                        <RadioOption value="concentricSquare" label="Square Style"><IconSquareConc/></RadioOption>
+                        <RadioOption value="heart" label="Heart Style"><IconHeart/></RadioOption>
                     </Radio>
                 </Label>
                 <Label value={opacity2} setValue={setOpacity2}>

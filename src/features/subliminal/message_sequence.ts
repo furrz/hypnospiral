@@ -203,7 +203,7 @@ function parseSpeedSyntax (message: string): [cleanedMessage: string, speedOverr
   const speedMatches = [...message.matchAll(speedMatch)]
 
   function clampSpeed (n: number) {
-    return Math.max(1, Math.min(999, n))
+    return Math.max(60, Math.min(600, n))
   }
 
   function wpmToDelay (n: number) {

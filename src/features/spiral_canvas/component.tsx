@@ -32,35 +32,55 @@ import {
   useThickness2,
   useBlur2,
   useOpacity2,
-  useSecondary
+  useSecondary,
+  useComposition
 } from './state'
 
-import spiralFrag from './spiral.frag'
-import concentricFrag from './concentric.frag'
+import spiralFrag from './shaders/spirals/spiral.frag'
+import concentricFrag from './shaders/spirals/concentric.frag'
+import squareFrag from './shaders/spirals/square.frag'
+import logFrag from './shaders/spirals/logspiral.frag'
+import concentricSquare from './shaders/spirals/concentricSquare.frag'
+import heartFrag from './shaders/spirals/heart.frag'
+import addFrag from './shaders/composite/add.frag'
+import multiplyFrag from './shaders/composite/multiply.frag'
+import alphaFrag from './shaders/composite/alpha.frag'
 import { colord } from 'colord'
 
-const shaders = Shaders.create({
+const spiralShaders = Shaders.create({
+  heart: {
+    frag: heartFrag
+  },
   spiral: {
     frag: spiralFrag
   },
   circle: {
     frag: concentricFrag
   },
-  composite: {
-    frag: GLSL`
-      precision highp float;
-      varying vec2 uv;
-      uniform sampler2D layer1;
-      uniform sampler2D layer2;
-      void main() {
-        vec4 c1 = texture2D(layer1, uv);
-        vec4 c2 = texture2D(layer2, uv);
-        // standard alpha compositing
-        vec3 color = mix(c1.rgb, c2.rgb, c2.a);
-        float alpha = max(c1.a, c2.a);
-        gl_FragColor = vec4(color, alpha);
-      }`
+  square: {
+    frag: squareFrag
   },
+  logarithmic: {
+    frag: logFrag
+  },
+  concentricSquare: {
+    frag: concentricSquare
+  }
+})
+
+const compositionShaders = Shaders.create({
+  add: {
+    frag: addFrag
+  },
+  alpha: {
+    frag: alphaFrag
+  },
+  multiply: {
+    frag: multiplyFrag
+  }
+})
+
+const backgroundShader = Shaders.create({
   background: {
     frag: GLSL`
       precision highp float;
@@ -108,8 +128,14 @@ export default function SpiralCanvas () {
   const [rainbowLightness2] = useRainbowLightness2()
   const [rainbowHueSpeed2] = useRainbowHueSpeed2()
   const [secondarySpiral] = useSecondary()
+  const [composition] = useComposition()
   const bgc = { ...bgColor }
   const bgc2 = { ...bgColor2 }
+
+  const primaryShader = spiralShaders[spiralMode] ?? spiralShaders.archemedian // Fallback value
+  const secondaryShader = spiralShaders[spiralMode2] ?? spiralShaders.archemedian
+
+  const compositionShader = compositionShaders[composition] ?? compositionShaders.alpha
 
   if (rainbowColors) {
     const newColor = colord({
@@ -149,9 +175,9 @@ export default function SpiralCanvas () {
   }, [targetRef])
 
   const baseLayer = () => (
-    <Node shader={shaders.composite} uniforms={{
-      layer1: <Node shader={shaders.background} uniforms={{ bgColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255] }} />,
-      layer2: <Node shader={spiralMode === 'circle' ? shaders.circle : shaders.spiral}
+    <Node shader={compositionShaders.alpha} uniforms={{
+      layer1: <Node shader={backgroundShader.background} uniforms={{ bgColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255] }} />,
+      layer2: <Node shader={primaryShader}
                   uniforms={{
                     iTime,
                     iRes: [dimensions.width, dimensions.height],
@@ -171,10 +197,10 @@ export default function SpiralCanvas () {
   return <div className="spiral_canvas_div" ref={targetRef}>
     <Surface width={dimensions.width} height={dimensions.height}>
       {secondarySpiral
-        ? (<Node shader={shaders.composite}
+        ? (<Node shader={compositionShader}
           uniforms={{
             layer1: baseLayer,
-            layer2: () => <Node shader={spiralMode2 === 'circle' ? shaders.circle : shaders.spiral}
+            layer2: () => <Node shader={secondaryShader}
                   uniforms={{
                     iTime,
                     iRes: [dimensions.width, dimensions.height],

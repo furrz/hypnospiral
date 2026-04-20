@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Fragment } from 'react'
 import {
+  useSpiralMode,
+  useSpiralMode2,
   useArms,
   useSpinSpeed,
   useThrobSpeed,
@@ -22,6 +24,8 @@ import Previewer from 'components/previewer'
 import CustomizePage from 'pages/customize'
 
 export default function Timing () {
+  const [spiralMode] = useSpiralMode()
+  const [spiralMode2] = useSpiralMode2()
   const [arms, setArms] = useArms()
   const [spinSpeed, setSpinSpeed] = useSpinSpeed()
   const [throbSpeed, setThrobSpeed] = useThrobSpeed()
@@ -41,10 +45,12 @@ export default function Timing () {
     <CustomizePage secondary/>
     <Page primary>
       <Breadcrumb showInBigPrimary>Spiral Style</Breadcrumb>
-      <Label value={arms} setValue={setArms} unitPrecision={1}>
-        arms
-        <Slider value={arms} onChange={setArms} min={1} max={12} step={1}/>
-      </Label>
+      { spiralMode !== 'circle' && spiralMode !== 'concentricSquare' && spiralMode !== 'heart' &&
+        <Label value={arms} setValue={setArms} unitPrecision={1}>
+          arms
+          <Slider value={arms} onChange={setArms} min={1} max={12} step={1}/>
+        </Label>
+      }
       <Label value={spinSpeed} setValue={setSpinSpeed}>
         spin speed
         <Slider value={spinSpeed} onChange={setSpinSpeed} min={-4} max={4}/>
@@ -71,10 +77,12 @@ export default function Timing () {
       </Label>
       {secondarySpiral && <>
         <label>secondary</label>
+        { spiralMode2 !== 'circle' && spiralMode2 !== 'concentricSquare' && spiralMode2 !== 'heart' &&
         <Label value={arms2} setValue={setArms2} unitPrecision={1}>
           arms
           <Slider value={arms2} onChange={setArms2} min={1} max={12} step={1}/>
         </Label>
+      }
         <Label value={spinSpeed2} setValue={setSpinSpeed2}>
           spin speed
           <Slider value={spinSpeed2} onChange={setSpinSpeed2} min={-4} max={4}/>
