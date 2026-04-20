@@ -110,6 +110,26 @@ label {
     flex-direction: column;
 }
 
+label input.value_input {
+    margin: 0;
+    padding: 0;
+    background: none;
+    font-size: inherit;
+    border: 0;
+    display: inline;
+    width: 5rem;
+    text-align: right;
+}
+
+label input.value_input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+label input.value_input::-webkit-outer-spin-button,
+label input.value_input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
 input[type=radio] {
     display: none;
 }
@@ -628,6 +648,10 @@ input[type=checkbox]:checked {
     flex-wrap: nowrap;
     container-name: spiralzone;
     font-size: var(--subliminal-font-size);
+}
+
+.subliminal_text.force_perfect_center {
+    margin-bottom: 0 !important;
 }
 
 .subliminal_input {

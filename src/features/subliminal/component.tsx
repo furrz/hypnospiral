@@ -10,12 +10,12 @@ import {
 import { colord } from 'colord'
 import {
   useCustomGoogleFont,
+  useForcePerfectCenterText,
   useHighlightColour,
   useHighlightPos,
   useMessageAlpha,
   useMessageDuration,
   useMessageGap,
-  useWpm,
   useMessages,
   useOneWord,
   useRandomOrder,
@@ -23,10 +23,16 @@ import {
   useTextWall,
   useTxtColor,
   useTxtScale,
+  useWpm,
   useWritingMode
 } from './state'
 import { CancellableTimeout } from 'util/timer'
-import { messageSequence, wallTextSequence, rsvpSequence, type TextSequenceItem } from './message_sequence'
+import {
+  messageSequence,
+  rsvpSequence,
+  type TextSequenceItem,
+  wallTextSequence
+} from './message_sequence'
 import { textIsRoughlySimilar } from './text_similarity'
 
 interface TextState {
@@ -45,6 +51,7 @@ export default function SpiralSubliminal () {
   const [highlightPos] = useHighlightPos()
   const [txtAlpha] = useMessageAlpha()
   const [txtScale] = useTxtScale()
+  const [forcePerfectCenterText] = useForcePerfectCenterText()
   const [currentText, setCurrentText] = useState<TextState>({
     word: [],
     txtScale: 1,
@@ -154,12 +161,16 @@ export default function SpiralSubliminal () {
   return <Fragment>
     <link rel="stylesheet"
           href={'https://fonts.googleapis.com/css?family=' + googleFont}/>
-    <div className={'subliminal_text' + (textWall ? ' wall' : '') + (rsvp ? ' rsvp' : '')} style={{
-      fontFamily,
-      fontWeight,
-      fontStyle: fontItalic ? 'italic' : 'normal',
-      color: colord({ a: txtAlpha, ...txtColor }).toRgbString()
-    }}>
+    <div className={'subliminal_text' +
+      (textWall ? ' wall' : '') +
+      (rsvp ? ' rsvp' : '') +
+      (forcePerfectCenterText ? ' force_perfect_center' : '')}
+         style={{
+           fontFamily,
+           fontWeight,
+           fontStyle: fontItalic ? 'italic' : 'normal',
+           color: colord({ a: txtAlpha, ...txtColor }).toRgbString()
+         }}>
       <span style={{ width: '100%' }}>
       {currentText.word.map((item, i) => {
         if (rsvp && item.length > 0) {
@@ -184,7 +195,8 @@ export default function SpiralSubliminal () {
               <span style={{
                 justifySelf: 'right'
               }}>{before}</span>
-              <span style={{ color: colord({ a: txtAlpha, ...txtHighlight }).toRgbString() }}>{focal}</span>
+              <span
+                style={{ color: colord({ a: txtAlpha, ...txtHighlight }).toRgbString() }}>{focal}</span>
               <span style={{
                 justifySelf: 'left'
               }}>{after}</span>

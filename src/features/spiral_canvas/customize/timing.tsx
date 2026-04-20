@@ -46,64 +46,64 @@ export default function Timing () {
     <Page primary>
       <Breadcrumb showInBigPrimary>Spiral Style</Breadcrumb>
       { spiralMode !== 'circle' && spiralMode !== 'concentricSquare' && spiralMode !== 'heart' &&
-        <Label value={arms}>
+        <Label value={arms} setValue={setArms} unitPrecision={1}>
           arms
           <Slider value={arms} onChange={setArms} min={1} max={12} step={1}/>
         </Label>
       }
-      <Label value={spinSpeed}>
+      <Label value={spinSpeed} setValue={setSpinSpeed}>
         spin speed
         <Slider value={spinSpeed} onChange={setSpinSpeed} min={-4} max={4}/>
       </Label>
-      <Label value={throbSpeed}>
+      <Label value={throbSpeed} setValue={setThrobSpeed}>
         throb speed
         <Slider value={throbSpeed} onChange={setThrobSpeed} max={4}/>
       </Label>
-      <Label value={throbStrength}>
+      <Label value={throbStrength} setValue={setThrobStrength}>
         throb strength
         <Slider value={throbStrength} onChange={setThrobStrength} max={4}/>
       </Label>
-      <Label value={zoom}>
+      <Label value={zoom} setValue={setZoom}>
         zoom
         <Slider value={zoom} onChange={setZoom} min={-4} max={4}/>
       </Label>
-      <Label value={thickness}>
+      <Label value={thickness} setValue={setThickness}>
         thickness
         <Slider value={thickness} onChange={setThickness} min={0.01} max={1.99} step={0.01}/>
       </Label>
-      <Label value={blur}>
+      <Label value={blur} setValue={setBlur}>
         blur factor
         <Slider value={blur} onChange={setBlur} min={0} max={1.99} step={0.01}/>
       </Label>
       {secondarySpiral && <>
         <label>secondary</label>
         { spiralMode2 !== 'circle' && spiralMode2 !== 'concentricSquare' && spiralMode2 !== 'heart' &&
-        <Label value={arms2}>
+        <Label value={arms2} setValue={setArms2} unitPrecision={1}>
           arms
           <Slider value={arms2} onChange={setArms2} min={1} max={12} step={1}/>
         </Label>
       }
-        <Label value={spinSpeed2}>
+        <Label value={spinSpeed2} setValue={setSpinSpeed2}>
           spin speed
           <Slider value={spinSpeed2} onChange={setSpinSpeed2} min={-4} max={4}/>
         </Label>
-        <Label value={throbSpeed2}>
+        <Label value={throbSpeed2} setValue={setThrobSpeed2}>
           throb speed
           <Slider value={throbSpeed2} onChange={setThrobSpeed2} max={4}/>
         </Label>
-        <Label value={throbStrength2}>
+        <Label value={throbStrength2} setValue={setThrobStrength2}>
           throb strength
           <Slider value={throbStrength2} onChange={setThrobStrength2} max={4}/>
         </Label>
-        <Label value={zoom2}>
+        <Label value={zoom2} setValue={setZoom2}>
           zoom
           <Slider value={zoom2} onChange={setZoom2} min={-4} max={4}/>
         </Label>
-        <Label value={thickness2}>
+        <Label value={thickness2} setValue={setThickness2}>
           thickness
           <Slider value={thickness2} onChange={setThickness2} min={0.01} max={1.99} step={0.01}/>
         </Label>
-        <Label value={blur2}>
+        <Label value={blur2} setValue={setBlur2}>
           blur factor
           <Slider value={blur2} onChange={setBlur2} min={0} max={1.99} step={0.01}/>
         </Label>

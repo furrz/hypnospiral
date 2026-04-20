@@ -111,8 +111,8 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
     return speedBefore + (speedAfter - speedBefore) * progress
   }
 
-  // Infinitely repeat the word list
-  while (true) {
+  // Infinitely repeat the word list (except when there are no words at all)
+  while (allWords.length > 0) {
     for (let i = 0; i < allWords.length; i++) {
       const word = allWords[i]
       const speed = getSpeedAtIndex(i)
@@ -166,7 +166,7 @@ function parseColorSyntax (message: string): [cleanedMessage: string, overrideCo
   const cleanedMessage = message.replace(colorMatch, '')
 
   if (colorMatches.length > 0) {
-    const colorStr = colorMatches[0][0].replace('{color:', '').replace('}', '')
+    const colorStr = colorMatches[0][0].replace(/{colou?r:|}/, '')
     const [r, g, b] = colorStr.split(',').map(n => clampToByte(parseInt(n, 10)))
     return [cleanedMessage, { r, g, b }]
   } else {
