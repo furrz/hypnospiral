@@ -25,7 +25,7 @@ export default function CustomizeSubliminalMessagesPage () {
                     {!writingMode && !textWall && !rsvp &&
                         <li><Tag tag={'{write}'} description="this line must be typed out"/></li>}
                     {rsvp && <li><Tag tag={'{speed:x}'} min={60} max={600} description='sets the rate of words per minute at that point, speed will linearly interpolate to the tag from the previous speed tag or starting speed'/></li>}
-                    {oneWord && <li>for tags to work with single word mode, the tag must be directly next to the word and will not apply to the whole line</li>}
+                    {oneWord && !textWall && !rsvp && <li>for tags to work with single word mode, the tag must be directly next to the word and will not apply to the whole line</li>}
                     {textWall && <li>no tags available for this text mode</li>}
                 </ul>
             </CollapsibleSection>
