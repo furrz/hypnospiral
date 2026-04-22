@@ -21,9 +21,9 @@ function emptyLine (gapTime: number) {
 }
 
 export function * messageSequence (messages: string[][], wordDuration: number, lineGapTime: number, randomizeOrder: boolean): Generator<TextSequenceItem> {
-  let outputbuffer = []
-  let buffer = false
   for (const line of repeatingSequence(messages, randomizeOrder)) {
+    let outputbuffer = []
+    let buffer = false
     for (const word of line) {
       const [wordWithoutBeginRepeat, beginBuffer] = parseBeginRepeatSyntax(word)
       const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
