@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import CustomizePage from 'pages/customize'
 import { Breadcrumb, FillGap, Label, Page, TextArea, CollapsibleSection, Tag } from 'components/building_blocks'
 import Previewer from 'components/previewer'
-import { useMessages, useWritingMode, useTextWall, useRsvp, useOneWord } from '../state'
+import { useMessages, useWritingMode, useTextWall, useRsvp, useOneWord, useRandomOrder } from '../state'
 
 export default function CustomizeSubliminalMessagesPage () {
   const [messages, setMessages] = useMessages()
@@ -11,6 +11,7 @@ export default function CustomizeSubliminalMessagesPage () {
   const [textWall] = useTextWall()
   const [rsvp] = useRsvp()
   const [oneWord] = useOneWord()
+  const [randomOrder] = useRandomOrder()
   return <Fragment>
         <CustomizePage secondary/>
         <Page primary>
@@ -21,6 +22,10 @@ export default function CustomizeSubliminalMessagesPage () {
                         <li><Tag tag={'{color:r,g,b}'} min={0} max={255} description="change the text color for the line"/></li>
                         <li><Tag tag={'{wait:x}'} min={0.000} max={9.999} description="change the duration of the line"/></li>
                         <li><Tag tag={'{fontScale:x}'} min={0.000} max={9.999} description="change the font scale of the line"/></li>
+                        {!randomOrder && <>
+                            <li><Tag tag={'{begin-repeat}'} description="start a repeating section"/></li>
+                            <li><Tag tag={'{repeat:x}'} min={1} max={99} description="repeat a section x times, starting from the furthest begin-repeat tag"/></li>
+                            </>}
                         </>}
                     {!writingMode && !textWall && !rsvp &&
                         <li><Tag tag={'{write}'} description="this line must be typed out"/></li>}
