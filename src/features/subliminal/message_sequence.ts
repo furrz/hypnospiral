@@ -10,34 +10,55 @@ export interface TextSequenceItem {
   rsvpHighlightPosition?: number
 }
 
+function emptyLine (gapTime: number) {
+  return {
+    word: [''],
+    waitTime: gapTime,
+    fontScale: 1,
+    wordColor: undefined,
+    askUserToWrite: undefined
+  }
+}
+
 export function * messageSequence (messages: string[][], wordDuration: number, lineGapTime: number, randomizeOrder: boolean): Generator<TextSequenceItem> {
+  let outputbuffer = []
+  let buffer = false
   for (const line of repeatingSequence(messages, randomizeOrder)) {
     for (const word of line) {
-      const [wordWithoutWait, customDelay] = parseWaitSyntax(word)
+      const [wordWithoutBeginRepeat, beginBuffer] = parseBeginRepeatSyntax(word)
+      const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
+      const [wordWithoutWait, customDelay] = parseWaitSyntax(wordWithoutRepeat)
       const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutWait)
       const [wordWithoutScale, fontScale] = parseFontScaleSyntax(wordWithoutColor)
       const [wordWithoutWrite, askUserToWrite] = parseWriteSyntax(wordWithoutScale)
-
       const cleanedWord =
           wordWithoutWrite.split('\\n').map(str => str.trim())
 
-      yield {
+      const output = {
         word: cleanedWord,
         waitTime: (customDelay > 0) ? customDelay : wordDuration,
         fontScale: fontScale,
         wordColor: overrideColor,
         askUserToWrite: askUserToWrite
       }
-    }
 
-    if (lineGapTime > 0) {
-      // Leave a gap between lines
-      yield {
-        word: [''],
-        waitTime: lineGapTime,
-        fontScale: 1,
-        wordColor: undefined,
-        askUserToWrite: undefined
+      if (beginBuffer && !buffer && !randomizeOrder) buffer = true
+      if (buffer) outputbuffer.push(output)
+
+      if (repeatCount !== undefined && buffer) {
+        buffer = false
+        yield output
+        if (lineGapTime > 0) yield emptyLine(lineGapTime)
+        for (let i = 0; i < repeatCount; i++) {
+          for (const output of outputbuffer) {
+            yield output
+            if (lineGapTime > 0) yield emptyLine(lineGapTime)
+          }
+        }
+        outputbuffer = []
+      } else {
+        yield output
+        if (lineGapTime > 0) yield emptyLine(lineGapTime)
       }
     }
   }
@@ -216,6 +237,34 @@ function parseSpeedSyntax (message: string): [cleanedMessage: string, speedOverr
     const speedStr = speedMatches[0][0].replace('{speed:', '').replace('}', '')
     const speed = wpmToDelay(clampSpeed(parseInt(speedStr)))
     return [cleanedMessage, speed]
+  } else {
+    return [cleanedMessage, undefined]
+  }
+}
+
+const beginRepeatMatch = /\{begin-repeat}/gi
+
+function parseBeginRepeatSyntax (message: string): [cleanedMessage: string, bufferLines: boolean] {
+  const beginMatches = [...message.matchAll(beginRepeatMatch)]
+  const cleanedMessage = message.replace(beginRepeatMatch, '')
+  return [cleanedMessage, beginMatches.length > 0]
+}
+
+const repeatMatch = /\{repeat:([1-9][0-9]*)}/gi
+
+function parseRepeatSyntax (message: string): [cleanedMessage: string, repeatCount: number | undefined] {
+  const repeatMatches = [...message.matchAll(repeatMatch)]
+
+  function clampRepeatNo (n: number) {
+    return Math.max(1, Math.min(99, n))
+  }
+
+  const cleanedMessage = message.replace(repeatMatch, '')
+
+  if (repeatMatches.length > 0) {
+    const repeatStr = repeatMatches[0][0].replace('{repeat:', '').replace('}', '')
+    const repeatCount = clampRepeatNo(parseInt(repeatStr))
+    return [cleanedMessage, repeatCount]
   } else {
     return [cleanedMessage, undefined]
   }
