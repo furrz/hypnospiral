@@ -132,8 +132,8 @@ export default function SpiralCanvas () {
   const bgc = { ...bgColor }
   const bgc2 = { ...bgColor2 }
 
-  const primaryShader = spiralShaders[spiralMode] ?? spiralShaders.archemedian // Fallback value
-  const secondaryShader = spiralShaders[spiralMode2] ?? spiralShaders.archemedian
+  const primaryShader = spiralShaders[spiralMode] ?? spiralShaders.spiral // Fallback value
+  const secondaryShader = spiralShaders[spiralMode2] ?? spiralShaders.spiral
 
   const compositionShader = compositionShaders[composition] ?? compositionShaders.alpha
 

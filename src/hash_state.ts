@@ -5,6 +5,7 @@ import { debounce } from 'util/timer'
 
 let hashState: any = {}
 const hashStateRefreshers: Array<() => void> = []
+export const activeState = createState(0)
 
 /// ONLY for debugging purposes. Please please please don't use this to get state.
 export function dumpCurrentHashState (): any {
@@ -37,26 +38,79 @@ export const onHashStateUpdate = debounce(async () => {
   }
 })
 
-export const createHashState = <T> (name: string, defaultValue: T) => {
-  const state = createState(JSON.parse(JSON.stringify((hashState[name] !== undefined) ? hashState[name] : defaultValue)))
+export const createHashState = <T> (name: string, defaultValue: T, allowStates: boolean) => {
+  if (allowStates) defaultValue = { 0: defaultValue } as any
+  const valueOrDefault = (hashState[name] !== undefined) ? hashState[name] : defaultValue
+
+  const state = createState(JSON.parse(JSON.stringify(valueOrDefault)))
 
   hashStateRefreshers.push(() => {
-    const valueOrDefault = (hashState[name] !== undefined) ? hashState[name] : defaultValue
-    state.setValue(JSON.parse(JSON.stringify(valueOrDefault)))
+    let valueOrDefault = (hashState[name] !== undefined) ? hashState[name] : defaultValue
+    // If value exists in hashState but in the wrong format (i.e. allowStates changed), convert it
+    if (allowStates) {
+      if (typeof valueOrDefault !== 'object' || 'r' in valueOrDefault || Array.isArray(valueOrDefault)) {
+        valueOrDefault = { 0: valueOrDefault } as any
+        if (valueOrDefault !== defaultValue) {
+          hashState[name] = valueOrDefault
+        }
+      }
+      state.setValue({ ...state.getValue(), ...JSON.parse(JSON.stringify(valueOrDefault)) })
+    } else {
+      if (typeof valueOrDefault === 'object' && !('r' in valueOrDefault) && !Array.isArray(valueOrDefault)) {
+        valueOrDefault = valueOrDefault[0] !== undefined ? valueOrDefault[0] : defaultValue
+        hashState[name] = valueOrDefault
+      }
+      state.setValue(JSON.parse(JSON.stringify(valueOrDefault)))
+    }
   })
 
-  return () => {
-    const [value, setValue] = state.useState()
+  if (allowStates) {
+    return () => {
+      const [currentState] = activeState.useState()
+      const [value, setValue] = state.useState()
+      return [(value[currentState] !== undefined ? value[currentState] : value[0]) as T, (newValue: T) => {
+        if (hashState[name] === undefined) {
+          hashState[name] = {} // Initialize early
+        }
+        if (currentState !== 0) {
+          if (newValue !== value[0]) {
+            setValue({ ...value, [currentState]: newValue })
+            hashState[name][currentState] = newValue
+          } else {
+            if (value[currentState] !== undefined) {
+              const valueCopy = { ...value }
+              delete valueCopy[currentState]
+              setValue(valueCopy)
+              delete hashState[name][currentState]
+            }
+          }
+        } else {
+          setValue({ ...value, 0: newValue })
 
-    return [value as T, (newValue: T) => {
-      setValue(newValue)
-      if (JSON.stringify(newValue) !== JSON.stringify(defaultValue)) {
-        hashState[name] = newValue
-      } else {
-        delete hashState[name]
-      }
-      onHashStateUpdate()
-    }] as [state: T, setState: (newState: T) => void]
+          if (JSON.stringify({ 0: newValue }) === JSON.stringify(defaultValue)) {
+            delete hashState[name]
+          } else {
+            hashState[name][currentState] = newValue
+          }
+        }
+        onHashStateUpdate()
+      }] as [state: T, setState: (newState: T) => void]
+    }
+  } else {
+    return () => {
+      const [value, setValue] = state.useState()
+
+      return [value as T, (newValue: T) => {
+        setValue(newValue)
+
+        if (JSON.stringify(newValue) === JSON.stringify(defaultValue)) {
+          delete hashState[name]
+        } else {
+          hashState[name] = newValue
+        }
+        onHashStateUpdate()
+      }] as [state: T, setState: (newState: T) => void]
+    }
   }
 }
 

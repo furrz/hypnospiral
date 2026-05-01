@@ -7,6 +7,7 @@ import {
   useRef,
   useState
 } from 'react'
+import { useLocation } from 'react-router-dom'
 import { colord } from 'colord'
 import {
   useCustomGoogleFont,
@@ -26,6 +27,7 @@ import {
   useWpm,
   useWritingMode
 } from './state'
+import { activeState } from '../../hash_state'
 import { CancellableTimeout } from 'util/timer'
 import {
   messageSequence,
@@ -63,6 +65,8 @@ export default function SpiralSubliminal () {
     callback: () => void
   }))
 
+  const [_, setCurrentState] = activeState.useState()
+
   const [messages] = useMessages()
   const [randomOrder] = useRandomOrder()
   const [messageGap] = useMessageGap()
@@ -71,6 +75,8 @@ export default function SpiralSubliminal () {
   const [oneWord] = useOneWord()
   const [writingMode] = useWritingMode()
   const writingInputRef = useRef<HTMLInputElement>(null)
+
+  const currentRoute = useLocation()
 
   let [fontFamily, fontWeight] = (googleFont ?? '').trim().split(':', 2)
   if (typeof fontWeight === 'undefined') fontWeight = ''
@@ -117,6 +123,10 @@ export default function SpiralSubliminal () {
         txtScale: item.fontScale ?? 1,
         rsvpHighlightPosition: item.rsvpHighlightPosition
       })
+
+      if (item.stateOverride !== undefined && !currentRoute.pathname.includes('/customize/spiral')) {
+        setCurrentState(item.stateOverride)
+      }
 
       const shouldWrite = Boolean(writingMode) || Boolean(item.askUserToWrite)
       if (shouldWrite) {

@@ -5,6 +5,7 @@ export interface TextSequenceItem {
   word: string[]
   waitTime: number
   fontScale: number
+  stateOverride?: number
   wordColor?: { r: number, g: number, b: number }
   askUserToWrite?: boolean
   rsvpHighlightPosition?: number
@@ -23,6 +24,10 @@ function emptyLine (gapTime: number) {
 export function * messageSequence (messages: string[][], wordDuration: number, lineGapTime: number, randomizeOrder: boolean): Generator<TextSequenceItem> {
   let outputbuffer = []
   let buffer = false
+  // Inject state override into first message so that it resets when looping
+  if (messages.length > 0 && messages[0].length > 0 && !messages[0][0].includes('{state:')) {
+    messages[0][0] = `{state:0}${messages[0][0]}`
+  }
   for (const line of repeatingSequence(messages, randomizeOrder)) {
     for (const word of line) {
       const [wordWithoutBeginRepeat, beginBuffer] = parseBeginRepeatSyntax(word)
@@ -31,15 +36,17 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
       const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutWait)
       const [wordWithoutScale, fontScale] = parseFontScaleSyntax(wordWithoutColor)
       const [wordWithoutWrite, askUserToWrite] = parseWriteSyntax(wordWithoutScale)
+      const [wordWithoutState, stateOverride] = parseStateSyntax(wordWithoutWrite)
       const cleanedWord =
-          wordWithoutWrite.split('\\n').map(str => str.trim())
+          wordWithoutState.split('\\n').map(str => str.trim())
 
       const output = {
         word: cleanedWord,
         waitTime: (customDelay > 0) ? customDelay : wordDuration,
         fontScale: fontScale,
         wordColor: overrideColor,
-        askUserToWrite: askUserToWrite
+        askUserToWrite: askUserToWrite,
+        stateOverride: randomizeOrder ? undefined : stateOverride
       }
 
       if (beginBuffer && !buffer && !randomizeOrder) buffer = true
@@ -265,6 +272,26 @@ function parseRepeatSyntax (message: string): [cleanedMessage: string, repeatCou
     const repeatStr = repeatMatches[0][0].replace('{repeat:', '').replace('}', '')
     const repeatCount = clampRepeatNo(parseInt(repeatStr))
     return [cleanedMessage, repeatCount]
+  } else {
+    return [cleanedMessage, undefined]
+  }
+}
+
+const stateMatch = /\{state:([0-9]+)}/gi
+
+export function parseStateSyntax (message: string): [cleanedMessage: string, stateOverride: number | undefined] {
+  const stateMatches = [...message.matchAll(stateMatch)]
+
+  function clampStateNo (n: number) {
+    return Math.max(0, Math.min(12, n))
+  }
+
+  const cleanedMessage = message.replace(stateMatch, '')
+
+  if (stateMatches.length > 0) {
+    const stateStr = stateMatches[0][0].replace('{state:', '').replace('}', '')
+    const stateOverride = clampStateNo(parseInt(stateStr))
+    return [cleanedMessage, stateOverride]
   } else {
     return [cleanedMessage, undefined]
   }
