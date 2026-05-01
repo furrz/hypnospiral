@@ -88,7 +88,7 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
   const wordDuration = 60 / wpm // convert from wpm to delay
 
   for (const message of messages) {
-    const shiftedTags = message.replace(/}\s/g, '}')
+    const shiftedTags = message.replace(/}\s/g, '}').replace(/}\s\{/g, '}{')
     const words = shiftedTags.split(/\s+/).filter(w => w.length > 0)
 
     for (const word of words) {
