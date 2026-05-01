@@ -91,17 +91,38 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
   const messagesCopy = [...messages]
   messagesCopy[0] = `{state:0}${messagesCopy[0]}`
 
+  let outputbuffer = []
+  let buffer = false
+
   for (const message of messagesCopy) {
-    const shiftedTags = message.replace(/}\s/g, '}').replace(/}\s\{/g, '}{')
+    // Shift tags so they are attached to a word
+    const shiftedTags = message.replace(/(?<=\s)({\S+})\s/gm, '$1')
     const words = shiftedTags.split(/\s+/).filter(w => w.length > 0)
 
     for (const word of words) {
       const [wordWithoutState, stateOverride] = parseStateSyntax(word)
-      const [cleanedWord, speedOverride] = parseSpeedSyntax(wordWithoutState)
-      outputs.push({ word: [cleanedWord], stateOverride })
-      if (speedOverride !== undefined) {
-        speedMarkers.set(outputs.length - 1, speedOverride)
-        console.log('found speedmarker')
+      const [wordWithoutBeginRepeat, beginBuffer] = parseBeginRepeatSyntax(wordWithoutState)
+      const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
+      const [cleanedWord, speedOverride] = parseSpeedSyntax(wordWithoutRepeat)
+
+      if (beginBuffer && !buffer) buffer = true
+      if (buffer) outputbuffer.push({ word: [cleanedWord], stateOverride })
+
+      if (repeatCount !== undefined && buffer) {
+        buffer = false
+        outputs.push({ word: [cleanedWord], stateOverride })
+        for (let i = 0; i < repeatCount; i++) {
+          for (const output of outputbuffer) {
+            outputs.push(output)
+          }
+        }
+        outputbuffer = []
+      } else {
+        outputs.push({ word: [cleanedWord], stateOverride })
+        if (speedOverride !== undefined) {
+          speedMarkers.set(outputs.length - 1, speedOverride)
+          console.log('found speedmarker')
+        }
       }
     }
   }
