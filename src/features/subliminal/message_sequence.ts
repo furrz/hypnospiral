@@ -83,19 +83,24 @@ export function * wallTextSequence (messages: string[], waitTime: number): Gener
 
 export function * rsvpSequence (messages: string[], wpm: number): Generator<TextSequenceItem> {
   // Flatten all messages and split by whitespace, collapsing line breaks
-  const allWords: string[] = []
+  const outputs: any[] = []
   const speedMarkers = new Map<number, number>() // word index -> speed override
   const wordDuration = 60 / wpm // convert from wpm to delay
 
-  for (const message of messages) {
+  // Inject state override into first message so that it resets when looping
+  const messagesCopy = [...messages]
+  messagesCopy[0] = `{state:0}${messagesCopy[0]}`
+
+  for (const message of messagesCopy) {
     const shiftedTags = message.replace(/}\s/g, '}').replace(/}\s\{/g, '}{')
     const words = shiftedTags.split(/\s+/).filter(w => w.length > 0)
 
     for (const word of words) {
-      const [cleanedWord, speedOverride] = parseSpeedSyntax(word)
-      allWords.push(cleanedWord)
+      const [wordWithoutState, stateOverride] = parseStateSyntax(word)
+      const [cleanedWord, speedOverride] = parseSpeedSyntax(wordWithoutState)
+      outputs.push({ word: [cleanedWord], stateOverride })
       if (speedOverride !== undefined) {
-        speedMarkers.set(allWords.length - 1, speedOverride)
+        speedMarkers.set(outputs.length - 1, speedOverride)
         console.log('found speedmarker')
       }
     }
@@ -142,13 +147,13 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
   }
 
   // Infinitely repeat the word list (except when there are no words at all)
-  while (allWords.length > 0) {
-    for (let i = 0; i < allWords.length; i++) {
-      const word = allWords[i]
+  while (outputs.length > 0) {
+    for (let i = 0; i < outputs.length; i++) {
+      const output = outputs[i]
       const speed = getSpeedAtIndex(i)
 
       yield {
-        word: [word],
+        ...output,
         waitTime: speed,
         fontScale: 1
       }
