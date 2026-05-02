@@ -148,6 +148,7 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
           }
         }
         outputbuffer = []
+        randomizeBuffer = false
       } else {
         outputs.push(output)
         if (speedOverride !== undefined) {
