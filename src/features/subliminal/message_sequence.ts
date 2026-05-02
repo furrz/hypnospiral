@@ -30,6 +30,7 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
     messages[0][0] = `{state:0}${messages[0][0]}`
   }
   for (const line of repeatingSequence(messages, randomizeOrder)) {
+    if (line.length > 1) shiftTags(line)
     for (const word of line) {
       const [wordWithoutBeginRepeat, beginBuffer, randomizeRepeat] = parseBeginRepeatSyntax(word)
       const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
@@ -211,6 +212,21 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
       if (output.lineGap > 0) {
         yield emptyLine(output.lineGap)
       }
+    }
+  }
+}
+
+function shiftTags (line: string[]) {
+  let i = 0
+  let accumulatedTags = ''
+  while (i < line.length) {
+    if (line[i].match(/^({[^}]+})$/gm) !== null) {
+      accumulatedTags += line[i]
+      line.splice(i, 1)
+    } else {
+      line[i] = accumulatedTags + line[i]
+      accumulatedTags = ''
+      i++
     }
   }
 }
