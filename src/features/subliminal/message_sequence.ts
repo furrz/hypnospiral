@@ -5,39 +5,80 @@ export interface TextSequenceItem {
   word: string[]
   waitTime: number
   fontScale: number
+  stateOverride?: number
   wordColor?: { r: number, g: number, b: number }
   askUserToWrite?: boolean
   rsvpHighlightPosition?: number
 }
 
+function emptyLine (gapTime: number) {
+  return {
+    word: [''],
+    waitTime: gapTime,
+    fontScale: 1,
+    wordColor: undefined,
+    askUserToWrite: undefined
+  }
+}
+
 export function * messageSequence (messages: string[][], wordDuration: number, lineGapTime: number, randomizeOrder: boolean): Generator<TextSequenceItem> {
+  let outputbuffer = []
+  let buffer = false
+  let randomizeBuffer = false
+  // Inject state override into first message so that it resets when looping
+  if (messages.length > 0 && messages[0].length > 0 && !messages[0][0].includes('{state:')) {
+    messages[0][0] = `{state:0}${messages[0][0]}`
+  }
   for (const line of repeatingSequence(messages, randomizeOrder)) {
+    if (line.length > 1) shiftTags(line)
     for (const word of line) {
-      const [wordWithoutWait, customDelay] = parseWaitSyntax(word)
-      const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutWait)
+      const [wordWithoutBeginRepeat, beginBuffer, randomizeRepeat] = parseBeginRepeatSyntax(word)
+      const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
+      const [wordWithoutWait, customDelay] = parseWaitSyntax(wordWithoutRepeat)
+      const [wordWithoutGap, lineGapOverride] = parseGapSyntax(wordWithoutWait)
+      const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutGap)
       const [wordWithoutScale, fontScale] = parseFontScaleSyntax(wordWithoutColor)
       const [wordWithoutWrite, askUserToWrite] = parseWriteSyntax(wordWithoutScale)
-
+      const [wordWithoutState, stateOverride] = parseStateSyntax(wordWithoutWrite)
       const cleanedWord =
-          wordWithoutWrite.split('\\n').map(str => str.trim())
+          wordWithoutState.split('\\n').map(str => str.trim())
 
-      yield {
-        word: cleanedWord,
-        waitTime: (customDelay > 0) ? customDelay : wordDuration,
-        fontScale: fontScale,
-        wordColor: overrideColor,
-        askUserToWrite: askUserToWrite
+      const lineGapTimeToUse = lineGapOverride !== undefined ? lineGapOverride : lineGapTime
+
+      const output = {
+        lineGap: lineGapTimeToUse,
+        line: {
+          word: cleanedWord,
+          waitTime: (customDelay > 0) ? customDelay : wordDuration,
+          fontScale: fontScale,
+          wordColor: overrideColor,
+          askUserToWrite: askUserToWrite,
+          stateOverride: randomizeOrder ? undefined : stateOverride
+        }
       }
-    }
 
-    if (lineGapTime > 0) {
-      // Leave a gap between lines
-      yield {
-        word: [''],
-        waitTime: lineGapTime,
-        fontScale: 1,
-        wordColor: undefined,
-        askUserToWrite: undefined
+      if (beginBuffer && !buffer && !randomizeOrder) {
+        buffer = true
+        randomizeBuffer = randomizeRepeat
+      }
+      if (buffer) outputbuffer.push(output)
+
+      if (repeatCount !== undefined && buffer) {
+        buffer = false
+        yield output.line
+        if (output.lineGap > 0) yield emptyLine(output.lineGap)
+        for (let i = 0; i < repeatCount; i++) {
+          if (randomizeBuffer) shuffle(outputbuffer)
+          for (const output of outputbuffer) {
+            yield output.line
+            if (output.lineGap > 0) yield emptyLine(output.lineGap)
+          }
+        }
+        randomizeBuffer = false
+        outputbuffer = []
+      } else {
+        yield output.line
+        if (output.lineGap > 0) yield emptyLine(output.lineGap)
       }
     }
   }
@@ -55,18 +96,65 @@ export function * wallTextSequence (messages: string[], waitTime: number): Gener
 
 export function * rsvpSequence (messages: string[], wpm: number): Generator<TextSequenceItem> {
   // Flatten all messages and split by whitespace, collapsing line breaks
-  const allWords: string[] = []
+  const outputs: any[] = []
   const speedMarkers = new Map<number, number>() // word index -> speed override
   const wordDuration = 60 / wpm // convert from wpm to delay
 
-  for (const message of messages) {
-    const words = message.split(/\s+/).filter(w => w.length > 0)
+  // Inject state override into first message so that it resets when looping
+  const messagesCopy = [...messages]
+  messagesCopy[0] = `{state:0}${messagesCopy[0]}`
+
+  let outputbuffer = []
+  let buffer = false
+  let randomizeBuffer = false
+
+  for (const message of messagesCopy) {
+    // Shift tags so they are attached to a word
+    const shiftedTags = message.replace(/(?<=\s)({\S+})\s/gm, '$1')
+    const words = shiftedTags.split(/\s+/).filter(w => w.length > 0)
+
     for (const word of words) {
-      const [cleanedWord, speedOverride] = parseSpeedSyntax(word)
-      allWords.push(cleanedWord)
-      if (speedOverride !== undefined) {
-        speedMarkers.set(allWords.length - 1, speedOverride)
-        console.log('found speedmarker')
+      const [wordWithoutState, stateOverride] = parseStateSyntax(word)
+      const [wordWithoutBeginRepeat, beginBuffer, randomizeRepeat] = parseBeginRepeatSyntax(wordWithoutState)
+      const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
+      const [wordWithoutWait, customDelay] = parseWaitSyntax(wordWithoutRepeat)
+      const [wordWithoutGap, lineGapOverride] = parseGapSyntax(wordWithoutWait)
+      const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutGap)
+      const [wordWithoutScale, fontScale] = parseFontScaleSyntax(wordWithoutColor)
+      const [cleanedWord, speedOverride] = parseSpeedSyntax(wordWithoutScale)
+
+      const output = {
+        line: {
+          word: [cleanedWord],
+          waitTime: customDelay,
+          fontScale,
+          wordColor: overrideColor,
+          stateOverride
+        },
+        lineGap: lineGapOverride
+      }
+      if (beginBuffer && !buffer) {
+        buffer = true
+        randomizeBuffer = randomizeRepeat
+      }
+      if (buffer) outputbuffer.push(output)
+
+      if (repeatCount !== undefined && buffer) {
+        buffer = false
+        outputs.push(output)
+        for (let i = 0; i < repeatCount; i++) {
+          if (randomizeBuffer) shuffle(outputbuffer)
+          for (const output of outputbuffer) {
+            outputs.push(output)
+          }
+        }
+        outputbuffer = []
+        randomizeBuffer = false
+      } else {
+        outputs.push(output)
+        if (speedOverride !== undefined) {
+          speedMarkers.set(outputs.length - 1, speedOverride)
+        }
       }
     }
   }
@@ -112,16 +200,33 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
   }
 
   // Infinitely repeat the word list (except when there are no words at all)
-  while (allWords.length > 0) {
-    for (let i = 0; i < allWords.length; i++) {
-      const word = allWords[i]
-      const speed = getSpeedAtIndex(i)
+  while (outputs.length > 0) {
+    for (let i = 0; i < outputs.length; i++) {
+      const output = outputs[i]
+      const speed = output.line.waitTime > 0 ? output.line.waitTime : getSpeedAtIndex(i)
 
       yield {
-        word: [word],
-        waitTime: speed,
-        fontScale: 1
+        ...output.line,
+        waitTime: speed
       }
+      if (output.lineGap > 0) {
+        yield emptyLine(output.lineGap)
+      }
+    }
+  }
+}
+
+function shiftTags (line: string[]) {
+  let i = 0
+  let accumulatedTags = ''
+  while (i < line.length) {
+    if (line[i].match(/^({[^}]+})$/gm) !== null) {
+      accumulatedTags += line[i]
+      line.splice(i, 1)
+    } else {
+      line[i] = accumulatedTags + line[i]
+      accumulatedTags = ''
+      i++
     }
   }
 }
@@ -148,6 +253,23 @@ function parseWaitSyntax (message: string): [cleanedMessage: string, customDelay
   const cleanedMessage = message.replace(waitMatch, '')
 
   return [cleanedMessage, customDelay]
+}
+
+const gapMatch = /\{gap:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
+
+function parseGapSyntax (message: string): [cleanedMessage: string, lineGapTime: number | undefined] {
+  const gapMatches = [...message.matchAll(gapMatch)]
+
+  if (gapMatches.length === 0) {
+    return [message, undefined]
+  }
+
+  let lineGapTime = 0
+  for (const match of gapMatches) {
+    lineGapTime += parseFloat(match[1])
+  }
+  const cleanedMessage = message.replace(gapMatch, '')
+  return [cleanedMessage, lineGapTime]
 }
 
 const colorMatch = /\{colou?r:[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}}/gi
@@ -216,6 +338,55 @@ function parseSpeedSyntax (message: string): [cleanedMessage: string, speedOverr
     const speedStr = speedMatches[0][0].replace('{speed:', '').replace('}', '')
     const speed = wpmToDelay(clampSpeed(parseInt(speedStr)))
     return [cleanedMessage, speed]
+  } else {
+    return [cleanedMessage, undefined]
+  }
+}
+
+const beginRepeatMatch = /\{begin-repeat(-random)?}/gi
+
+function parseBeginRepeatSyntax (message: string): [cleanedMessage: string, bufferLines: boolean, randomizeOrder: boolean] {
+  const beginMatches = [...message.matchAll(beginRepeatMatch)]
+  const randomize = beginMatches.length > 0 && beginMatches[0][1] === '-random'
+  const cleanedMessage = message.replace(beginRepeatMatch, '')
+  return [cleanedMessage, beginMatches.length > 0, randomize]
+}
+
+const repeatMatch = /\{repeat:([1-9][0-9]*)}/gi
+
+function parseRepeatSyntax (message: string): [cleanedMessage: string, repeatCount: number | undefined] {
+  const repeatMatches = [...message.matchAll(repeatMatch)]
+
+  function clampRepeatNo (n: number) {
+    return Math.max(1, Math.min(99, n))
+  }
+
+  const cleanedMessage = message.replace(repeatMatch, '')
+
+  if (repeatMatches.length > 0) {
+    const repeatStr = repeatMatches[0][0].replace('{repeat:', '').replace('}', '')
+    const repeatCount = clampRepeatNo(parseInt(repeatStr))
+    return [cleanedMessage, repeatCount]
+  } else {
+    return [cleanedMessage, undefined]
+  }
+}
+
+const stateMatch = /\{state:([0-9]+)}/gi
+
+export function parseStateSyntax (message: string): [cleanedMessage: string, stateOverride: number | undefined] {
+  const stateMatches = [...message.matchAll(stateMatch)]
+
+  function clampStateNo (n: number) {
+    return Math.max(0, Math.min(12, n))
+  }
+
+  const cleanedMessage = message.replace(stateMatch, '')
+
+  if (stateMatches.length > 0) {
+    const stateStr = stateMatches[0][0].replace('{state:', '').replace('}', '')
+    const stateOverride = clampStateNo(parseInt(stateStr))
+    return [cleanedMessage, stateOverride]
   } else {
     return [cleanedMessage, undefined]
   }

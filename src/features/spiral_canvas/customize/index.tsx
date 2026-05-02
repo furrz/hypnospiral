@@ -34,6 +34,7 @@ import {
   useSecondary,
   useComposition
 } from '../state'
+import { activeState } from '../../../hash_state'
 
 import IconArchemedian from 'assets/ArchemedianStyle.svg'
 import IconLogarithmic from 'assets/LogarithmicStyle.svg'
@@ -43,6 +44,7 @@ import IconSquareConc from 'assets/SquareConcStyle.svg'
 import IconHeart from 'assets/HeartStyle.svg'
 
 export default function CustomizeSpiralPage () {
+  const [currentState, setCurrentState] = activeState.useState()
   const [spiralMode, setSpiralMode] = useSpiralMode()
   const [bgColor, setBgColor] = useBgColor()
   const [fgColor, setFgColor] = useFgColor()
@@ -65,6 +67,10 @@ export default function CustomizeSpiralPage () {
         <CustomizePage secondary/>
         <Page primary>
             <Breadcrumb>Customizer</Breadcrumb>
+            <Label value={currentState} setValue={setCurrentState}>
+                state
+                <Slider value={currentState} onChange={setCurrentState} min={0} max={12} step={1}/>
+            </Label>
             <Label>
                 background colour
                 <ColourBox value={fgColor} onChange={setFgColor}/>

@@ -10,7 +10,7 @@
     --screen-aspect: 3/5;
     --page-padding: 0.25in;
     --slider-thumb-size: 4vh;
-    --subliminal-font-size: 15vh;
+    --subliminal-font-size: min(15vh, 15vw);
     --preview-size: 25;
 }
 
