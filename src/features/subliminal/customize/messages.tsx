@@ -23,6 +23,7 @@ export default function CustomizeSubliminalMessagesPage () {
                     {(!textWall && !rsvp) && <li><Tag tag={'{wait:x}'} min={0.000} max={9.999} description="change the duration of the line"/></li>}
                     {(!textWall && !rsvp) && <li><Tag tag={'{fontScale:x}'} min={0.000} max={9.999} description="change the font scale of the line"/></li>}
                     {(!textWall && (!randomOrder || rsvp)) && <li><Tag tag={'{begin-repeat}'} description="start a repeating section"/></li>}
+                    {(!textWall && (!randomOrder || rsvp)) && <li><Tag tag={'{begin-repeat-random}'} description="start a repeating section, randomizing the order of repeated lines"/></li>}
                     {(!textWall && (!randomOrder || rsvp)) && <li><Tag tag={'{repeat:x}'} min={1} max={99} description="repeat a section x times, starting from the furthest begin-repeat tag"/></li>}
                     {(!writingMode && !textWall && !rsvp) && <li><Tag tag={'{write}'} description="this line must be typed out"/></li>}
                     {rsvp && <li><Tag tag={'{speed:x}'} min={60} max={600} description='sets the rate of words per minute at that point, speed will linearly interpolate to the tag from the previous speed tag or starting speed'/></li>}

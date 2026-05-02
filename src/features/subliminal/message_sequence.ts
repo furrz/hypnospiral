@@ -24,13 +24,14 @@ function emptyLine (gapTime: number) {
 export function * messageSequence (messages: string[][], wordDuration: number, lineGapTime: number, randomizeOrder: boolean): Generator<TextSequenceItem> {
   let outputbuffer = []
   let buffer = false
+  let randomizeBuffer = false
   // Inject state override into first message so that it resets when looping
   if (messages.length > 0 && messages[0].length > 0 && !messages[0][0].includes('{state:')) {
     messages[0][0] = `{state:0}${messages[0][0]}`
   }
   for (const line of repeatingSequence(messages, randomizeOrder)) {
     for (const word of line) {
-      const [wordWithoutBeginRepeat, beginBuffer] = parseBeginRepeatSyntax(word)
+      const [wordWithoutBeginRepeat, beginBuffer, randomizeRepeat] = parseBeginRepeatSyntax(word)
       const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
       const [wordWithoutWait, customDelay] = parseWaitSyntax(wordWithoutRepeat)
       const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutWait)
@@ -49,7 +50,10 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
         stateOverride: randomizeOrder ? undefined : stateOverride
       }
 
-      if (beginBuffer && !buffer && !randomizeOrder) buffer = true
+      if (beginBuffer && !buffer && !randomizeOrder) {
+        buffer = true
+        randomizeBuffer = randomizeRepeat
+      }
       if (buffer) outputbuffer.push(output)
 
       if (repeatCount !== undefined && buffer) {
@@ -57,11 +61,13 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
         yield output
         if (lineGapTime > 0) yield emptyLine(lineGapTime)
         for (let i = 0; i < repeatCount; i++) {
+          if (randomizeBuffer) shuffle(outputbuffer)
           for (const output of outputbuffer) {
             yield output
             if (lineGapTime > 0) yield emptyLine(lineGapTime)
           }
         }
+        randomizeBuffer = false
         outputbuffer = []
       } else {
         yield output
@@ -93,6 +99,7 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
 
   let outputbuffer = []
   let buffer = false
+  let randomizeBuffer = false
 
   for (const message of messagesCopy) {
     // Shift tags so they are attached to a word
@@ -101,17 +108,21 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
 
     for (const word of words) {
       const [wordWithoutState, stateOverride] = parseStateSyntax(word)
-      const [wordWithoutBeginRepeat, beginBuffer] = parseBeginRepeatSyntax(wordWithoutState)
+      const [wordWithoutBeginRepeat, beginBuffer, randomizeRepeat] = parseBeginRepeatSyntax(wordWithoutState)
       const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
       const [cleanedWord, speedOverride] = parseSpeedSyntax(wordWithoutRepeat)
 
-      if (beginBuffer && !buffer) buffer = true
+      if (beginBuffer && !buffer) {
+        buffer = true
+        randomizeBuffer = randomizeRepeat
+      }
       if (buffer) outputbuffer.push({ word: [cleanedWord], stateOverride })
 
       if (repeatCount !== undefined && buffer) {
         buffer = false
         outputs.push({ word: [cleanedWord], stateOverride })
         for (let i = 0; i < repeatCount; i++) {
+          if (randomizeBuffer) shuffle(outputbuffer)
           for (const output of outputbuffer) {
             outputs.push(output)
           }
@@ -277,12 +288,13 @@ function parseSpeedSyntax (message: string): [cleanedMessage: string, speedOverr
   }
 }
 
-const beginRepeatMatch = /\{begin-repeat}/gi
+const beginRepeatMatch = /\{begin-repeat(-random)?}/gi
 
-function parseBeginRepeatSyntax (message: string): [cleanedMessage: string, bufferLines: boolean] {
+function parseBeginRepeatSyntax (message: string): [cleanedMessage: string, bufferLines: boolean, randomizeOrder: boolean] {
   const beginMatches = [...message.matchAll(beginRepeatMatch)]
+  const randomize = beginMatches.length > 0 && beginMatches[0][1] === '-random'
   const cleanedMessage = message.replace(beginRepeatMatch, '')
-  return [cleanedMessage, beginMatches.length > 0]
+  return [cleanedMessage, beginMatches.length > 0, randomize]
 }
 
 const repeatMatch = /\{repeat:([1-9][0-9]*)}/gi
