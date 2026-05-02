@@ -34,20 +34,26 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
       const [wordWithoutBeginRepeat, beginBuffer, randomizeRepeat] = parseBeginRepeatSyntax(word)
       const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
       const [wordWithoutWait, customDelay] = parseWaitSyntax(wordWithoutRepeat)
-      const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutWait)
+      const [wordWithoutGap, lineGapOverride] = parseGapSyntax(wordWithoutWait)
+      const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutGap)
       const [wordWithoutScale, fontScale] = parseFontScaleSyntax(wordWithoutColor)
       const [wordWithoutWrite, askUserToWrite] = parseWriteSyntax(wordWithoutScale)
       const [wordWithoutState, stateOverride] = parseStateSyntax(wordWithoutWrite)
       const cleanedWord =
           wordWithoutState.split('\\n').map(str => str.trim())
 
+      const lineGapTimeToUse = lineGapOverride !== undefined ? lineGapOverride : lineGapTime
+
       const output = {
-        word: cleanedWord,
-        waitTime: (customDelay > 0) ? customDelay : wordDuration,
-        fontScale: fontScale,
-        wordColor: overrideColor,
-        askUserToWrite: askUserToWrite,
-        stateOverride: randomizeOrder ? undefined : stateOverride
+        lineGap: lineGapTimeToUse,
+        line: {
+          word: cleanedWord,
+          waitTime: (customDelay > 0) ? customDelay : wordDuration,
+          fontScale: fontScale,
+          wordColor: overrideColor,
+          askUserToWrite: askUserToWrite,
+          stateOverride: randomizeOrder ? undefined : stateOverride
+        }
       }
 
       if (beginBuffer && !buffer && !randomizeOrder) {
@@ -58,20 +64,20 @@ export function * messageSequence (messages: string[][], wordDuration: number, l
 
       if (repeatCount !== undefined && buffer) {
         buffer = false
-        yield output
-        if (lineGapTime > 0) yield emptyLine(lineGapTime)
+        yield output.line
+        if (output.lineGap > 0) yield emptyLine(output.lineGap)
         for (let i = 0; i < repeatCount; i++) {
           if (randomizeBuffer) shuffle(outputbuffer)
           for (const output of outputbuffer) {
-            yield output
-            if (lineGapTime > 0) yield emptyLine(lineGapTime)
+            yield output.line
+            if (output.lineGap > 0) yield emptyLine(output.lineGap)
           }
         }
         randomizeBuffer = false
         outputbuffer = []
       } else {
-        yield output
-        if (lineGapTime > 0) yield emptyLine(lineGapTime)
+        yield output.line
+        if (output.lineGap > 0) yield emptyLine(output.lineGap)
       }
     }
   }
@@ -215,6 +221,23 @@ function parseWaitSyntax (message: string): [cleanedMessage: string, customDelay
   const cleanedMessage = message.replace(waitMatch, '')
 
   return [cleanedMessage, customDelay]
+}
+
+const gapMatch = /\{gap:([0-9]{1,3}(\.[0-9]{1,3})?)}/gi
+
+function parseGapSyntax (message: string): [cleanedMessage: string, lineGapTime: number | undefined] {
+  const gapMatches = [...message.matchAll(gapMatch)]
+
+  if (gapMatches.length === 0) {
+    return [message, undefined]
+  }
+
+  let lineGapTime = 0
+  for (const match of gapMatches) {
+    lineGapTime += parseFloat(match[1])
+  }
+  const cleanedMessage = message.replace(gapMatch, '')
+  return [cleanedMessage, lineGapTime]
 }
 
 const colorMatch = /\{colou?r:[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}}/gi
