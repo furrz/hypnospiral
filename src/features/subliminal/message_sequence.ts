@@ -116,17 +116,31 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
       const [wordWithoutState, stateOverride] = parseStateSyntax(word)
       const [wordWithoutBeginRepeat, beginBuffer, randomizeRepeat] = parseBeginRepeatSyntax(wordWithoutState)
       const [wordWithoutRepeat, repeatCount] = parseRepeatSyntax(wordWithoutBeginRepeat)
-      const [cleanedWord, speedOverride] = parseSpeedSyntax(wordWithoutRepeat)
+      const [wordWithoutWait, customDelay] = parseWaitSyntax(wordWithoutRepeat)
+      const [wordWithoutGap, lineGapOverride] = parseGapSyntax(wordWithoutWait)
+      const [wordWithoutColor, overrideColor] = parseColorSyntax(wordWithoutGap)
+      const [wordWithoutScale, fontScale] = parseFontScaleSyntax(wordWithoutColor)
+      const [cleanedWord, speedOverride] = parseSpeedSyntax(wordWithoutScale)
 
+      const output = {
+        line: {
+          word: [cleanedWord],
+          waitTime: customDelay,
+          fontScale,
+          wordColor: overrideColor,
+          stateOverride
+        },
+        lineGap: lineGapOverride
+      }
       if (beginBuffer && !buffer) {
         buffer = true
         randomizeBuffer = randomizeRepeat
       }
-      if (buffer) outputbuffer.push({ word: [cleanedWord], stateOverride })
+      if (buffer) outputbuffer.push(output)
 
       if (repeatCount !== undefined && buffer) {
         buffer = false
-        outputs.push({ word: [cleanedWord], stateOverride })
+        outputs.push(output)
         for (let i = 0; i < repeatCount; i++) {
           if (randomizeBuffer) shuffle(outputbuffer)
           for (const output of outputbuffer) {
@@ -135,10 +149,9 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
         }
         outputbuffer = []
       } else {
-        outputs.push({ word: [cleanedWord], stateOverride })
+        outputs.push(output)
         if (speedOverride !== undefined) {
           speedMarkers.set(outputs.length - 1, speedOverride)
-          console.log('found speedmarker')
         }
       }
     }
@@ -188,12 +201,14 @@ export function * rsvpSequence (messages: string[], wpm: number): Generator<Text
   while (outputs.length > 0) {
     for (let i = 0; i < outputs.length; i++) {
       const output = outputs[i]
-      const speed = getSpeedAtIndex(i)
+      const speed = output.line.waitTime > 0 ? output.line.waitTime : getSpeedAtIndex(i)
 
       yield {
-        ...output,
-        waitTime: speed,
-        fontScale: 1
+        ...output.line,
+        waitTime: speed
+      }
+      if (output.lineGap > 0) {
+        yield emptyLine(output.lineGap)
       }
     }
   }

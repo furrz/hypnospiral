@@ -199,7 +199,10 @@ export default function SpiralSubliminal () {
               gridTemplateColumns: '1fr min-content 1fr',
               whiteSpace: 'nowrap',
               width: '100%',
-              color: colord({ a: txtAlpha, ...txtColor }).toRgbString(),
+              color: colord({
+                a: txtAlpha,
+                ...(currentText.color ?? txtColor)
+              }).toRgbString(),
               margin: '0'
             }}>
               <span style={{

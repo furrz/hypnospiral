@@ -19,10 +19,10 @@ export default function CustomizeSubliminalMessagesPage () {
             <CollapsibleSection title="available tags">
                 <ul>
                     {(!textWall && (!randomOrder || rsvp)) && <li><Tag tag={'{state:x}'} min={0} max={12} description="change the state of the spiral"/></li>}
-                    {(!textWall && !rsvp) && <li><Tag tag={'{color:r,g,b}'} min={0} max={255} description="change the text color for the line"/></li>}
-                    {(!textWall && !rsvp) && <li><Tag tag={'{wait:x}'} min={0.000} max={9.999} description="change the duration of the line"/></li>}
-                    {(!textWall && !rsvp) && <li><Tag tag={'{gap:x}'} min={0.000} max={9.999} description="change the duration of the line gap"/></li>}
-                    {(!textWall && !rsvp) && <li><Tag tag={'{fontScale:x}'} min={0.000} max={9.999} description="change the font scale of the line"/></li>}
+                    {!textWall && <li><Tag tag={'{color:r,g,b}'} min={0} max={255} description="change the text color for the line"/></li>}
+                    {!textWall && <li><Tag tag={'{wait:x}'} min={0.000} max={9.999} description="change the duration of the line"/></li>}
+                    {!textWall && <li><Tag tag={'{gap:x}'} min={0.000} max={9.999} description="change the duration of the line gap"/></li>}
+                    {!textWall && <li><Tag tag={'{fontScale:x}'} min={0.000} max={9.999} description="change the font scale of the line"/></li>}
                     {(!textWall && (!randomOrder || rsvp)) && <li><Tag tag={'{begin-repeat}'} description="start a repeating section"/></li>}
                     {(!textWall && (!randomOrder || rsvp)) && <li><Tag tag={'{begin-repeat-random}'} description="start a repeating section, randomizing the order of repeated lines"/></li>}
                     {(!textWall && (!randomOrder || rsvp)) && <li><Tag tag={'{repeat:x}'} min={1} max={99} description="repeat a section x times, starting from the furthest begin-repeat tag"/></li>}
