@@ -16,23 +16,23 @@ import {
 import Previewer from 'components/previewer'
 import CustomizePage from 'pages/customize'
 import {
-  useBgColor,
-  useFgColor,
-  useOpacity,
-  useRainbowColors,
-  useRainbowHueSpeed,
-  useRainbowLightness,
-  useRainbowSaturation,
-  useSpiralMode,
-  useBgColor2,
-  useOpacity2,
-  useRainbowColors2,
-  useRainbowHueSpeed2,
-  useRainbowLightness2,
-  useRainbowSaturation2,
-  useSpiralMode2,
-  useSecondary,
-  useComposition
+    useBgColor,
+    useFgColor,
+    useOpacity,
+    useRainbowColors,
+    useRainbowHueSpeed,
+    useRainbowLightness,
+    useRainbowSaturation,
+    useSpiralMode,
+    useBgColor2,
+    useOpacity2,
+    useRainbowColors2,
+    useRainbowHueSpeed2,
+    useRainbowLightness2,
+    useRainbowSaturation2,
+    useSpiralMode2,
+    useSecondary,
+    useComposition, useVrSplit, useVrOffset,
 } from '../state'
 import { activeState } from '../../../hash_state'
 
@@ -61,6 +61,8 @@ export default function CustomizeSpiralPage () {
   const [rainbowLightness2, setRainbowLightness2] = useRainbowLightness2()
   const [rainbowHueSpeed2, setRainbowHueSpeed2] = useRainbowHueSpeed2()
   const [secondarySpiral, setSecondarySpiral] = useSecondary()
+  const [vrSplit, setVrSplit] = useVrSplit()
+  const [vrOffset, setVrOffset] = useVrOffset()
   const [composition, setComposition] = useComposition()
 
   return <Fragment>
@@ -111,6 +113,13 @@ export default function CustomizeSpiralPage () {
                 </>}
             </div>
             <Checkbox value={secondarySpiral} onChange={setSecondarySpiral}>secondary spiral</Checkbox>
+            <Checkbox value={vrSplit} onChange={setVrSplit}>VR Split</Checkbox>
+            { vrSplit && <div>
+                <Label value={vrOffset} setValue={setVrOffset}>
+                    VR Offset
+                    <Slider value={vrOffset} onChange={setVrOffset} min={-0.5} max={0.5}/>
+                </Label>
+            </div>}
             { secondarySpiral && <div>
                 <Label>
                     composition
