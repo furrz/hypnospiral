@@ -16,6 +16,7 @@ uniform float zoom;
 uniform float thickness;
 uniform float blur;
 uniform float opacity;
+uniform float vrOffset;
 
 float heart(vec2 uv)
 {   
@@ -25,7 +26,7 @@ float heart(vec2 uv)
 }
 
 void main() {
-    vec2 truPos = vec2(1.0, iRes.y / iRes.x) * (uv - vec2(0.5, 0.5)) * 2.0;
+    vec2 truPos = vec2(1.0, iRes.y / iRes.x) * (uv - vec2(0.5 + vrOffset, 0.5)) * 2.0;
 
     float angle = atan(truPos.y, truPos.x);
     float throbFactor = .4 + sin((iTime + cos(iTime * .05) * 0.1) * throbSpeed) * 0.2 * throbStrength;

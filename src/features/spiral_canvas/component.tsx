@@ -33,7 +33,9 @@ import {
   useBlur2,
   useOpacity2,
   useSecondary,
-  useComposition
+  useComposition,
+  useVrSplit,
+  useVrOffset
 } from './state'
 
 import spiralFrag from './shaders/spirals/spiral.frag'
@@ -128,7 +130,9 @@ export default function SpiralCanvas () {
   const [rainbowLightness2] = useRainbowLightness2()
   const [rainbowHueSpeed2] = useRainbowHueSpeed2()
   const [secondarySpiral] = useSecondary()
+  const [vrSplit] = useVrSplit()
   const [composition] = useComposition()
+  const [vrOffset] = useVrOffset()
   const bgc = { ...bgColor }
   const bgc2 = { ...bgColor2 }
 
@@ -162,7 +166,7 @@ export default function SpiralCanvas () {
   const animFrame = useCallback(() => {
     if (targetRef.current != null) {
       setDimensions({
-        width: targetRef.current.offsetWidth,
+        width: vrSplit ? targetRef.current.offsetWidth / 2.0 : targetRef.current.offsetWidth,
         height: targetRef.current.offsetHeight
       })
 
@@ -175,50 +179,98 @@ export default function SpiralCanvas () {
   }, [targetRef])
 
   const baseLayer = () => (
-    <Node shader={compositionShaders.alpha} uniforms={{
-      layer1: <Node shader={backgroundShader.background} uniforms={{ bgColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255] }} />,
-      layer2: <Node shader={primaryShader}
-                  uniforms={{
-                    iTime,
-                    iRes: [dimensions.width, dimensions.height],
-                    arms,
-                    spinSpeed,
-                    throbSpeed,
-                    throbStrength,
-                    zoom,
-                    thickness,
-                    blur,
-                    opacity,
-                    spiralColor: [bgc.r / 255, bgc.g / 255, bgc.b / 255]
-                  }}/>
-    }}/>
+      <Node shader={compositionShaders.alpha} uniforms={{
+        layer1: <Node shader={backgroundShader.background} uniforms={{ bgColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255] }} />,
+        layer2: <Node shader={primaryShader}
+                      uniforms={{
+                        iTime,
+                        iRes: [dimensions.width, dimensions.height],
+                        arms,
+                        spinSpeed,
+                        throbSpeed,
+                        throbStrength,
+                        zoom,
+                        thickness,
+                        blur,
+                        opacity,
+                        spiralColor: [bgc.r / 255, bgc.g / 255, bgc.b / 255],
+                        vrOffset
+                      }}/>
+      }}/>
+  )
+  const baseLayer2 = () => (
+      <Node shader={compositionShaders.alpha} uniforms={{
+        layer1: <Node shader={backgroundShader.background} uniforms={{ bgColor: [fgColor.r / 255, fgColor.g / 255, fgColor.b / 255] }} />,
+        layer2: <Node shader={primaryShader}
+                      uniforms={{
+                        iTime,
+                        iRes: [dimensions.width, dimensions.height],
+                        arms,
+                        spinSpeed,
+                        throbSpeed,
+                        throbStrength,
+                        zoom,
+                        thickness,
+                        blur,
+                        opacity,
+                        spiralColor: [bgc.r / 255, bgc.g / 255, bgc.b / 255],
+                        vrOffset: -vrOffset
+                      }}/>
+      }}/>
   )
 
   return <div className="spiral_canvas_div" ref={targetRef}>
     <Surface width={dimensions.width} height={dimensions.height}>
       {secondarySpiral
-        ? (<Node shader={compositionShader}
-          uniforms={{
-            layer1: baseLayer,
-            layer2: () => <Node shader={secondaryShader}
-                  uniforms={{
-                    iTime,
-                    iRes: [dimensions.width, dimensions.height],
-                    arms: arms2,
-                    spinSpeed: spinSpeed2,
-                    throbSpeed: throbSpeed2,
-                    throbStrength: throbStrength2,
-                    zoom: zoom2,
-                    thickness: thickness2,
-                    blur: blur2,
-                    opacity: opacity2,
-                    spiralColor: [bgc2.r / 255, bgc2.g / 255, bgc2.b / 255]
-                  }}/>
-          }}/>)
-        : (
-            baseLayer()
+          ? (<Node shader={compositionShader}
+                   uniforms={{
+                     layer1: baseLayer,
+                     layer2: () => <Node shader={secondaryShader}
+                                         uniforms={{
+                                           iTime,
+                                           iRes: [dimensions.width, dimensions.height],
+                                           arms: arms2,
+                                           spinSpeed: spinSpeed2,
+                                           throbSpeed: throbSpeed2,
+                                           throbStrength: throbStrength2,
+                                           zoom: zoom2,
+                                           thickness: thickness2,
+                                           blur: blur2,
+                                           opacity: opacity2,
+                                           spiralColor: [bgc2.r / 255, bgc2.g / 255, bgc2.b / 255],
+                                           vrOffset: vrOffset
+                                         }}/>
+                   }}/>)
+          : (
+              baseLayer()
           )
       }
     </Surface>
+    {vrSplit && <Surface width={dimensions.width} height={dimensions.height}>
+      {secondarySpiral
+          ? (<Node shader={compositionShader}
+                   uniforms={{
+                     layer1: baseLayer2,
+                     layer2: () => <Node shader={secondaryShader}
+                                         uniforms={{
+                                           iTime,
+                                           iRes: [dimensions.width, dimensions.height],
+                                           arms: arms2,
+                                           spinSpeed: spinSpeed2,
+                                           throbSpeed: throbSpeed2,
+                                           throbStrength: throbStrength2,
+                                           zoom: zoom2,
+                                           thickness: thickness2,
+                                           blur: blur2,
+                                           opacity: opacity2,
+                                           spiralColor: [bgc2.r / 255, bgc2.g / 255, bgc2.b / 255],
+                                           vrOffset: -vrOffset
+                                         }}/>
+                   }}/>)
+          : (
+              baseLayer2()
+          )
+      }
+    </Surface>}
   </div>
 }
