@@ -194,7 +194,7 @@ export default function SpiralCanvas () {
                         blur,
                         opacity,
                         spiralColor: [bgc.r / 255, bgc.g / 255, bgc.b / 255],
-                        vrOffset
+                        vrOffset : vrSplit && vrOffset
                       }}/>
       }}/>
   )
@@ -238,7 +238,7 @@ export default function SpiralCanvas () {
                                            blur: blur2,
                                            opacity: opacity2,
                                            spiralColor: [bgc2.r / 255, bgc2.g / 255, bgc2.b / 255],
-                                           vrOffset: vrOffset
+                                           vrOffset: vrSplit && vrOffset
                                          }}/>
                    }}/>)
           : (
