@@ -115,6 +115,9 @@ export default function CustomizeSpiralPage () {
             <Checkbox value={secondarySpiral} onChange={setSecondarySpiral}>secondary spiral</Checkbox>
             <Checkbox value={vrSplit} onChange={setVrSplit}>VR Split</Checkbox>
             { vrSplit && <div>
+                <span>VR Mode is not directly compatible with subliminals or overlays, except for line-based subliminals.</span>
+                <br/>
+                <span>Be sure to set VR Split and offset in subliminal settings if you are using line-based subliminals!</span>
                 <Label value={vrOffset} setValue={setVrOffset}>
                     VR Offset
                     <Slider value={vrOffset} onChange={setVrOffset} min={-0.5} max={0.5}/>
