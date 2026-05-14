@@ -38,7 +38,7 @@ export const onHashStateUpdate = debounce(async () => {
   }
 })
 
-export const createHashState = <T> (name: string, defaultValue: T, allowStates: boolean) => {
+export const createHashState = <T> (name: string, defaultValue: T, allowStates: boolean = false) => {
   if (allowStates) defaultValue = { 0: defaultValue } as any
   const valueOrDefault = (hashState[name] !== undefined) ? hashState[name] : defaultValue
 
