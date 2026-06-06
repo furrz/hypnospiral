@@ -8,10 +8,10 @@ import {
   useTxtColor,
   useWritingMode,
   useHighlightColour,
-  useHighlightPos
+  useHighlightPos, useTextVrSplit, useTextVrOffset
 } from '../state'
 import {
-  Breadcrumb,
+  Breadcrumb, Checkbox,
   ColourBox,
   FillGap,
   Label,
@@ -38,6 +38,8 @@ export default function CustomizeSubliminalPage () {
   const [highlight, setHighlight] = useHighlightColour()
   const [highlightPos, setHighlightPos] = useHighlightPos()
   const [writingMode, setWritingMode] = useWritingMode()
+  const [textVrSplit, setTextVrSplit] = useTextVrSplit()
+  const [textVrOffset, setTextVrOffset] = useTextVrOffset()
 
   const currentMode = useWall ? 'wall' : (writingMode ? 'writing' : (rsvp ? 'rsvp' : 'lines'))
   const setMode = useCallback((value: string) => {
@@ -74,9 +76,18 @@ export default function CustomizeSubliminalPage () {
           <ColourBox value={highlight} onChange={setHighlight}/>
           <Slider value={highlightPos} onChange={setHighlightPos} max={1} min={0}/>
         </div>
-      </>
-
+      </>}
+      {currentMode == 'lines' && <>
+        <Checkbox value={textVrSplit} onChange={setTextVrSplit}>VR Split</Checkbox>
+    { textVrSplit && <div>
+      <Label value={textVrOffset} setValue={setTextVrOffset}>
+        VR Offset
+        <Slider value={textVrOffset} onChange={setTextVrOffset} min={-50} max={50}/>
+      </Label>
+    </div>}
+          </>
       }
+
       <WideButton to="/customize/subliminal/messages">
         edit messages
         <Pencil weight="bold"/>

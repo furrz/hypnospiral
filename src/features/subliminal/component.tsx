@@ -25,7 +25,9 @@ import {
   useTxtColor,
   useTxtScale,
   useWpm,
-  useWritingMode
+  useWritingMode,
+  useTextVrOffset,
+  useTextVrSplit,
 } from './state'
 import { activeState } from '../../hash_state'
 import { CancellableTimeout } from 'util/timer'
@@ -74,6 +76,9 @@ export default function SpiralSubliminal () {
   const [wpm] = useWpm()
   const [oneWord] = useOneWord()
   const [writingMode] = useWritingMode()
+  const [textVrSplit] = useTextVrSplit()
+  const [textVrOffset] = useTextVrOffset()
+
   const writingInputRef = useRef<HTMLInputElement>(null)
 
   const currentRoute = useLocation()
@@ -217,16 +222,33 @@ export default function SpiralSubliminal () {
           </Fragment>
         } else {
           // Normal rendering
+          const offsetPercent = textVrOffset + '%'
           return <Fragment key={i}>{i !== 0 && <br/>}
-            <span style={{
-              color: colord({
-                a: txtAlpha,
-                ...(currentText.color ?? txtColor)
-              }).toRgbString(),
-              fontSize: ((currentText.txtScale * txtScale) * 100.0).toFixed(2) + '%'
-            }}>
-              {item}
+            {textVrSplit ?
+                <span style={{
+                  display: 'grid',
+                  alignItems: 'center',
+                  gridTemplateColumns: '1fr 1fr',
+                  color: colord({
+                    a: txtAlpha,
+                    ...(currentText.color ?? txtColor)
+                  }).toRgbString(),
+                  fontSize: ((currentText.txtScale * txtScale) * 100.0).toFixed(2) + '%'
+                }}>
+              <span
+                  style={{marginLeft :offsetPercent}}>{item}</span>
+              <span style={{marginRight :offsetPercent}}>{item}</span>
             </span>
+                :
+                <span style={{
+                  color: colord({
+                    a: txtAlpha,
+                    ...(currentText.color ?? txtColor)
+                  }).toRgbString(),
+                  fontSize: ((currentText.txtScale * txtScale) * 100.0).toFixed(2) + '%'
+                }}>{item}</span>
+            }
+
           </Fragment>
         }
       })}
