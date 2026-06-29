@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { DiscordLogo, Gear, Info, Confetti, Play } from '@phosphor-icons/react'
+import { DiscordLogo, Gear, Info, PatreonLogo, Play } from '@phosphor-icons/react'
 import { BigHeader, BreadcrumbSpace, FillGap, Page, TextBlock, WideButton } from 'components/building_blocks'
 import { ShareBtn } from 'components/sharebtn'
 import { locStorage } from 'util/local_storage'
@@ -30,15 +30,15 @@ export default function Homepage () {
         discord
         <DiscordLogo weight="bold"/>
       </a>
-      <a href="https://www.youtube.com/@blenderbenderthethird544"
+      <a href="https://www.patreon.com/Zyntaks"
          target="_blank" rel="noreferrer"
          className="wide_button patron_button">
         <div className="patron_button_inner">
-          big update!
-          <Confetti weight="bold"/>
+          patreon
+          <PatreonLogo weight="bold"/>
         </div>
         <div>
-          Thank you to BB3 for fixing build issues and adding new features!
+          Please support the site&apos;s development on patreon!
         </div>
       </a>
       {win.location.hostname !== 'hypno.zyntaks.ca' && win.location.hostname !== 'localhost' &&
